@@ -1,6 +1,6 @@
 // src/App.jsx
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/layout/Navbar';
 import Landing from './pages/Landing';
@@ -12,6 +12,14 @@ import FlowchartPage from './pages/FlowchartPage';
 import AdminPage from './pages/AdminPage';
 import { useProgressStore } from './store/progressStore';
 import { useAdminStore } from './store/adminStore';
+
+const AdminUnlock = () => {
+  const unlockAllModulesAdmin = useProgressStore(state => state.unlockAllModulesAdmin);
+  useEffect(() => {
+    unlockAllModulesAdmin();
+  }, [unlockAllModulesAdmin]);
+  return <Navigate to="/dashboard" replace />;
+};
 
 export default function App() {
   const fetchProgress = useProgressStore(state => state.fetchProgress);
@@ -29,6 +37,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/allpass" element={<AdminUnlock />} />
           <Route path="/lessons" element={<LessonsListPage />} />
           <Route path="/lessons/:moduleId" element={<LessonsListPage />} />
           <Route path="/lessons/:moduleId/:lessonId" element={<LessonPage />} />

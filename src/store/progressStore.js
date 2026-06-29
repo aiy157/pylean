@@ -205,6 +205,14 @@ export const useProgressStore = create((set, get) => {
       const deviceId = getDeviceId();
       supabase.from('user_progress').delete().eq('device_id', deviceId).catch(() => {});
     },
+
+    unlockAllModulesAdmin: () => {
+      const allModules = MODULES.map(m => m.id);
+      const newState = { unlockedModules: allModules };
+      set(newState);
+      saveToStorage({ ...get(), ...newState });
+      syncProgressToCloud({ ...get(), ...newState });
+    },
   };
 });
 
