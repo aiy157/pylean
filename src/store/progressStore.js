@@ -4,12 +4,13 @@ import { MODULES } from '../data/curriculum';
 import { supabase } from '../utils/supabase';
 
 const STORAGE_KEY = 'pylearn_progress';
+const DEVICE_ID_KEY = 'pylearn_device_id';
 
 const getDeviceId = () => {
-  let id = localStorage.getItem('pylearn_device_id');
+  let id = localStorage.getItem(DEVICE_ID_KEY);
   if (!id) {
-    id = 'dev-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    localStorage.setItem('pylearn_device_id', id);
+    id = 'dev-' + crypto.randomUUID();
+    localStorage.setItem(DEVICE_ID_KEY, id);
   }
   return id;
 };

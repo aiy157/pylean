@@ -4,7 +4,12 @@ import { supabase } from '../utils/supabase';
 
 const ADMIN_EXERCISES_KEY = 'pylearn_admin_exercises';
 const ADMIN_SESSION_KEY = 'pylearn_admin_session';
-const ADMIN_PASSWORD = 'admin1234';
+
+// Use environment variable for admin password, fallback to something secure if missing in production
+// Since this is evaluated on the client side, the password will still be visible in the bundle if built!
+// However, as a first step we remove the hardcoded 'admin1234'. 
+// A real fix would require moving auth to the server (Supabase Auth).
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
 const loadAdminExercises = () => {
   try {

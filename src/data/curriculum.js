@@ -21,31 +21,30 @@ export const MODULES = [
         xpReward: 20,
         hasFlowchart: true,
         content: {
-          th: `## ผังงาน (Flowchart) คืออะไร?
+          th: `## ผังงาน (Flowchart) คืออะไร? 🗺️
 
-ผังงาน คือ **แผนภาพที่แสดงขั้นตอนการทำงาน** ของโปรแกรม โดยใช้สัญลักษณ์รูปทรงต่างๆ เชื่อมต่อกันด้วยลูกศร
+สวัสดีจ้า! ก่อนที่เราจะเริ่มเขียนโค้ดคอมพิวเตอร์ เราต้องมาทำความรู้จักกับ **ผังงาน** หรือที่เรียกภาษาอังกฤษว่า **Flowchart** (โฟลว์-ชาร์ต) กันก่อนนะ!
 
-### เปรียบเทียบกับชีวิตจริง
+**ผังงาน (Flowchart)** ก็คือ "แผนที่" หรือ "ภาพวาด" ที่บอกว่าเราต้องทำอะไรบ้าง ทีละขั้นตอน ตั้งแต่เริ่มต้นจนจบเลย 
 
-ลองนึกภาพว่าคุณจะ **ชงกาแฟ** คุณต้องทำตามขั้นตอน:
-1. ต้มน้ำ
-2. ใส่กาแฟลงในแก้ว
-3. เทน้ำร้อน
-4. เติมน้ำตาล (ถ้าชอบหวาน)
-5. คนให้เข้ากัน
+### ลองนึกถึงการชงไมโลดื่มเองดูสิ! ☕
 
-ผังงานก็เหมือนกัน — เป็นแผนที่นำทางก่อนเขียนโค้ด!
+ถ้าเราจะชงไมโล เราก็ต้องมีขั้นตอนใช่ไหมล่ะ? ดูรูปนี้เลย!
 
-### ทำไมโปรแกรมเมอร์ต้องใช้ผังงาน?
+![ขั้นตอนการชงไมโล](/images/coffee_flowchart_1782705272122.png)
 
-> **คนที่ไม่วางแผน** มักเจอปัญหาระหว่างทาง  
-> **คนที่วางแผนด้วยผังงาน** เขียนโค้ดได้เร็วและผิดพลาดน้อยกว่า
+1. **เริ่มต้น** (เตรียมตัว)
+2. **ต้มน้ำร้อน** 
+3. **ใส่ผงไมโลลงในแก้ว**
+4. **เทน้ำร้อนใส่แก้ว**
+5. **จบ** (ได้ไมโลอร่อยๆ มาดื่ม!)
 
-### ประโยชน์ของผังงาน
-- ✅ มองเห็นภาพรวมของโปรแกรมได้ชัดเจน
-- ✅ ค้นหาจุดผิดพลาดได้ง่ายขึ้น
-- ✅ ทีมงานเข้าใจโปรแกรมได้โดยไม่ต้องอ่านโค้ด
-- ✅ ประหยัดเวลาในการพัฒนา`,
+เห็นไหม! แค่เราวาดรูปออกมาเป็นข้อๆ เราก็ทำตามได้ง่ายมากๆ ผังงานในคอมพิวเตอร์ก็เหมือนกันเป๊ะเลย!
+
+### ทำไมเราต้องวาดผังงานก่อนเขียนโค้ด? 🤔
+- 🌟 **ช่วยให้ไม่หลงทาง:** เหมือนมีแผนที่ ทำให้เรารู้ว่าต้องเขียนโค้ดอะไรต่อไป
+- 🌟 **หาที่ผิดง่าย:** ถ้าชงไมโลแล้วไม่อร่อย เราก็กลับไปดูแผนที่ได้ว่าลืมใส่อะไรไปไหม คอมพิวเตอร์ก็เหมือนกัน!
+- 🌟 **เพื่อนๆ อ่านเข้าใจ:** ถ้าเราเอาแผนที่นี้ไปให้เพื่อน เพื่อนก็จะชงไมโลได้เหมือนเราเลย!`,
           en: `## What is a Flowchart?
 
 A flowchart is a **diagram that shows the steps** of a program using different shapes connected by arrows.
@@ -80,35 +79,26 @@ A flowchart works the same way — it's a roadmap before you write code!
         xpReward: 25,
         hasFlowchart: true,
         content: {
-          th: `## สัญลักษณ์ที่ใช้ในผังงาน
+          th: `## รูปร่างต่างๆ ในผังงาน 🟢🟪🔷
 
-| สัญลักษณ์ | รูปทรง | ความหมาย | ตัวอย่าง |
+เวลาเราวาดผังงาน เราจะใช้ "รูปร่างเรขาคณิต" แบบต่างๆ เพื่อบอกว่าตรงนั้นเรากำลังทำอะไรอยู่ แต่ละรูปจะมีความหมายไม่เหมือนกันนะ มาดูกันเลย!
+
+![สัญลักษณ์ Flowchart](/images/flowchart_symbols_1782705282978.png)
+
+### สัญลักษณ์ที่ต้องจำให้แม่น! 🧠
+
+| รูปทรง | ชื่อเรียก | เอาไว้ทำอะไร? | ตัวอย่างง่ายๆ |
 |---|---|---|---|
-| เริ่ม/จบ | วงรี ⬭ | จุดเริ่มต้นและสิ้นสุด | เริ่มต้น, สิ้นสุด |
-| กระบวนการ | สี่เหลี่ยม ▭ | การคำนวณ/กำหนดค่า | x = x + 1 |
-| เงื่อนไข | สี่เหลี่ยมข้าวหลามตัด ◇ | การตัดสินใจ ใช่/ไม่ใช่ | อายุ >= 18? |
-| รับ/แสดงผล | ขนาน ▱ | Input/Output | รับชื่อ, แสดงผล |
-| ลูกศร | → | ทิศทางการทำงาน | เชื่อมกล่อง |
+| **วงรี (Oval) ⬭** | **เริ่มต้น / จบ** | ต้องมีเสมอที่บนสุดและล่างสุด เหมือนการกดปุ่ม Start/Stop | เริ่มทำงาน, จบการทำงาน |
+| **สี่เหลี่ยมผืนผ้า ▭** | **ลงมือทำ** | จุดที่เราต้องออกแรงทำอะไรสักอย่าง หรือให้คอมพิวเตอร์คำนวณ | ต้มน้ำร้อน, เอา 5 + 5 |
+| **สี่เหลี่ยมข้าวหลามตัด ◇** | **ตัดสินใจ** | เป็นทางแยก! ต้องตอบคำถามว่า "ใช่" หรือ "ไม่ใช่" | ฝนตกไหม? (ใช่ ไปกางร่ม / ไม่ใช่ ไปวิ่งเล่น) |
+| **สี่เหลี่ยมด้านขนาน ▱** | **รับของ / ส่งของ** | รับข้อมูลเข้ามา หรือแสดงผลลัพธ์ออกไป | คอมพิวเตอร์ถามชื่อ, คอมพิวเตอร์โชว์คำว่า "สวัสดี" |
+| **ลูกศร →** | **เส้นทางเดิน** | บอกว่าเราต้องเดินไปทางไหนต่อ ห้ามเดินย้อนศรนะ! | ชี้จากรูปหนึ่งไปอีกรูปหนึ่ง |
 
-### ตัวอย่าง: ผังงานตรวจสอบอายุ
-
-\`\`\`
-       [เริ่มต้น]
-           ↓
-    [รับค่า: อายุ]
-           ↓
-    ◇ อายุ >= 18? ◇
-      ↙ใช่    ไม่ใช่↘
-[แสดง"ผู้ใหญ่"] [แสดง"เด็ก"]
-      ↘          ↙
-       [สิ้นสุด]
-\`\`\`
-
-### กฎสำคัญของผังงาน
-1. **เริ่มต้นและสิ้นสุดเสมอ** ด้วยวงรี
-2. **ลูกศรไหลจากบนลงล่าง** เป็นหลัก
-3. **เงื่อนไขต้องมี 2 ทางเสมอ** (ใช่/ไม่ใช่)
-4. **ทุกเส้นต้องมีลูกศร** แสดงทิศทาง`,
+### กฎเหล็ก 3 ข้อของการวาดผังงาน 📜
+1. 🏁 **ต้องมีจุดเริ่มต้นและจุดสิ้นสุดเสมอ!** วงรีต้องอยู่บนสุดและล่างสุด
+2. ⬇️ **ลูกศรต้องชี้ลงล่างเสมอ!** เราอ่านจากบนลงล่างเหมือนอ่านหนังสือ (ยกเว้นตอนทำซ้ำ)
+3. 🛤️ **ข้าวหลามตัดต้องมีทางแยกเสมอ!** ต้องมีทางเลือก "ใช่ (Yes)" กับ "ไม่ใช่ (No)" ให้คอมพิวเตอร์เลือกเดิน`,
           en: `## Flowchart Symbols
 
 | Symbol | Shape | Meaning | Example |
@@ -147,116 +137,44 @@ A flowchart works the same way — it's a roadmap before you write code!
         xpReward: 25,
         hasFlowchart: true,
         content: {
-          th: `## ผังงานในชีวิตประจำวัน
+          th: `## ลองใช้ผังงานในชีวิตจริงกันเถอะ! 🧸
 
-ก่อนเขียนโปรแกรม ลองฝึกอ่านผังงานจากสถานการณ์จริง
+ก่อนที่เราจะไปเขียนโปรแกรมจริงๆ เรามาลองเล่นเกมอ่านผังงานจากชีวิตประจำวันของเราดูก่อนนะ!
 
-### ตัวอย่าง 1: เช็คว่ามีเงินพอซื้อของไหม?
+### สถานการณ์: อยากได้ของเล่นใหม่จังเลย! 🤖
 
-\`\`\`
-     [เริ่มต้น]
-          ↓
-  [รับราคาสินค้า]
-  [รับจำนวนเงิน]
-          ↓
- ◇ เงิน >= ราคา? ◇
-   ↙ใช่     ไม่ใช่↘
-[ซื้อสินค้า]  [ไม่ซื้อ]
-[รับเงินทอน]  [ออกจากร้าน]
-    ↘              ↙
-      [สิ้นสุด]
-\`\`\`
+สมมติว่าเดินผ่านร้านของเล่น แล้วเจอหุ่นยนต์ตัวใหม่ อยากได้มากๆ เราจะตัดสินใจยังไงดี? ลองดูผังงานนี้สิ!
 
-โค้ด Python ที่ตรงกัน:
-\`\`\`python
-price = float(input("ราคาสินค้า: "))
-money = float(input("เงินที่มี: "))
+![ผังงานซื้อของเล่น](/images/buy_toy_flowchart_1782705292668.png)
 
-if money >= price:
-    change = money - price
-    print(f"ซื้อได้! เงินทอน {change:.2f} บาท")
-else:
-    print("เงินไม่พอ ออกจากร้านได้เลย")
-\`\`\`
+**มาลองอ่านผังงานกันทีละขั้นนะ:**
+1. **(วงรี) เริ่มต้น** → เรากำลังเดินไปที่ร้านของเล่น
+2. **(สี่เหลี่ยม) ดูราคาของเล่น** → อ๊ะ! หุ่นยนต์ตัวนี้ราคา 500 บาท
+3. **(ข้าวหลามตัด) เรามีเงินพอไหมนะ?** ตรงนี้คือ "ทางแยก" แล้วล่ะ!
+   - 👉 **ถ้ามีเงินพอ (ใช่):** เราก็จะเดินตามลูกศรฝั่ง "ใช่" ไปที่กล่อง **(สี่เหลี่ยม) ซื้อของเล่นเลย!** เย้!
+   - 👉 **ถ้าเงินไม่พอ (ไม่ใช่):** เราก็ต้องเดินตามลูกศรฝั่ง "ไม่ใช่" ไปที่กล่อง **(สี่เหลี่ยม) เก็บเงินเพิ่มต่อไป** แงงง 😭
+4. **(วงรี) สิ้นสุด** → จบการตัดสินใจ!
 
-### ตัวอย่าง 2: หาเลขที่มากกว่า
+เห็นไหมล่ะ! แค่นี้เราก็สามารถเอาผังงานมาแก้ปัญหาในชีวิตจริงได้แล้วนะ! ถ้าเราเข้าใจผังงานแบบนี้ พอไปเขียนโค้ดสั่งให้คอมพิวเตอร์ทำงาน มันก็จะง่ายนิดเดียวเลยล่ะ! 😉`,
+          en: `## Using Flowcharts in Real Life! 🧸
 
-\`\`\`
-      [เริ่มต้น]
-           ↓
-   [รับค่า A และ B]
-           ↓
-     ◇ A > B? ◇
-    ↙ใช่   ไม่ใช่↘
-[แสดง A]    ◇ A == B? ◇
-               ↙ใช่   ไม่ใช่↘
-         [เท่ากัน] [แสดง B]
-    ↘        ↓         ↙
-          [สิ้นสุด]
-\`\`\`
+Before we write real computer programs, let's play a game of reading flowcharts from our everyday life!
 
-### ฝึกคิด: ผังงาน ATM
+### Situation: I want a new toy! 🤖
 
-ลองวาดผังงานสำหรับ:
-1. ใส่รหัส PIN
-2. ถ้าถูกต้อง → เข้าเมนู
-3. ถ้าผิด → แสดงข้อผิดพลาด (สูงสุด 3 ครั้ง)
-4. ถ้าผิด 3 ครั้ง → บล็อกบัตร`,
-          en: `## Real-life Flowcharts
+Imagine you walk past a toy store and see a cool new robot. You really want it! How do you decide what to do? Look at this flowchart!
 
-Before writing a program, practice reading flowcharts from real situations.
+![Buy Toy Flowchart](/images/buy_toy_flowchart_1782705292668.png)
 
-### Example 1: Can I afford this item?
+**Let's read the flowchart step-by-step:**
+1. **(Oval) Start** → We are walking into the toy store.
+2. **(Rectangle) Check toy price** → Oh! This robot costs 500 baht.
+3. **(Diamond) Do we have enough money?** This is a "crossroad"!
+   - 👉 **If we have enough (Yes):** We follow the "Yes" arrow to the box **(Rectangle) Buy the toy!** Yay!
+   - 👉 **If we don't have enough (No):** We follow the "No" arrow to the box **(Rectangle) Save more money**. Aww! 😭
+4. **(Oval) End** → Decision is done!
 
-\`\`\`
-      [Start]
-          ↓
-  [Get item price]
-  [Get my money]
-          ↓
- ◇ money >= price? ◇
-   ↙Yes        No↘
-[Buy item]    [Don't buy]
-[Get change]  [Leave store]
-    ↘              ↙
-        [End]
-\`\`\`
-
-Matching Python code:
-\`\`\`python
-price = float(input("Item price: "))
-money = float(input("Your money: "))
-
-if money >= price:
-    change = money - price
-    print(f"Purchased! Change: {change:.2f}")
-else:
-    print("Not enough money. Leave store.")
-\`\`\`
-
-### Example 2: Find the larger number
-
-\`\`\`
-      [Start]
-           ↓
-   [Get values A and B]
-           ↓
-     ◇ A > B? ◇
-    ↙Yes     No↘
-[Show A]    ◇ A == B? ◇
-               ↙Yes    No↘
-         [Equal]   [Show B]
-    ↘        ↓         ↙
-           [End]
-\`\`\`
-
-### Practice: ATM Flowchart
-
-Try to draw a flowchart for:
-1. Enter PIN
-2. If correct → go to menu
-3. If wrong → show error (max 3 tries)
-4. If wrong 3 times → block card`,
+See? We can use flowcharts to solve problems in real life! If you understand this flowchart, writing code to tell a computer what to do will be super easy! 😉`,
         },
         commands: [],
       },
@@ -266,120 +184,68 @@ Try to draw a flowchart for:
         xpReward: 30,
         hasFlowchart: true,
         content: {
-          th: `## ผังงานแบบวนซ้ำ (Loop)
+          th: `## ผังงานแบบทำซ้ำ (Loop) 🔁
 
-ผังงานที่มีการวนซ้ำจะมีลูกศร **ย้อนกลับขึ้นไป** นี่คือสัญญาณว่าโปรแกรมจะทำซ้ำ
+บางครั้งเราต้องทำงานเดิมซ้ำๆ หลายๆ รอบ เช่น วิ่งรอบสนาม 3 รอบ หรือท่องสูตรคูณ
+ถ้าเราต้องเขียนผังงานยาวยืดลงมาเรื่อยๆ คงเมื่อยมือแย่เลย! 🥵
 
-### ผังงาน for loop: นับ 1-5
+เราจึงมีเวทมนตร์เรียกว่า **การวนซ้ำ (Loop)**
+
+### ตัวอย่าง: วิ่งรอบสนาม 3 รอบ 🏃‍♂️
+
+แทนที่จะวาดกล่อง "วิ่ง 1 รอบ" ซ้ำกัน 3 กล่อง เราวาดแบบนี้แทน!
 
 \`\`\`
-    [เริ่มต้น]
+     [เริ่มต้น]
          ↓
-    [i = 1]
+    [รอบ = 1] 🏁
          ↓
-  ◇ i <= 5? ◇──ไม่ใช่──→ [สิ้นสุด]
+  ◇ รอบ <= 3? ◇ ──ไม่──> [สิ้นสุด]
        ↓ ใช่
-  [แสดง i]
-       ↓
-  [i = i + 1]
-       ↑_________↙  ← วนกลับ!
-\`\`\`
-
-โค้ด Python:
-\`\`\`python
-for i in range(1, 6):
-    print(i)
-\`\`\`
-
-### ผังงาน while loop: รับเลขจนกว่าจะถูก
-
-\`\`\`
-    [เริ่มต้น]
+    [วิ่ง 1 รอบ]
          ↓
-    [เลขลับ = 7]
-         ↓
-   [รับค่า guess]
-         ↓
-◇ guess == 7? ◇──ไม่ใช่──→ [แสดง"ลองใหม่"]
-       ↓ ใช่                        ↓
- [แสดง"ถูกต้อง!"]           [รับค่า guess อีกครั้ง]
-       ↓                              ↑___↙
-   [สิ้นสุด]
+   [รอบ = รอบ + 1] 📝
+         ↑_________↙ (วนกลับไปเช็คใหม่!)
 \`\`\`
 
-โค้ด Python:
-\`\`\`python
-secret = 7
-guess = int(input("ทายเลข: "))
-while guess != secret:
-    print("ผิด! ลองใหม่")
-    guess = int(input("ทายเลข: "))
-print("ถูกต้อง! 🎉")
-\`\`\`
+**มาลองอ่านทีละก้าว:**
+1. เริ่มต้นปุ๊บ เรานับรอบว่า \`รอบ = 1\`
+2. ไปที่ทางแยก (ข้าวหลามตัด): "รอบที่เราอยู่ น้อยกว่าหรือเท่ากับ 3 หรือเปล่า?"
+3. ถ้า **ใช่**: ไปวิ่ง 1 รอบ -> วิ่งเสร็จก็บวกเลขรอบขึ้นอีก 1 (กลายเป็นรอบ 2) -> แล้วเดินย้อนศรกลับไปที่ทางแยก!
+4. วนไปเรื่อยๆ จนกว่ารอบจะเป็น 4... พอถึงรอบ 4 ปุ๊บ คำตอบของทางแยกจะเป็น **ไม่ใช่** ก็จะเดินออกไปที่ **สิ้นสุด** ทันที!
 
-### สังเกตความแตกต่าง
+เห็นไหม? ประหยัดที่วาดไปได้เยอะเลย! 🤩`,
+          en: `## Repeating Flowcharts (Loop) 🔁
 
-| for loop | while loop |
-|---|---|
-| รู้จำนวนรอบที่แน่นอน | ไม่รู้จำนวนรอบ มีเงื่อนไขหยุด |
-| \`for i in range(5)\` | \`while condition:\` |`,
-          en: `## Flowcharts with Loops
+Sometimes we have to do the same thing many times, like running around the field 3 times or reciting the multiplication table.
+If we had to draw a super long flowchart, our hands would get tired! 🥵
 
-Flowcharts with loops have arrows that **go back up**. This signals that the program will repeat.
+So we use a magic called **Looping**.
 
-### for loop flowchart: Count 1 to 5
+### Example: Running 3 laps 🏃‍♂️
+
+Instead of drawing the "Run 1 lap" box 3 times, we draw this!
 
 \`\`\`
-    [Start]
-         ↓
-    [i = 1]
-         ↓
-  ◇ i <= 5? ◇──No──→ [End]
-       ↓ Yes
-  [Display i]
-       ↓
-  [i = i + 1]
-       ↑_________↙  ← Loop back!
+     [Start]
+        ↓
+    [lap = 1] 🏁
+        ↓
+  ◇ lap <= 3? ◇ ──No──> [End]
+      ↓ Yes
+   [Run 1 lap]
+        ↓
+  [lap = lap + 1] 📝
+        ↑_________↙ (Loop back to check!)
 \`\`\`
 
-Python code:
-\`\`\`python
-for i in range(1, 6):
-    print(i)
-\`\`\`
+**Let's read step-by-step:**
+1. At the start, we count \`lap = 1\`.
+2. Go to the crossroad (Diamond): "Is the lap we are on less than or equal to 3?"
+3. If **Yes**: Go run 1 lap -> After running, add 1 to the lap count (becomes lap 2) -> Then follow the arrow back up to the crossroad!
+4. Keep looping until the lap becomes 4... When it is 4, the answer at the crossroad is **No**, so we walk straight to **End**!
 
-### while loop flowchart: Guess until correct
-
-\`\`\`
-    [Start]
-         ↓
-    [secret = 7]
-         ↓
-   [Get guess]
-         ↓
-◇ guess == 7? ◇──No──→ [Show "Try again"]
-       ↓ Yes                    ↓
- [Show "Correct!"]      [Get guess again]
-       ↓                         ↑___↙
-    [End]
-\`\`\`
-
-Python code:
-\`\`\`python
-secret = 7
-guess = int(input("Guess: "))
-while guess != secret:
-    print("Wrong! Try again")
-    guess = int(input("Guess: "))
-print("Correct! 🎉")
-\`\`\`
-
-### Key Differences
-
-| for loop | while loop |
-|---|---|
-| Known number of iterations | Unknown iterations, has stop condition |
-| \`for i in range(5)\` | \`while condition:\` |`,
+See? We saved a lot of drawing space! 🤩`,
         },
         commands: [],
       },
@@ -408,147 +274,153 @@ print("Correct! 🎉")
         xpReward: 25,
         hasFlowchart: false,
         content: {
-          th: `## ตัวแปร (Variables) คืออะไร?
+          th: `## ตัวแปร (Variables) คืออะไร? 📦
 
-ตัวแปรเปรียบเหมือน **กล่องเก็บของที่มีป้ายชื่อ** — เราใส่ข้อมูลลงในกล่อง แล้วเรียกชื่อกล่องเพื่อนำข้อมูลออกมาใช้
+ตัวแปรเปรียบเหมือน **กล่องเก็บของที่มีป้ายชื่อแปะไว้** — เราเอาของใส่ลงไปในกล่อง แล้วเวลาเราอยากได้ของชิ้นนั้น เราก็แค่เรียกชื่อกล่อง!
 
 \`\`\`
   ┌─────────────┐
-  │  name       │  ← ชื่อตัวแปร
-  │  "สมชาย"    │  ← ค่าที่เก็บ
+  │  name       │  ← ป้ายชื่อกล่อง (ชื่อตัวแปร)
+  │  "สมชาย"    │  ← ของที่อยู่ในกล่อง (ค่าที่เก็บ)
   └─────────────┘
 \`\`\`
 
-### วิธีสร้างตัวแปร
+### วิธีสร้างกล่อง (ตัวแปร) ใน Python 🛠️
+
+ง่ายมากๆ แค่ตั้งชื่อกล่อง ใส่เครื่องหมายเท่ากับ \`=\` แล้วตามด้วยของที่จะใส่
 
 \`\`\`python
-# รูปแบบ:  ชื่อตัวแปร = ค่า
+# รูปแบบ:  ชื่อกล่อง = ของที่ใส่
 name = "สมชาย"
-age = 20
-height = 170.5
-is_student = True
+age = 10
+score = 100
 \`\`\`
 
-### Python เดาชนิดข้อมูลให้อัตโนมัติ!
+### งูเหลือม Python ฉลาดมาก! 🐍
 
-ไม่เหมือนบางภาษาที่ต้องบอกว่า "ฉันจะเก็บตัวเลข" — Python ฉลาดพอที่จะรู้เอง
+ในภาษาอื่น เราต้องบอกคอมพิวเตอร์ว่า "กล่องนี้ใส่ได้แค่ตัวเลขนะ" แต่ Python ฉลาดพอที่จะรู้เองว่าของที่เราใส่คืออะไร!
 
 \`\`\`python
-x = 42        # Python รู้ว่าเป็น int
-y = 3.14      # Python รู้ว่าเป็น float
-z = "hello"   # Python รู้ว่าเป็น str
+x = 42        # Python รู้ว่าเป็นตัวเลขจำนวนเต็ม
+y = 3.14      # Python รู้ว่าเป็นตัวเลขมีจุดทศนิยม
+z = "hello"   # Python รู้ว่าเป็นข้อความ
 \`\`\`
 
-### กฎการตั้งชื่อตัวแปร
+### กฎการตั้งชื่อกล่อง (ตัวแปร) 📝
+
+การตั้งชื่อก็มีกฎนะ เหมือนเราตั้งชื่อสัตว์เลี้ยงนั่นแหละ!
 
 \`\`\`python
-# ✅ ถูกต้อง
+# ✅ ตั้งชื่อแบบนี้ถูกต้อง (เก่งมาก!)
 student_name = "Alice"
 score1 = 95
-_data = []
-myVariable = "ok"
+my_score = 100
 
-# ❌ ผิด!
-1name = "Bob"         # ห้ามขึ้นต้นตัวเลข
-my-name = "Charlie"   # ห้ามใช้ -
-my name = "Dave"      # ห้ามมีช่องว่าง
-for = 10              # ห้ามใช้คำสงวน
+# ❌ ตั้งชื่อแบบนี้ผิด! (คอมพิวเตอร์จะงง)
+1name = "Bob"         # ห้ามเอาตัวเลขขึ้นต้น!
+my-name = "Charlie"   # ห้ามใช้เครื่องหมายลบ - 
+my name = "Dave"      # ห้ามมีช่องว่าง! (ใช้ _ แทนนะ)
 \`\`\`
 
-### การตั้งชื่อให้ดี (Best Practice)
+### ตั้งชื่อให้สื่อความหมาย (คนเก่งเค้าทำกัน) 🌟
 
 \`\`\`python
-# ❌ ชื่อไม่ดี (ไม่รู้ว่าเก็บอะไร)
-x = 25
+# ❌ ตั้งชื่อแบบนี้ไม่ดี (a คืออะไร? ไม่มีใครรู้)
 a = "John"
+x = 10
 
-# ✅ ชื่อดี (เข้าใจได้ทันที)
-age = 25
-student_name = "John"
+# ✅ ตั้งชื่อแบบนี้ดีมาก (อ่านปุ๊บรู้ปั๊บ!)
+player_name = "John"
+player_age = 10
 \`\`\`
 
-### เปลี่ยนค่าตัวแปรได้เสมอ
+### กล่องนี้เปลี่ยนของข้างในได้ตลอดนะ! 🪄
+
+เราสามารถเอาของเก่าออก แล้วใส่ของใหม่เข้าไปแทนได้เสมอ
 
 \`\`\`python
-score = 80
-print(score)   # 80
+coin = 50
+print(coin)   # มีเหรียญ 50
 
-score = 95     # เปลี่ยนค่าใหม่
-print(score)   # 95
+coin = 100    # เปลี่ยนเป็น 100 แทน
+print(coin)   # ตอนนี้มี 100 แล้ว!
 
-score = score + 5   # บวกเพิ่ม
-print(score)   # 100
+coin = coin + 10   # ได้เพิ่มมาอีก 10 
+print(coin)   # กลายเป็น 110!
 \`\`\``,
-          en: `## What is a Variable?
+          en: `## What is a Variable? 📦
 
-A variable is like a **labeled box** — we store data in the box, then use its name to retrieve the data.
+A variable is like a **magic box with a name tag** — we put something inside the box, and when we need it, we just call the name on the tag!
 
 \`\`\`
   ┌─────────────┐
-  │  name       │  ← variable name
-  │  "Alice"    │  ← stored value
+  │  name       │  ← The tag (variable name)
+  │  "Alice"    │  ← What's inside (stored value)
   └─────────────┘
 \`\`\`
 
-### How to Create a Variable
+### How to Create a Box (Variable) 🛠️
+
+It's super easy! Just write the name, an equals sign \`=\`, and then what you want to put inside.
 
 \`\`\`python
-# Format:  variable_name = value
+# Format:  box_name = what_to_put_inside
 name = "Alice"
-age = 20
-height = 170.5
-is_student = True
+age = 10
+score = 100
 \`\`\`
 
-### Python Guesses the Type Automatically!
+### Python is Super Smart! 🐍
 
-Unlike some languages where you must declare "I'm storing a number" — Python is smart enough to figure it out.
+In some other languages, you have to tell the computer "This box is only for numbers". But Python is smart enough to figure it out by itself!
 
 \`\`\`python
-x = 42        # Python knows it's an int
-y = 3.14      # Python knows it's a float
-z = "hello"   # Python knows it's a str
+x = 42        # Python knows it's a whole number
+y = 3.14      # Python knows it has a decimal point
+z = "hello"   # Python knows it's text
 \`\`\`
 
-### Naming Rules
+### Box Naming Rules 📝
+
+Just like naming a pet, there are rules for naming boxes!
 
 \`\`\`python
-# ✅ Valid
+# ✅ Good names (Great job!)
 student_name = "Alice"
 score1 = 95
-_data = []
-myVariable = "ok"
+my_score = 100
 
-# ❌ Invalid!
-1name = "Bob"         # can't start with number
-my-name = "Charlie"   # can't use -
-my name = "Dave"      # can't have spaces
-for = 10              # can't use reserved words
+# ❌ Bad names (Computer gets confused!)
+1name = "Bob"         # Cannot start with a number!
+my-name = "Charlie"   # Cannot use minus sign -
+my name = "Dave"      # Cannot have spaces! (Use _ instead)
 \`\`\`
 
-### Good Naming (Best Practice)
+### Name it clearly! (Like a pro) 🌟
 
 \`\`\`python
-# ❌ Bad names (unclear what they store)
-x = 25
+# ❌ Bad names (What is a? Nobody knows!)
 a = "John"
+x = 10
 
-# ✅ Good names (immediately understandable)
-age = 25
-student_name = "John"
+# ✅ Good names (Instantly understandable!)
+player_name = "John"
+player_age = 10
 \`\`\`
 
-### Variables Can Change
+### You can always change what's inside! 🪄
+
+You can take the old thing out and put a new thing in anytime!
 
 \`\`\`python
-score = 80
-print(score)   # 80
+coin = 50
+print(coin)   # You have 50 coins
 
-score = 95     # reassign
-print(score)   # 95
+coin = 100    # Swap it to 100
+print(coin)   # Now you have 100!
 
-score = score + 5   # add to it
-print(score)   # 100
+coin = coin + 10   # Got 10 more
+print(coin)   # Now it's 110!
 \`\`\``,
         },
         commands: [
@@ -566,177 +438,155 @@ print(score)   # 100
         xpReward: 25,
         hasFlowchart: false,
         content: {
-          th: `## ชนิดข้อมูล str (String)
+          th: `## ชนิดข้อมูลแบบข้อความ (String หรือ str) 📝
 
-str คือข้อมูลประเภท **ข้อความ** ครอบด้วยเครื่องหมาย \`"\` หรือ \`'\`
+**String (สตริง)** คือข้อมูลที่เป็น **"ข้อความ"** เราจะรู้ได้ยังไงว่าเป็นข้อความ? ง่ายมาก! ข้อความจะต้องมี **ฟันหนู \`"\` หรือเครื่องหมายขีดเดียว \`'\`** คลุมไว้เสมอ!
 
 \`\`\`python
-name = "สมชาย"
-city = 'กรุงเทพฯ'
-sentence = "Python is awesome!"
-empty = ""           # string ว่าง
-multiline = """
-บรรทัดที่ 1
-บรรทัดที่ 2
-"""
+name = "สมชาย"         # ใช้ฟันหนู (Double quote)
+city = 'กรุงเทพฯ'      # ใช้ขีดเดียว (Single quote) ได้เหมือนกัน!
+empty = ""             # ข้อความว่างเปล่า (ไม่มีอะไรข้างในเลย)
 \`\`\`
 
-### การดำเนินการพื้นฐาน
+### การเล่นกับข้อความ 🪄
+
+เราสามารถเอาข้อความมาบวกกัน หรือคูณกันก็ได้นะ! 
 
 \`\`\`python
-# ต่อข้อความ (Concatenation)
+# เอาข้อความมาต่อกัน (เหมือนต่อเลโก้)
 first = "Hello"
 second = "World"
-result = first + " " + second   # "Hello World"
+result = first + " " + second   # ได้คำว่า "Hello World"
 
-# ทำซ้ำ (Repetition)
-line = "-" * 20   # "--------------------"
+# คูณข้อความ (ปั๊มข้อความซ้ำๆ)
+line = "-" * 20   # จะได้ขีดแบบนี้ 20 อัน: "--------------------"
 
-# ความยาว
-print(len("Python"))   # 6
+# นับจำนวนตัวอักษร 
+print(len("Python"))   # ได้ 6 เพราะมี 6 ตัวอักษร
 \`\`\`
 
-### เข้าถึงตัวอักษรแต่ละตัว (Indexing)
+### การดึงตัวอักษรบางตัวออกมา (Indexing) 🎯
+
+คอมพิวเตอร์จะนับตำแหน่งตัวอักษรเริ่มจากเลข 0 เสมอ! จำไว้นะ **ตัวแรกคือ 0 ไม่ใช่ 1**
 
 \`\`\`python
 word = "Python"
-#       012345   ← index (เริ่มที่ 0!)
+# ตำแหน่ง: 012345   ← เริ่มที่ 0!
 
 print(word[0])   # P  (ตัวแรก)
-print(word[1])   # y
-print(word[-1])  # n  (ตัวสุดท้าย)
-print(word[-2])  # o
+print(word[1])   # y  (ตัวที่สอง)
+print(word[-1])  # n  (ถ้าติดลบ คือนับจากข้างหลัง! -1 คือตัวสุดท้าย)
 \`\`\`
 
-### การตัดข้อความ (Slicing)
+### การตัดข้อความ (Slicing) ✂️
+
+ถ้าเราอยากได้ข้อความแค่บางส่วน ก็ตัดมันออกมาได้!
 
 \`\`\`python
 text = "Hello, World!"
-#       0123456789...
 
-print(text[0:5])    # "Hello"
-print(text[7:])     # "World!"
-print(text[:5])     # "Hello"
-print(text[::2])    # "Hlo ol!"  ← ทีละ 2
+# เอาตั้งแต่ตำแหน่ง 0 ถึง 4 (ตัวที่ 5 ไม่เอานะ!)
+print(text[0:5])    # ได้ "Hello"
 \`\`\`
 
-### Method ที่ใช้บ่อย
+### เวทมนตร์แปลงร่างข้อความ (Methods) ✨
+
+เราสามารถสั่งให้ข้อความแปลงร่างได้ด้วยคำสั่งพิเศษ!
 
 \`\`\`python
-name = "  hello world  "
+name = "hello"
 
-name.upper()          # "  HELLO WORLD  "
-name.lower()          # "  hello world  "
-name.strip()          # "hello world"  (ตัดช่องว่างหน้า-หลัง)
-name.replace("o","0") # "hell0 w0rld"
-name.split(" ")       # ['', '', 'hello', 'world', '', '']
-
-text = "Python"
-text.startswith("Py")  # True
-text.endswith("on")    # True
-"yth" in text          # True
+name.upper()          # แปลงเป็นพิมพ์ใหญ่ทั้งหมด -> "HELLO"
+name.replace("o", "0") # เปลี่ยนตัว o เป็นเลข 0 -> "hell0"
 \`\`\`
 
-### f-string (สมัยใหม่ แนะนำมาก!)
+### f-string (สุดยอดเวทมนตร์ 🧙‍♂️) แนะนำให้ใช้!
+
+ถ้าเราอยากเอาตัวแปรไปแทรกในข้อความ ให้พิมพ์ตัว \`f\` ไว้หน้าสุด แล้วใส่ตัวแปรไว้ในปีกกา \`{}\` ได้เลย ง่ายและสะอาดมาก!
 
 \`\`\`python
 name = "สมชาย"
-age = 20
-score = 98.5
+age = 10
 
-# แบบเก่า (ยุ่งยาก)
-msg = "ชื่อ " + name + " อายุ " + str(age)
-
-# แบบ f-string (สะอาด อ่านง่าย)
-msg = f"ชื่อ {name} อายุ {age} ปี คะแนน {score:.1f}"
-print(msg)
-# ชื่อ สมชาย อายุ 20 ปี คะแนน 98.5
+# เอาตัวแปรไปใส่ในข้อความแบบนี้เลย!
+msg = f"สวัสดี เราชื่อ {name} อายุ {age} ขวบ"
+print(msg) 
+# ได้: สวัสดี เราชื่อ สมชาย อายุ 10 ขวบ
 \`\`\``,
-          en: `## Data Type: str (String)
+          en: `## Text Data Type (String or str) 📝
 
-str is **text data**, wrapped in \`"\` or \`'\` quotes.
+**String** is **"text"** data. How do we know it's a string? Easy! Text must always be wrapped in **quotes \`"\` or single quotes \`'\`**!
 
 \`\`\`python
-name = "Alice"
-city = 'Bangkok'
-sentence = "Python is awesome!"
-empty = ""           # empty string
-multiline = """
-Line 1
-Line 2
-"""
+name = "Alice"         # Using double quotes
+city = 'Bangkok'       # Using single quotes works too!
+empty = ""             # Empty string (nothing inside)
 \`\`\`
 
-### Basic Operations
+### Playing with Strings 🪄
+
+We can add or multiply strings together!
 
 \`\`\`python
-# Concatenation
+# Adding strings together (like Lego blocks)
 first = "Hello"
 second = "World"
-result = first + " " + second   # "Hello World"
+result = first + " " + second   # Becomes "Hello World"
 
-# Repetition
-line = "-" * 20   # "--------------------"
+# Multiplying strings (stamping it repeatedly)
+line = "-" * 20   # You get 20 dashes: "--------------------"
 
-# Length
-print(len("Python"))   # 6
+# Counting characters 
+print(len("Python"))   # Gives 6 because it has 6 characters
 \`\`\`
 
-### Accessing Individual Characters (Indexing)
+### Pulling out one character (Indexing) 🎯
+
+Computers always start counting from 0! Remember, **the first letter is 0, not 1**.
 
 \`\`\`python
 word = "Python"
-#       012345   ← index (starts at 0!)
+# Index: 012345   ← Starts at 0!
 
-print(word[0])   # P  (first char)
-print(word[1])   # y
-print(word[-1])  # n  (last char)
-print(word[-2])  # o
+print(word[0])   # P  (First letter)
+print(word[1])   # y  (Second letter)
+print(word[-1])  # n  (Negative means counting from the end! -1 is the last letter)
 \`\`\`
 
-### Slicing
+### Cutting Strings (Slicing) ✂️
+
+If we only want a part of the text, we can cut it out!
 
 \`\`\`python
 text = "Hello, World!"
-#       0123456789...
 
-print(text[0:5])    # "Hello"
-print(text[7:])     # "World!"
-print(text[:5])     # "Hello"
-print(text[::2])    # "Hlo ol!"  ← every 2nd char
+# Get from position 0 up to 4 (position 5 is not included!)
+print(text[0:5])    # Gives "Hello"
 \`\`\`
 
-### Common Methods
+### String Magic Spells (Methods) ✨
+
+We can tell the string to transform using special commands!
 
 \`\`\`python
-name = "  hello world  "
+name = "hello"
 
-name.upper()           # "  HELLO WORLD  "
-name.lower()           # "  hello world  "
-name.strip()           # "hello world"  (remove leading/trailing spaces)
-name.replace("o","0")  # "hell0 w0rld"
-name.split(" ")        # ['hello', 'world']
-
-text = "Python"
-text.startswith("Py")  # True
-text.endswith("on")    # True
-"yth" in text          # True
+name.upper()           # Transforms to all uppercase -> "HELLO"
+name.replace("o", "0") # Changes 'o' to '0' -> "hell0"
 \`\`\`
 
-### f-string (Modern, Highly Recommended!)
+### f-string (Ultimate Magic 🧙‍♂️) Highly Recommended!
+
+If we want to put a variable inside a text, just type \`f\` at the very front, and put the variable in curly braces \`{}\`. It's so easy!
 
 \`\`\`python
 name = "Alice"
-age = 20
-score = 98.5
+age = 10
 
-# Old way (messy)
-msg = "Name: " + name + " Age: " + str(age)
-
-# f-string (clean and readable)
-msg = f"Name: {name} Age: {age} Score: {score:.1f}"
-print(msg)
-# Name: Alice Age: 20 Score: 98.5
+# Put variables inside the text like this!
+msg = f"Hello, my name is {name} and I am {age} years old."
+print(msg) 
+# Output: Hello, my name is Alice and I am 10 years old.
 \`\`\``,
         },
         commands: [
@@ -778,159 +628,161 @@ print(msg)
         xpReward: 25,
         hasFlowchart: false,
         content: {
-          th: `## ชนิดข้อมูลตัวเลข
+          th: `## ชนิดข้อมูลตัวเลข (Numbers) 🔢
 
-### int — จำนวนเต็ม
-ตัวเลขที่ไม่มีทศนิยม ไม่ว่าจะบวกหรือลบก็ได้
+ในโลกของ Python ตัวเลขมี 2 แก๊งใหญ่ๆ ที่เราต้องรู้จัก!
+
+### 1. แก๊งจำนวนเต็ม (int ย่อมาจาก Integer)
+ตัวเลขล้วนๆ ไม่มีจุดทศนิยม จะเป็นบวกหรือลบก็ได้!
 
 \`\`\`python
-age = 25
+age = 10
 year = 2024
-score = -10
-big_number = 1_000_000   # ใส่ _ เพื่อให้อ่านง่าย
+score = -5
+
+# ถ้าเลขเยอะๆ ลายตา เราใส่ _ (ขีดล่าง) ช่วยให้อ่านง่ายได้นะ! 
+# คอมพิวเตอร์จะมองไม่เห็น _ หรอก ไม่ต้องห่วง
+money = 1_000_000   # หนึ่งล้านบาท!
 \`\`\`
 
-### float — เลขทศนิยม
+### 2. แก๊งทศนิยม (float)
+ตัวเลขที่มี "จุด" นั่นเอง!
 
 \`\`\`python
-price = 99.99
-pi = 3.14159
-temperature = -5.5
-scientific = 1.5e10   # 1.5 × 10^10
+price = 99.50
+pi = 3.14
+temperature = -2.5
 \`\`\`
 
-### การคำนวณทุกอย่างที่รู้จัก
+### ให้ Python ช่วยคิดเลข (เหมือนเครื่องคิดเลขเลย!) 🧮
 
 \`\`\`python
 a = 10
 b = 3
 
-print(a + b)    # 13   บวก
-print(a - b)    # 7    ลบ
-print(a * b)    # 30   คูณ
-print(a / b)    # 3.333...  หาร (ได้ float เสมอ)
-print(a // b)   # 3    หารเอาเฉพาะส่วนเต็ม (Floor division)
-print(a % b)    # 1    หารเอาเศษ (Modulo)
-print(a ** b)   # 1000 ยกกำลัง (10^3)
+print(a + b)    # ได้ 13   (บวก)
+print(a - b)    # ได้ 7    (ลบ)
+print(a * b)    # ได้ 30   (คูณ ใช้ตัวดอกจัน *)
+print(a / b)    # ได้ 3.33 (หาร จะได้ทศนิยมเสมอ)
 
-# Shorthand operators
-x = 10
-x += 5    # x = x + 5  → 15
-x -= 3    # x = x - 3  → 12
-x *= 2    # x = x * 2  → 24
-x //= 5   # x = x // 5 → 4
+# ท่าพิเศษ!
+print(a // b)   # ได้ 3    (หารแบบไม่เอาเศษ เอาแค่จำนวนเต็ม)
+print(a % b)    # ได้ 1    (หาเศษเหลือ! 10 หาร 3 เหลือเศษ 1)
+print(a ** b)   # ได้ 1000 (ยกกำลัง! 10 คูณกัน 3 ครั้ง)
 \`\`\`
 
-### ลำดับความสำคัญ (Priority)
+### การคิดเลขแบบรวบรัด (Shorthand) ⚡
+
+ถ้าเราอยากเพิ่มค่าให้ตัวแปรเดิม เราเขียนแบบย่อๆ ได้นะ!
 
 \`\`\`python
-# Python คำนวณตามลำดับ: ** → * / // % → + -
-result = 2 + 3 * 4    # = 2 + 12 = 14  (ไม่ใช่ 20!)
-result = (2 + 3) * 4  # = 5 * 4 = 20   (ใช้วงเล็บ)
+coin = 10
+coin += 5    # มีความหมายเหมือน coin = coin + 5 (ตอนนี้ coin เป็น 15)
+coin -= 3    # โดนหักไป 3 (เหลือ 12)
+coin *= 2    # ได้เบิ้ล 2 เท่า! (เป็น 24)
 \`\`\`
 
-### ฟังก์ชันคณิตศาสตร์
+### กฎการคิดเลข (อันไหนทำก่อน?) 🚦
+
+Python จะคิดคณิตศาสตร์ตามกฎของโรงเรียนเป๊ะเลย!
+ทำ \`**\` (ยกกำลัง) ก่อน → ตามด้วย \`* / // %\` (คูณหาร) → และสุดท้ายคือ \`+ -\` (บวกลบ)
 
 \`\`\`python
-import math
+result = 2 + 3 * 4    # Python จะเอา 3*4 ก่อน ได้ 12 แล้วค่อยบวก 2 = 14 (ไม่ใช่ 20 นะ!)
 
-print(abs(-5))          # 5    ค่าสัมบูรณ์
-print(round(3.14159, 2))# 3.14 ปัดเศษ
-print(max(1, 5, 3))     # 5    ค่ามากสุด
-print(min(1, 5, 3))     # 1    ค่าน้อยสุด
-print(sum([1,2,3,4,5])) # 15   รวมทุกค่า
-
-print(math.sqrt(16))    # 4.0  รากที่สอง
-print(math.ceil(3.2))   # 4    ปัดขึ้น
-print(math.floor(3.8))  # 3    ปัดลง
-print(math.pi)          # 3.14159...
+# ถ้าอยากให้บวกก่อน ต้องใส่วงเล็บ!
+result = (2 + 3) * 4  # ทำในวงเล็บก่อน ได้ 5 * 4 = 20
 \`\`\`
 
-### การแปลงชนิดข้อมูล
+### เวทมนตร์แปลงร่างตัวเลข! 🧙‍♂️
+
+บางทีตัวเลขมันปลอมตัวเป็นข้อความมา เราใช้เวทมนตร์แปลงกลับได้นะ!
 
 \`\`\`python
-int("100")     # 100  str → int
-float("3.14")  # 3.14 str → float
-str(42)        # "42" int → str
-int(3.9)       # 3    float → int (ตัดทศนิยม ไม่ปัด!)
-float(5)       # 5.0  int → float
+int("100")     # แปลงข้อความ "100" ให้เป็นเลข 100 จริงๆ
+float("3.14")  # แปลงข้อความให้เป็นเลขทศนิยม 3.14
+str(42)        # แปลงเลข 42 ให้กลายเป็นข้อความ "42" 
+
+# ระวังนะ!
+int(3.9)       # จะได้ 3 เฉยๆ (มันแค่ตัดทศนิยมทิ้ง ไม่ได้ปัดขึ้นนะ!)
 \`\`\``,
-          en: `## Number Data Types
+          en: `## Number Data Types 🔢
 
-### int — Integers
-Whole numbers without decimals, positive or negative.
+In the Python world, numbers belong to 2 main gangs!
+
+### 1. The Whole Number Gang (int - Integer)
+Just numbers, no decimal points. They can be positive or negative!
 
 \`\`\`python
-age = 25
+age = 10
 year = 2024
-score = -10
-big_number = 1_000_000   # underscores for readability
+score = -5
+
+# If a number is too big, you can use _ to make it easy to read!
+# The computer will ignore the _ so don't worry.
+money = 1_000_000   # One million!
 \`\`\`
 
-### float — Decimal Numbers
+### 2. The Decimal Gang (float)
+Numbers with a "dot"!
 
 \`\`\`python
-price = 99.99
-pi = 3.14159
-temperature = -5.5
-scientific = 1.5e10   # 1.5 × 10^10
+price = 99.50
+pi = 3.14
+temperature = -2.5
 \`\`\`
 
-### All Arithmetic Operations
+### Let Python Do the Math (Like a calculator!) 🧮
 
 \`\`\`python
 a = 10
 b = 3
 
-print(a + b)    # 13   addition
-print(a - b)    # 7    subtraction
-print(a * b)    # 30   multiplication
-print(a / b)    # 3.333...  division (always float!)
-print(a // b)   # 3    floor division
-print(a % b)    # 1    modulo (remainder)
-print(a ** b)   # 1000 exponentiation (10^3)
+print(a + b)    # 13   (Addition)
+print(a - b)    # 7    (Subtraction)
+print(a * b)    # 30   (Multiplication uses star *)
+print(a / b)    # 3.33 (Division always gives a decimal)
 
-# Shorthand operators
-x = 10
-x += 5    # x = x + 5  → 15
-x -= 3    # x = x - 3  → 12
-x *= 2    # x = x * 2  → 24
-x //= 5   # x = x // 5 → 4
+# Special Moves!
+print(a // b)   # 3    (Floor division - ignores the remainder)
+print(a % b)    # 1    (Modulo - gives only the remainder! 10 divided by 3 leaves 1)
+print(a ** b)   # 1000 (Power! 10 to the power of 3)
 \`\`\`
 
-### Operator Priority
+### Shortcut Math (Shorthand) ⚡
+
+If we want to change a variable's value quickly, we can use shortcuts!
 
 \`\`\`python
-# Python follows: ** → * / // % → + -
-result = 2 + 3 * 4    # = 2 + 12 = 14  (not 20!)
-result = (2 + 3) * 4  # = 5 * 4 = 20   (use parentheses)
+coin = 10
+coin += 5    # Same as coin = coin + 5 (Now coin is 15)
+coin -= 3    # Lost 3 (Now 12)
+coin *= 2    # Doubled! (Now 24)
 \`\`\`
 
-### Math Functions
+### Math Rules (What goes first?) 🚦
+
+Python follows school math rules perfectly!
+Does \`**\` (Power) first → then \`* / // %\` (Multiply/Divide) → then \`+ -\` (Add/Subtract)
 
 \`\`\`python
-import math
+result = 2 + 3 * 4    # Python does 3*4 first (12), then adds 2 = 14 (Not 20!)
 
-print(abs(-5))           # 5    absolute value
-print(round(3.14159, 2)) # 3.14 round to 2 decimal places
-print(max(1, 5, 3))      # 5    maximum value
-print(min(1, 5, 3))      # 1    minimum value
-print(sum([1,2,3,4,5]))  # 15   sum of all values
-
-print(math.sqrt(16))     # 4.0  square root
-print(math.ceil(3.2))    # 4    round up
-print(math.floor(3.8))   # 3    round down
-print(math.pi)           # 3.14159...
+# If you want to add first, use parentheses!
+result = (2 + 3) * 4  # Does (2+3) first, so 5 * 4 = 20
 \`\`\`
 
-### Type Conversion
+### Number Transformation Magic! 🧙‍♂️
+
+Sometimes numbers disguise themselves as text. We can change them back!
 
 \`\`\`python
-int("100")     # 100  str → int
-float("3.14")  # 3.14 str → float
-str(42)        # "42" int → str
-int(3.9)       # 3    float → int (truncates, doesn't round!)
-float(5)       # 5.0  int → float
+int("100")     # Turns text "100" into real number 100
+float("3.14")  # Turns text into decimal 3.14
+str(42)        # Turns number 42 into text "42"
+
+# Watch out!
+int(3.9)       # This gives 3 (It just chops off the decimal, it doesn't round up!)
 \`\`\``,
         },
         commands: [
@@ -966,163 +818,106 @@ float(5)       # 5.0  int → float
         xpReward: 25,
         hasFlowchart: false,
         content: {
-          th: `## ชนิดข้อมูล bool (Boolean)
+          th: `## ความจริงและความเท็จ (Boolean หรือ bool) ✅❌
 
-bool มีแค่ **2 ค่า**: \`True\` (จริง) และ \`False\` (เท็จ)  
-เปรียบเหมือนสวิตช์ไฟ — เปิดหรือปิดเท่านั้น!
+นี่คือชนิดข้อมูลที่ง่ายที่สุดในโลก! เพราะมันมีแค่ 2 ค่าเท่านั้น คือ:
+- **True** (จริง / ใช่ / เปิด)
+- **False** (เท็จ / ไม่ใช่ / ปิด)
+
+*(จำไว้นะ: ต้องขึ้นต้นด้วยตัวพิมพ์ใหญ่ **T** และ **F** เสมอ!)*
 
 \`\`\`python
-is_raining = True
-is_sunny = False
-has_ticket = True
-is_logged_in = False
+is_raining = False     # ฝนตกไหม? -> ไม่ตก (False)
+is_sunny = True        # แดดออกไหม? -> ใช่ (True)
+has_homework = True    # มีการบ้านไหม? -> มี (True) แงงง 😭
 \`\`\`
 
-> ⚠️ **สำคัญ**: ต้องขึ้นต้นตัวพิมพ์ใหญ่! \`True\` ✅ ไม่ใช่ \`true\` ❌
+### คอมพิวเตอร์คิดยังไงถึงได้ True หรือ False? 🤔
 
-### bool เกิดจากการเปรียบเทียบ
+เวลาเราถามคำถามคอมพิวเตอร์ (เปรียบเทียบ) มันจะตอบเราเป็น True หรือ False นี่แหละ!
 
 \`\`\`python
-print(5 > 3)      # True
-print(5 < 3)      # False
-print(5 == 5)     # True   (เท่ากัน ใช้ ==)
-print(5 != 3)     # True   (ไม่เท่ากัน)
-print(5 >= 5)     # True
-print(5 <= 4)     # False
-
-name = "Alice"
-print(name == "Alice")   # True
-print(name == "alice")   # False  (ตัวพิมพ์สำคัญ!)
+# เรามาถามคอมพิวเตอร์กัน!
+print(10 > 5)   # 10 มากกว่า 5 ใช่ไหม? -> ตอบ: True (ใช่!)
+print(2 == 3)   # 2 เท่ากับ 3 ใช่ไหม? -> ตอบ: False (ไม่เท่า!)
+print(8 != 5)   # 8 ไม่เท่ากับ 5 ใช่ไหม? -> ตอบ: True (ถูกต้อง!)
 \`\`\`
 
-### ตัวดำเนินการตรรกะ (Logical Operators)
+### การรวมเงื่อนไข (and, or, not) 🧩
+
+เหมือนเวลาแม่ตั้งเงื่อนไขกับเราเลยล่ะ!
+
+- **and (และ)**: ต้องจริง **ทั้งหมด** ถึงจะรอด!
+  *(ต้องกินข้าวให้หมด **และ** ทำการบ้านเสร็จ ถึงจะได้เล่นเกม)*
+- **or (หรือ)**: ขอแค่จริง **อย่างใดอย่างหนึ่ง** ก็รอดแล้ว!
+  *(ถ้ามีเงิน **หรือ** มีบัตรฟรี ก็เข้าสวนสนุกได้)*
+- **not (ตรงข้าม)**: เปลี่ยนคำตอบให้เป็นตรงกันข้าม!
 
 \`\`\`python
-# and — ทุกเงื่อนไขต้องเป็น True
-print(True and True)    # True
-print(True and False)   # False
-print(False and True)   # False
+# 1. and (และ) -> ต้อง True คู่ ถึงจะได้ True
+print(True and True)   # True (กินข้าวหมด + การบ้านเสร็จ = ได้เล่น!)
+print(True and False)  # False (กินข้าวหมด แต่ไม่ทำการบ้าน = อดเล่น!)
 
-# or — อย่างน้อยหนึ่งอันต้อง True
-print(True or False)    # True
-print(False or False)   # False
+# 2. or (หรือ) -> มี True แค่อันเดียวก็รอดแล้ว!
+print(False or True)   # True (ไม่มีเงิน แต่มีบัตรฟรี = ได้เข้า!)
+print(False or False)  # False (ไม่มีเงิน แถมไม่มีบัตรฟรี = อด!)
 
-# not — กลับค่า
-print(not True)    # False
-print(not False)   # True
+# 3. not (ตรงข้าม) -> เปลี่ยนดำเป็นขาว!
+print(not True)        # False (ตรงข้ามกับจริง คือเท็จ)
+print(not False)       # True (ตรงข้ามกับเท็จ คือจริง)
 \`\`\`
 
-### ตัวอย่างการใช้งาน
+ชนิดข้อมูล bool นี้สำคัญมากๆ เลยนะ เพราะเราต้องเอามันไปใช้ตัดสินใจในบทต่อๆ ไปล่ะ! 😉`,
+          en: `## Truth and Falsehood (Boolean or bool) ✅❌
+
+This is the simplest data type in the world! Because it only has 2 values:
+- **True** (Yes / On / Correct)
+- **False** (No / Off / Incorrect)
+
+*(Remember: They must always start with a capital **T** and **F**!)*
 
 \`\`\`python
-age = 25
-has_id = True
-
-# ตรวจสอบว่าเข้าได้ไหม
-can_enter = age >= 18 and has_id
-print(can_enter)   # True
-
-# วันหยุด?
-day = "เสาร์"
-is_weekend = day == "เสาร์" or day == "อาทิตย์"
-print(is_weekend)  # True
-
-# ไม่ใช่วันธรรมดา?
-is_workday = not is_weekend
-print(is_workday)  # False
+is_raining = False     # Is it raining? -> No (False)
+is_sunny = True        # Is it sunny? -> Yes (True)
+has_homework = True    # Do you have homework? -> Yes (True) Aww 😭
 \`\`\`
 
-### ค่าใดที่ Python ถือว่าเป็น False?
+### How does the computer get True or False? 🤔
+
+When we ask the computer a question (compare things), it answers us with True or False!
 
 \`\`\`python
-# ค่าเหล่านี้ถือว่าเป็น "falsy" (เท็จ)
-bool(0)        # False  (เลขศูนย์)
-bool(0.0)      # False  (ทศนิยมศูนย์)
-bool("")       # False  (string ว่าง)
-bool([])       # False  (list ว่าง)
-bool(None)     # False  (ไม่มีค่า)
-
-# ทุกอย่างอื่นถือว่าเป็น "truthy" (จริง)
-bool(1)        # True
-bool("hello")  # True
-bool([1,2,3])  # True
-\`\`\``,
-          en: `## Data Type: bool (Boolean)
-
-bool has only **2 values**: \`True\` and \`False\`  
-Think of a light switch — on or off!
-
-\`\`\`python
-is_raining = True
-is_sunny = False
-has_ticket = True
-is_logged_in = False
+# Let's ask the computer!
+print(10 > 5)   # Is 10 greater than 5? -> Answer: True (Yes!)
+print(2 == 3)   # Is 2 equal to 3? -> Answer: False (No!)
+print(8 != 5)   # Is 8 not equal to 5? -> Answer: True (Correct!)
 \`\`\`
 
-> ⚠️ **Important**: Must be capitalized! \`True\` ✅ not \`true\` ❌
+### Combining Conditions (and, or, not) 🧩
 
-### bool Comes from Comparisons
+Just like when mom sets rules for us!
+
+- **and**: EVERYTHING must be true to pass!
+  *(Must finish dinner **and** finish homework to play games)*
+- **or**: Only ONE thing needs to be true to pass!
+  *(If you have money **or** a free pass, you can enter the theme park)*
+- **not**: Flips the answer to the opposite!
 
 \`\`\`python
-print(5 > 3)      # True
-print(5 < 3)      # False
-print(5 == 5)     # True   (equals, use ==)
-print(5 != 3)     # True   (not equal)
-print(5 >= 5)     # True
-print(5 <= 4)     # False
+# 1. and -> Needs BOTH to be True to win
+print(True and True)   # True (Finished dinner + Finished homework = Play time!)
+print(True and False)  # False (Finished dinner but no homework done = No play!)
 
-name = "Alice"
-print(name == "Alice")   # True
-print(name == "alice")   # False  (case-sensitive!)
+# 2. or -> Just ONE True is enough to win!
+print(False or True)   # True (No money but have a free pass = Enter!)
+print(False or False)  # False (No money and no pass = Cannot enter!)
+
+# 3. not -> Flips everything!
+print(not True)        # False (Opposite of true is false)
+print(not False)       # True (Opposite of false is true)
 \`\`\`
 
-### Logical Operators
-
-\`\`\`python
-# and — both conditions must be True
-print(True and True)    # True
-print(True and False)   # False
-
-# or — at least one must be True
-print(True or False)    # True
-print(False or False)   # False
-
-# not — reverses the value
-print(not True)    # False
-print(not False)   # True
-\`\`\`
-
-### Practical Examples
-
-\`\`\`python
-age = 25
-has_id = True
-
-# Can they enter?
-can_enter = age >= 18 and has_id
-print(can_enter)   # True
-
-# Is it a weekend?
-day = "Saturday"
-is_weekend = day == "Saturday" or day == "Sunday"
-print(is_weekend)  # True
-\`\`\`
-
-### What Python Considers False?
-
-\`\`\`python
-# These are "falsy" values
-bool(0)        # False  (zero)
-bool(0.0)      # False  (float zero)
-bool("")       # False  (empty string)
-bool([])       # False  (empty list)
-bool(None)     # False  (no value)
-
-# Everything else is "truthy"
-bool(1)        # True
-bool("hello")  # True
-bool([1,2,3])  # True
-\`\`\``,
+This bool data type is super important because we will use it to make decisions in the next chapters! 😉`,
         },
         commands: [
           {
@@ -1145,129 +940,42 @@ bool([1,2,3])  # True
         xpReward: 20,
         hasFlowchart: false,
         content: {
-          th: `## ตรวจสอบชนิดข้อมูล
+          th: `## ตรวจสอบชนิดข้อมูลด้วยตัวเอง! 🕵️‍♂️
 
-### type() — รู้ว่าตัวแปรเก็บอะไร
-
-\`\`\`python
-x = 42
-y = 3.14
-z = "hello"
-w = True
-
-print(type(x))   # <class 'int'>
-print(type(y))   # <class 'float'>
-print(type(z))   # <class 'str'>
-print(type(w))   # <class 'bool'>
-\`\`\`
-
-### isinstance() — ตรวจว่าเป็นชนิดนั้นไหม?
+บางทีเราแอบลืมว่าของที่อยู่ในกล่อง (ตัวแปร) มันคืออะไรกันแน่นะ? 
+เราสามารถใช้เครื่องสแกนที่ชื่อว่า \`type()\` เพื่อตรวจดูได้!
 
 \`\`\`python
-x = 42
-
-print(isinstance(x, int))    # True
-print(isinstance(x, float))  # False
-print(isinstance(x, str))    # False
-
-# ตรวจหลายชนิดพร้อมกัน
-print(isinstance(x, (int, float)))  # True (เป็นอย่างใดอย่างหนึ่ง)
-\`\`\`
-
-### กำหนดค่าหลายตัวพร้อมกัน
-
-\`\`\`python
-# กำหนดค่าหลายตัวในบรรทัดเดียว
-x, y, z = 1, 2, 3
-print(x, y, z)   # 1 2 3
-
-# สลับค่าระหว่างตัวแปร (Python trick!)
-a = 10
-b = 20
-a, b = b, a   # สลับกัน!
-print(a, b)   # 20 10
-
-# กำหนดค่าเดียวกันให้หลายตัวแปร
-p = q = r = 0
-print(p, q, r)  # 0 0 0
-\`\`\`
-
-### ตาราง cheat sheet ชนิดข้อมูล
-
-| ชนิด | ตัวอย่าง | แปลงจาก |
-|---|---|---|
-| int | 42, -10, 0 | int("5"), int(3.9) |
-| float | 3.14, -2.5 | float("3.14"), float(5) |
-| str | "hello", 'world' | str(42), str(True) |
-| bool | True, False | bool(0), bool("") |
-
-\`\`\`python
-# รวมทุกอย่างใน 1 โปรแกรม
+age = 10
+price = 99.5
 name = "Alice"
-age = 20
-height = 165.5
-is_student = True
+is_happy = True
 
-print(f"ชื่อ: {name} ({type(name).__name__})")
-print(f"อายุ: {age} ({type(age).__name__})")
-print(f"ส่วนสูง: {height} ({type(height).__name__})")
-print(f"เป็นนักเรียน: {is_student} ({type(is_student).__name__})")
-\`\`\``,
-          en: `## Checking Data Types
-
-### type() — Know What a Variable Contains
-
-\`\`\`python
-x = 42
-y = 3.14
-z = "hello"
-w = True
-
-print(type(x))   # <class 'int'>
-print(type(y))   # <class 'float'>
-print(type(z))   # <class 'str'>
-print(type(w))   # <class 'bool'>
+print(type(age))      # จะบอกว่าเป็น <class 'int'> (จำนวนเต็ม)
+print(type(price))    # จะบอกว่าเป็น <class 'float'> (ทศนิยม)
+print(type(name))     # จะบอกว่าเป็น <class 'str'> (ข้อความ)
+print(type(is_happy)) # จะบอกว่าเป็น <class 'bool'> (ความจริง/เท็จ)
 \`\`\`
 
-### isinstance() — Check if it's a Specific Type
+แค่นี้เราก็รู้แล้วว่าของในกล่องคืออะไร คอมพิวเตอร์เก่งไหมล่ะ! 🌟`,
+          en: `## Checking Data Types Yourself! 🕵️‍♂️
+
+Sometimes we forget what exactly is inside our box (variable).
+We can use a scanner called \`type()\` to check it!
 
 \`\`\`python
-x = 42
+age = 10
+price = 99.5
+name = "Alice"
+is_happy = True
 
-print(isinstance(x, int))    # True
-print(isinstance(x, float))  # False
-print(isinstance(x, str))    # False
-
-# Check multiple types at once
-print(isinstance(x, (int, float)))  # True (either one)
+print(type(age))      # Tells us it's <class 'int'> (Integer)
+print(type(price))    # Tells us it's <class 'float'> (Decimal)
+print(type(name))     # Tells us it's <class 'str'> (String/Text)
+print(type(is_happy)) # Tells us it's <class 'bool'> (True/False)
 \`\`\`
 
-### Assign Multiple Variables at Once
-
-\`\`\`python
-# Multiple assignment in one line
-x, y, z = 1, 2, 3
-print(x, y, z)   # 1 2 3
-
-# Swap variable values (Python trick!)
-a = 10
-b = 20
-a, b = b, a   # swap!
-print(a, b)   # 20 10
-
-# Assign same value to multiple variables
-p = q = r = 0
-print(p, q, r)  # 0 0 0
-\`\`\`
-
-### Data Type Cheat Sheet
-
-| Type | Examples | Convert from |
-|---|---|---|
-| int | 42, -10, 0 | int("5"), int(3.9) |
-| float | 3.14, -2.5 | float("3.14"), float(5) |
-| str | "hello", 'world' | str(42), str(True) |
-| bool | True, False | bool(0), bool("") |`,
+Now we know exactly what's inside the box. Isn't the computer smart? 🌟`,
         },
         commands: [
           {
@@ -1309,153 +1017,91 @@ print(p, q, r)  # 0 0 0
         xpReward: 30,
         hasFlowchart: true,
         content: {
-          th: `## คำสั่ง print()
+          th: `## คำสั่งให้คอมพิวเตอร์พูด! (print) 🗣️
 
-print() คือคำสั่งที่ใช้ **แสดงข้อมูลบนหน้าจอ** เปรียบเหมือนลำโพงที่ส่งเสียงให้ได้ยิน
+\`print()\` คือคำสั่งที่เราใช้บอกให้คอมพิวเตอร์ **แสดงผลลัพธ์ หรือ "พูด"** ออกมาบนหน้าจอ ถ้าเราไม่ใช้ \`print()\` คอมพิวเตอร์ก็จะคิดเงียบๆ อยู่คนเดียว เราจะมองไม่เห็นอะไรเลย!
 
-### รูปแบบพื้นฐาน
+### วิธีใช้งานพื้นฐาน 📝
+
+แค่เอาของที่เราอยากให้คอมพิวเตอร์พูด ใส่เข้าไปในวงเล็บ \`()\`
 
 \`\`\`python
-# แสดงข้อความ
+# ให้คอมพิวเตอร์พูดข้อความ (ต้องมีฟันหนูนะ!)
 print("สวัสดีชาวโลก!")
 
-# แสดงตัวแปร
-name = "Python"
-print(name)
+# ให้คอมพิวเตอร์คิดเลขแล้วบอกคำตอบ
+print(5 + 5)    # มันจะแสดงเลข 10 ออกมา
 
-# แสดงหลายค่า (คั่นด้วย comma)
-print("ชื่อ:", name, "เวอร์ชัน:", 3)
-# ชื่อ: Python เวอร์ชัน: 3
+# เอาค่าในกล่อง (ตัวแปร) ออกมาโชว์
+name = "โดเรม่อน"
+print(name)     # จะแสดงคำว่า โดเรม่อน
 \`\`\`
 
-### ตัวเลือกพิเศษ: sep และ end
+### พิมพ์หลายๆ อย่างพร้อมกัน 🤝
+
+เราสามารถให้คอมพิวเตอร์พูดหลายๆ อย่างพร้อมกันได้ โดยใช้ **ลูกน้ำ (,)** คั่นแต่ละอย่าง
 
 \`\`\`python
-# sep — กำหนดตัวคั่นระหว่างค่า (ค่าเริ่มต้นคือ " ")
-print("แอปเปิ้ล", "กล้วย", "มะม่วง", sep=", ")
-# แอปเปิ้ล, กล้วย, มะม่วง
-
-print("2024", "06", "23", sep="-")
-# 2024-06-23
-
-# end — กำหนดตัวสิ้นสุด (ค่าเริ่มต้นคือ "\\n")
-print("Hello", end=" ")
-print("World")
-# Hello World  (อยู่บรรทัดเดียวกัน!)
-
-# พิมพ์โดยไม่ขึ้นบรรทัดใหม่
-print("A", end="")
-print("B", end="")
-print("C")
-# ABC
+age = 10
+# คอมพิวเตอร์จะเอาคำมาต่อกัน และเติมช่องว่างให้ตรงลูกน้ำอัตโนมัติ!
+print("ฉันอายุ", age, "ขวบ")
+# ผลลัพธ์: ฉันอายุ 10 ขวบ
 \`\`\`
 
-### f-string — จัดรูปแบบขั้นเทพ
+### ใช้ f-string (เท่ที่สุด!) 🌟
+
+แทนที่จะใช้ลูกน้ำ (,) คั่น ซึ่งบางทีก็งง เราสามารถใช้เวทมนตร์ \`f-string\` ได้! แค่พิมพ์ตัว \`f\` ไว้หน้าข้อความ แล้วเอาตัวแปรใส่ในปีกกา \`{}\`
 
 \`\`\`python
-name = "สมชาย"
-score = 98.567
-pi = 3.14159265
+score = 100
+name = "โนบิตะ"
 
-# รูปแบบตัวเลข
-print(f"คะแนน: {score:.2f}")        # คะแนน: 98.57  (2 ตำแหน่ง)
-print(f"Pi = {pi:.4f}")             # Pi = 3.1416
-print(f"จำนวน: {1000000:,}")        # จำนวน: 1,000,000 (มี comma)
-print(f"เปอร์เซ็นต์: {0.856:.1%}") # เปอร์เซ็นต์: 85.6%
-
-# จัดตำแหน่ง (Alignment)
-print(f"{'ชื่อ':<10} {'คะแนน':>6}")  # ชอบด้านซ้าย / ขวา
-print(f"{'Alice':<10} {95:>6}")
-print(f"{'Bob':<10} {87:>6}")
-\`\`\`
-
-### พิมพ์ pattern สวยๆ
-
-\`\`\`python
-# กรอบข้อความ
-print("=" * 30)
-print(f"{'ยินดีต้อนรับ':^30}")    # จัดกลาง
-print("=" * 30)
-
-# ตาราง
-print(f"{'ชื่อ':<15} {'คะแนน':^10} {'เกรด':>5}")
-print("-" * 32)
-print(f"{'Alice':<15} {95:^10} {'A':>5}")
-print(f"{'Bob':<15} {82:^10} {'B':>5}")
+# ง่ายและอ่านง่ายมาก!
+print(f"{name} สอบได้คะแนน {score} คะแนนเต็มเลย!")
+# ผลลัพธ์: โนบิตะ สอบได้คะแนน 100 คะแนนเต็มเลย!
 \`\`\``,
-          en: `## The print() Function
+          en: `## Making the Computer Speak! (print) 🗣️
 
-print() is used to **display information on screen** — like a speaker that outputs sound.
+\`print()\` is the command we use to tell the computer to **show results or "speak"** on the screen. If we don't use \`print()\`, the computer will just think quietly to itself, and we won't see anything!
 
-### Basic Usage
+### Basic Usage 📝
+
+Just put what you want the computer to say inside the parentheses \`()\`.
 
 \`\`\`python
-# Display text
-print("Hello, World!")
+# Make it say text (must use quotes!)
+print("Hello World!")
 
-# Display variable
-name = "Python"
-print(name)
+# Make it calculate and show the answer
+print(5 + 5)    # It will show 10
 
-# Display multiple values (separated by comma)
-print("Name:", name, "Version:", 3)
-# Name: Python Version: 3
+# Show what's inside a box (variable)
+name = "Doraemon"
+print(name)     # It will show Doraemon
 \`\`\`
 
-### Special Options: sep and end
+### Printing many things together 🤝
+
+We can make the computer say multiple things at once by using a **comma (,)** to separate them.
 
 \`\`\`python
-# sep — custom separator (default is " ")
-print("Apple", "Banana", "Mango", sep=", ")
-# Apple, Banana, Mango
-
-print("2024", "06", "23", sep="-")
-# 2024-06-23
-
-# end — custom ending (default is "\\n")
-print("Hello", end=" ")
-print("World")
-# Hello World  (same line!)
-
-# No newline
-print("A", end="")
-print("B", end="")
-print("C")
-# ABC
+age = 10
+# The computer puts them together and adds a space at the comma automatically!
+print("I am", age, "years old")
+# Output: I am 10 years old
 \`\`\`
 
-### f-string — Advanced Formatting
+### Using f-string (The coolest way!) 🌟
+
+Instead of using commas (,) which can get confusing, we can use \`f-string\` magic! Just type an \`f\` before the text, and put variables inside curly braces \`{}\`.
 
 \`\`\`python
-name = "Alice"
-score = 98.567
-pi = 3.14159265
+score = 100
+name = "Nobita"
 
-# Number formatting
-print(f"Score: {score:.2f}")           # Score: 98.57  (2 decimals)
-print(f"Pi = {pi:.4f}")               # Pi = 3.1416
-print(f"Count: {1000000:,}")          # Count: 1,000,000
-print(f"Percentage: {0.856:.1%}")     # Percentage: 85.6%
-
-# Alignment
-print(f"{'Name':<10} {'Score':>6}")   # left / right
-print(f"{'Alice':<10} {95:>6}")
-print(f"{'Bob':<10} {87:>6}")
-\`\`\`
-
-### Creating Pretty Patterns
-
-\`\`\`python
-# Bordered text
-print("=" * 30)
-print(f"{'Welcome':^30}")   # center aligned
-print("=" * 30)
-
-# Table
-print(f"{'Name':<15} {'Score':^10} {'Grade':>5}")
-print("-" * 32)
-print(f"{'Alice':<15} {95:^10} {'A':>5}")
-print(f"{'Bob':<15} {82:^10} {'B':>5}")
+# Super easy to read!
+print(f"{name} got a perfect score of {score}!")
+# Output: Nobita got a perfect score of 100!
 \`\`\``,
         },
         commands: [
@@ -1473,153 +1119,98 @@ print(f"{'Bob':<15} {82:^10} {'B':>5}")
         xpReward: 35,
         hasFlowchart: true,
         content: {
-          th: `## คำสั่ง input()
+          th: `## ให้คอมพิวเตอร์ฟังเราบ้าง! (input) 👂
 
-input() ใช้ **รับข้อมูลจากผู้ใช้** — เหมือนกล่องที่รอให้คนพิมพ์แล้วกด Enter
+\`print()\` คือให้คอมพิวเตอร์เป็นคนพูด แล้วถ้าเราอยากเป็นคนพูดให้คอมพิวเตอร์ฟังล่ะ? เราต้องใช้คำสั่ง \`input()\` ครับ!
 
-### รูปแบบพื้นฐาน
+\`input()\` จะทำให้คอมพิวเตอร์ **หยุดรอ** ให้เราพิมพ์อะไรบางอย่างลงไปทางคีย์บอร์ด แล้วกด Enter!
+
+### วิธีใช้งานพื้นฐาน ⌨️
+
+ส่วนใหญ่เราจะตั้งคำถามทิ้งไว้ในวงเล็บ และ **ต้องสร้างกล่อง (ตัวแปร) มารอรับคำตอบเสมอ!** ไม่งั้นคอมพิวเตอร์ฟังแล้วก็จะลืมทิ้งไปเลย!
 
 \`\`\`python
-# รับข้อมูลพื้นฐาน
-name = input("ชื่อของคุณ: ")
-print(f"สวัสดี, {name}!")
+# 1. คอมพิวเตอร์ถามชื่อ
+# 2. รอเราพิมพ์
+# 3. เอาคำตอบไปเก็บไว้ในกล่องชื่อ user_name
+user_name = input("คุณชื่ออะไรครับ? ")
+
+print(f"ยินดีที่ได้รู้จักนะคุณ {user_name}!")
 \`\`\`
 
-### ⚠️ input() คืนค่าเป็น str เสมอ!
+### ⚠️ ข้อควรระวังสุดๆ! (ทุกสิ่งที่พิมพ์คือข้อความ!)
+
+เมื่อเราใช้ \`input()\` **ทุกอย่างที่เราพิมพ์ลงไป คอมพิวเตอร์จะมองว่าเป็น ข้อความ (str) เสมอ!** ถึงแม้เราจะพิมพ์ตัวเลข 10 ลงไป มันก็จะมองว่าเป็นคำว่า "10" (เอาไปบวกลบไม่ได้นะ!)
 
 \`\`\`python
-# ผิด! ไม่สามารถบวกตัวเลขกับ string ได้
-age = input("อายุ: ")
-print(age + 1)    # TypeError!
+age = input("คุณอายุเท่าไหร่? ")  # สมมติเราพิมพ์ 10
 
-# ถูก! ต้องแปลงชนิดก่อน
-age = int(input("อายุ: "))
-print(age + 1)    # ทำงานได้!
-
-height = float(input("ส่วนสูง (cm): "))
-print(f"ส่วนสูงในเมตร: {height/100:.2f} m")
+# ถ้าเราทำแบบนี้ โปรแกรมจะพัง (Error) ทันที!
+# เพราะเราเอาข้อความ "10" ไปบวกกับเลข 5 ไม่ได้!
+# print(age + 5)  ❌ ผิด!
 \`\`\`
 
-### รับหลายค่าพร้อมกัน
+### วิธีแก้: แปลงร่างข้อความเป็นตัวเลข! 🧙‍♂️
+
+ถ้าเราจะถามตัวเลขจากผู้ใช้ เราต้องใช้เวทมนตร์ \`int()\` หรือ \`float()\` คลุมทับ \`input()\` ไปอีกชั้นนึง!
 
 \`\`\`python
-# รับทีละบรรทัด
-name = input("ชื่อ: ")
-age = int(input("อายุ: "))
-city = input("เมือง: ")
+# ใช้ int() คลุม input() เอาไว้ เพื่อแปลงคำตอบเป็นเลขจำนวนเต็ม
+age = int(input("คุณอายุเท่าไหร่? "))
 
-print(f"สวัสดี {name} อายุ {age} ปี จาก{city}")
+print(f"อีก 5 ปี คุณจะอายุ {age + 5} ขวบนะ!")  # ✅ คราวนี้บวกเลขได้แล้ว!
 \`\`\`
 
-### รับหลายค่าในบรรทัดเดียว (ขั้นสูง)
+จำง่ายๆ:
+- ถ้าถามชื่อ, ถามสีที่ชอบ 👉 ใช้ \`input()\` ธรรมดา
+- ถ้าถามอายุ, ถามจำนวนของ 👉 ใช้ \`int(input())\`
+- ถ้าถามส่วนสูง, ถามน้ำหนัก (มีทศนิยม) 👉 ใช้ \`float(input())\``,
+          en: `## Making the Computer Listen! (input) 👂
+
+\`print()\` is for the computer to talk. What if we want to talk to the computer? We use the \`input()\` command!
+
+\`input()\` makes the computer **stop and wait** for us to type something on the keyboard and press Enter!
+
+### Basic Usage ⌨️
+
+Usually, we put a question inside the parentheses, and **we must always create a box (variable) to catch the answer!** Otherwise, the computer will hear it and immediately forget it!
 
 \`\`\`python
-# รับ 3 ตัวเลขในบรรทัดเดียว (คั่นด้วยช่องว่าง)
-# ผู้ใช้พิมพ์: 1 2 3
-a, b, c = input("กรอก 3 ตัวเลข: ").split()
-a, b, c = int(a), int(b), int(c)
-print(f"ผลรวม = {a + b + c}")
+# 1. Computer asks your name
+# 2. Waits for you to type
+# 3. Stores the answer in the box 'user_name'
+user_name = input("What is your name? ")
+
+print(f"Nice to meet you, {user_name}!")
 \`\`\`
 
-### ตัวอย่างโปรแกรมครบๆ
+### ⚠️ Super Important Warning! (Everything typed is text!)
+
+When we use \`input()\`, **everything we type is seen as text (str) by the computer!** Even if we type the number 10, it sees it as the word "10" (you can't add or subtract with it!).
 
 \`\`\`python
-# โปรแกรมคำนวณ BMI
-print("=== คำนวณ BMI ===")
-name = input("ชื่อ: ")
-weight = float(input("น้ำหนัก (kg): "))
-height = float(input("ส่วนสูง (cm): "))
+age = input("How old are you? ")  # Let's say we type 10
 
-height_m = height / 100
-bmi = weight / (height_m ** 2)
-
-print(f"\\nผล BMI ของ {name}:")
-print(f"BMI = {bmi:.1f}")
-
-if bmi < 18.5:
-    status = "น้ำหนักน้อย"
-elif bmi < 25:
-    status = "ปกติ ✅"
-elif bmi < 30:
-    status = "น้ำหนักเกิน"
-else:
-    status = "อ้วน"
-
-print(f"สถานะ: {status}")
-\`\`\``,
-          en: `## The input() Function
-
-input() is used to **receive data from the user** — like a box waiting for someone to type and press Enter.
-
-### Basic Usage
-
-\`\`\`python
-# Get basic input
-name = input("Your name: ")
-print(f"Hello, {name}!")
+# If we do this, the program will crash (Error)!
+# Because you cannot add the text "10" to the number 5!
+# print(age + 5)  ❌ WRONG!
 \`\`\`
 
-### ⚠️ input() Always Returns a String!
+### The Fix: Transform text into numbers! 🧙‍♂️
+
+If we want to ask for a number, we must wrap \`input()\` with the \`int()\` or \`float()\` magic spells!
 
 \`\`\`python
-# Wrong! Can't add a number to a string
-age = input("Age: ")
-print(age + 1)    # TypeError!
+# Wrap input() with int() to transform the answer into a whole number
+age = int(input("How old are you? "))
 
-# Correct! Convert type first
-age = int(input("Age: "))
-print(age + 1)    # Works!
-
-height = float(input("Height (cm): "))
-print(f"Height in meters: {height/100:.2f} m")
+print(f"In 5 years, you will be {age + 5} years old!")  # ✅ Now we can do math!
 \`\`\`
 
-### Receive Multiple Values
-
-\`\`\`python
-# One per line
-name = input("Name: ")
-age = int(input("Age: "))
-city = input("City: ")
-
-print(f"Hello {name}, age {age}, from {city}")
-\`\`\`
-
-### Multiple Values on One Line (Advanced)
-
-\`\`\`python
-# User types: 1 2 3
-a, b, c = input("Enter 3 numbers: ").split()
-a, b, c = int(a), int(b), int(c)
-print(f"Sum = {a + b + c}")
-\`\`\`
-
-### Complete Program Example
-
-\`\`\`python
-# BMI Calculator
-print("=== BMI Calculator ===")
-name = input("Name: ")
-weight = float(input("Weight (kg): "))
-height = float(input("Height (cm): "))
-
-height_m = height / 100
-bmi = weight / (height_m ** 2)
-
-print(f"\\nBMI result for {name}:")
-print(f"BMI = {bmi:.1f}")
-
-if bmi < 18.5:
-    status = "Underweight"
-elif bmi < 25:
-    status = "Normal ✅"
-elif bmi < 30:
-    status = "Overweight"
-else:
-    status = "Obese"
-
-print(f"Status: {status}")
-\`\`\``,
+Easy to remember:
+- Asking name, favorite color 👉 Just use \`input()\`
+- Asking age, how many items 👉 Use \`int(input())\`
+- Asking height, weight (decimals) 👉 Use \`float(input())\``,
         },
         commands: [
           {
@@ -1642,117 +1233,61 @@ print(f"Status: {status}")
         xpReward: 30,
         hasFlowchart: false,
         content: {
-          th: `## การจัดรูปแบบตัวเลขใน Python
+          th: `## การจัดรูปแบบตัวเลขให้สวยงาม 🎨
 
-### format specifiers ใน f-string
+บางทีเวลาเราคำนวณเลข ทศนิยมมันอาจจะยาวเป็นหางว่าวเลย เช่น \`3.33333333\`
+เราสามารถใช้เวทมนตร์ \`f-string\` จัดการให้มันสวยงามได้!
+
+### ตัดทศนิยมให้เหลือแค่ 2 ตำแหน่ง ✂️
+
+เราแค่ใส่ โคลอน \`:\` และจุด \`.2f\` ไว้หลังชื่อตัวแปร
 
 \`\`\`python
-pi = 3.14159265358
+money = 100 / 3
+# ถ้า print ธรรมดา จะได้ 33.333333333333336
 
-# จำนวนทศนิยม
-print(f"{pi:.0f}")    # 3      (0 ตำแหน่ง)
-print(f"{pi:.2f}")    # 3.14   (2 ตำแหน่ง)
-print(f"{pi:.5f}")    # 3.14159 (5 ตำแหน่ง)
-
-# จำนวนเงิน
-price = 1234567.89
-print(f"฿\{price:,.2f\}")   # ฿1,234,567.89
-
-# เปอร์เซ็นต์
-ratio = 0.8567
-print(f"{ratio:.1%}")   # 85.7%
-print(f"{ratio:.0%}")   # 86%
-
-# เลขยกกำลัง (Scientific notation)
-big = 1234567890
-print(f"{big:.2e}")   # 1.23e+09
-
-# ใส่ศูนย์นำหน้า
-num = 7
-print(f"{num:03d}")   # 007  (กว้าง 3 ใส่ 0 นำหน้า)
+# ใช้ f-string ตัดให้เหลือ 2 ตำแหน่ง!
+print(f"ฉันมีเงิน {money:.2f} บาท")
+# ผลลัพธ์: ฉันมีเงิน 33.33 บาท
 \`\`\`
 
-### ตัวอย่าง: ใบเสร็จร้านอาหาร
+### ใส่ลูกน้ำให้ตัวเลขเยอะๆ (หลักพัน หลักหมื่น) 💰
+
+ถ้าเงินเราเยอะมากๆ เช่น \`1000000\` เราอ่านยากใช่ไหมล่ะ? 
+ใส่ \`,\` ให้มันซะเลย!
 
 \`\`\`python
-print("=" * 35)
-print(f"{'ใบเสร็จ':^35}")
-print("=" * 35)
-
-items = [
-    ("ข้าวผัด", 2, 60),
-    ("ต้มยำ", 1, 120),
-    ("น้ำเปล่า", 3, 15),
-]
-
-total = 0
-for name, qty, price in items:
-    subtotal = qty * price
-    total += subtotal
-    print(f"{name:<12} {qty:>3} x {price:>4} = {subtotal:>6,.0f}฿")
-
-print("-" * 35)
-print(f"{'รวม':>27} {total:>6,.0f}฿")
-vat = total * 0.07
-print(f"{'VAT 7%':>27} {vat:>6,.0f}฿")
-print(f"{'รวมทั้งหมด':>27} {total+vat:>6,.0f}฿")
-print("=" * 35)
+score = 5000000
+print(f"คะแนนของคุณคือ {score:,} แต้ม")
+# ผลลัพธ์: คะแนนของคุณคือ 5,000,000 แต้ม (อ่านง่ายขึ้นเยอะ!)
 \`\`\``,
-          en: `## Number Formatting in Python
+          en: `## Making Numbers Look Beautiful 🎨
 
-### Format Specifiers in f-string
+Sometimes when we calculate math, the decimal points are super long like \`3.33333333\`.
+We can use \`f-string\` magic to make it look pretty!
+
+### Trim to just 2 decimal places ✂️
+
+Just add a colon \`:\` and \`.2f\` right after the variable name.
 
 \`\`\`python
-pi = 3.14159265358
+money = 100 / 3
+# Normal print gives: 33.333333333333336
 
-# Decimal places
-print(f"{pi:.0f}")    # 3      (0 places)
-print(f"{pi:.2f}")    # 3.14   (2 places)
-print(f"{pi:.5f}")    # 3.14159 (5 places)
-
-# Currency
-price = 1234567.89
-print(f"$\{price:,.2f\}")   # $1,234,567.89
-
-# Percentage
-ratio = 0.8567
-print(f"{ratio:.1%}")   # 85.7%
-print(f"{ratio:.0%}")   # 86%
-
-# Scientific notation
-big = 1234567890
-print(f"{big:.2e}")   # 1.23e+09
-
-# Zero-padded
-num = 7
-print(f"{num:03d}")   # 007  (width 3, pad with zeros)
+# Use f-string to trim to 2 places!
+print(f"I have {money:.2f} dollars")
+# Output: I have 33.33 dollars
 \`\`\`
 
-### Example: Restaurant Receipt
+### Add commas to big numbers (Thousands, Millions) 💰
+
+If we have a huge number like \`1000000\`, it's hard to read, right?
+Let's add commas \`,\` to it!
 
 \`\`\`python
-print("=" * 35)
-print(f"{'RECEIPT':^35}")
-print("=" * 35)
-
-items = [
-    ("Fried Rice", 2, 60),
-    ("Tom Yum", 1, 120),
-    ("Water", 3, 15),
-]
-
-total = 0
-for name, qty, price in items:
-    subtotal = qty * price
-    total += subtotal
-    print(f"{name:<12} {qty:>3} x {price:>4} = {subtotal:>6,.0f}")
-
-print("-" * 35)
-print(f"{'Subtotal':>27} {total:>6,.0f}")
-vat = total * 0.07
-print(f"{'VAT 7%':>27} {vat:>6,.0f}")
-print(f"{'Total':>27} {total+vat:>6,.0f}")
-print("=" * 35)
+score = 5000000
+print(f"Your score is {score:,} points")
+# Output: Your score is 5,000,000 points (Much easier to read!)
 \`\`\``,
         },
         commands: [],
@@ -1782,129 +1317,71 @@ print("=" * 35)
         xpReward: 35,
         hasFlowchart: true,
         content: {
-          th: `## คำสั่ง if / else
+          th: `## การตัดสินใจ (if / else) 🤔
 
-if-else เหมือน **ทางแยก** ที่โปรแกรมต้องเลือกเส้นทาง
+ในโลกความจริง เราต้องตัดสินใจตลอดเวลา เช่น "ถ้าฝนตก ฉันจะกางร่ม แต่ถ้าไม่ตก ฉันจะใส่หมวก"
+คอมพิวเตอร์ก็ตัดสินใจได้เหมือนกัน! เราเรียกเวทมนตร์นี้ว่า \`if\` (ถ้า) และ \`else\` (มิฉะนั้น)
 
-### รูปแบบ
+### วิธีเขียน if / else ง่ายๆ 📝
 
 \`\`\`python
-if เงื่อนไข:
-    # รันเมื่อเงื่อนไขเป็น True
+is_raining = True
+
+# ถ้าฝนตกนะ (is_raining เป็น True)
+if is_raining:
+    print("เอาร่มไปด้วยนะ! ☔")
+
+# ถ้าไม่ตกล่ะ (is_raining เป็น False)
 else:
-    # รันเมื่อเงื่อนไขเป็น False
+    print("ใส่หมวกกันแดดได้เลย! 🧢")
 \`\`\`
 
-> ⚠️ **Python ใช้ indentation (การเยื้อง 4 ช่องว่าง)** แทนวงเล็บปีกกา { }
+### ⚠️ กฎสำคัญของการใช้ if / else
+1. ต้องมีเครื่องหมายทวิภาค \`:\` (โคลอน) ต่อท้ายบรรทัด \`if\` และ \`else\` เสมอ!
+2. บรรทัดที่อยู่ข้างใต้ **ต้องย่อหน้า (กด Tab 1 ครั้ง)** เพื่อให้คอมพิวเตอร์รู้ว่า "นี่คือสิ่งที่ต้องทำนะ"
 
-### ตัวดำเนินการเปรียบเทียบ
-
-\`\`\`python
-x = 10
-print(x == 10)   # True   (เท่ากัน)
-print(x != 5)    # True   (ไม่เท่ากัน)
-print(x > 8)     # True   (มากกว่า)
-print(x < 8)     # False  (น้อยกว่า)
-print(x >= 10)   # True   (มากกว่าหรือเท่ากัน)
-print(x <= 9)    # False  (น้อยกว่าหรือเท่ากัน)
-\`\`\`
-
-### ตัวอย่างพื้นฐาน
+### ลองเช็คอายุเล่นๆ 🎂
 
 \`\`\`python
-# ตัวอย่าง 1: ตรวจสอบอายุ
-age = int(input("อายุ: "))
+age = int(input("คุณอายุเท่าไหร่? "))
+
 if age >= 18:
-    print("คุณบรรลุนิติภาวะแล้ว")
+    print("คุณเป็นผู้ใหญ่แล้ว! 🧑")
 else:
-    print(f"อีก {18 - age} ปีจะบรรลุนิติภาวะ")
-
-# ตัวอย่าง 2: ตรวจสอบเลขคู่/คี่
-num = int(input("กรอกตัวเลข: "))
-if num % 2 == 0:
-    print(f"{num} เป็นเลขคู่")
-else:
-    print(f"{num} เป็นเลขคี่")
-
-# ตัวอย่าง 3: หาค่ามาก/น้อย
-a = int(input("a = "))
-b = int(input("b = "))
-if a > b:
-    print(f"a ({a}) มากกว่า b ({b})")
-else:
-    print(f"b ({b}) มากกว่าหรือเท่ากับ a ({a})")
-\`\`\`
-
-### if โดยไม่มี else
-
-\`\`\`python
-score = int(input("คะแนน: "))
-if score == 100:
-    print("🎉 Perfect Score!")   # แสดงเฉพาะเมื่อได้ 100
-
-print("ขอบคุณที่เข้าร่วม!")   # แสดงเสมอ
+    print("คุณยังเป็นเด็กอยู่เลย! 👶")
 \`\`\``,
-          en: `## if / else Statement
+          en: `## Making Decisions (if / else) 🤔
 
-if-else is like a **crossroads** where the program must choose a path.
+In the real world, we make decisions all the time. Like "If it rains, I will take an umbrella, else I will wear a hat."
+Computers can make decisions too! We call this magic \`if\` and \`else\`.
 
-### Structure
+### How to write if / else easily 📝
 
 \`\`\`python
-if condition:
-    # runs when condition is True
+is_raining = True
+
+# If it is raining (is_raining is True)
+if is_raining:
+    print("Take an umbrella! ☔")
+
+# Else (if is_raining is False)
 else:
-    # runs when condition is False
+    print("Wear a sun hat! 🧢")
 \`\`\`
 
-> ⚠️ **Python uses indentation (4 spaces)** instead of curly braces { }
+### ⚠️ Important Rules for if / else
+1. You must always put a colon \`:\` at the end of the \`if\` and \`else\` lines!
+2. The lines underneath **must be indented (press Tab once)** so the computer knows "this is what I should do inside".
 
-### Comparison Operators
-
-\`\`\`python
-x = 10
-print(x == 10)   # True   (equals)
-print(x != 5)    # True   (not equal)
-print(x > 8)     # True   (greater than)
-print(x < 8)     # False  (less than)
-print(x >= 10)   # True   (greater than or equal)
-print(x <= 9)    # False  (less than or equal)
-\`\`\`
-
-### Basic Examples
+### Let's check your age 🎂
 
 \`\`\`python
-# Example 1: Age check
-age = int(input("Age: "))
+age = int(input("How old are you? "))
+
 if age >= 18:
-    print("You are an adult")
+    print("You are an adult! 🧑")
 else:
-    print(f"{18 - age} more years until adulthood")
-
-# Example 2: Even or Odd
-num = int(input("Enter a number: "))
-if num % 2 == 0:
-    print(f"{num} is even")
-else:
-    print(f"{num} is odd")
-
-# Example 3: Find larger value
-a = int(input("a = "))
-b = int(input("b = "))
-if a > b:
-    print(f"a ({a}) is greater than b ({b})")
-else:
-    print(f"b ({b}) is greater than or equal to a ({a})")
-\`\`\`
-
-### if Without else
-
-\`\`\`python
-score = int(input("Score: "))
-if score == 100:
-    print("🎉 Perfect Score!")   # only shows when score is 100
-
-print("Thank you for participating!")   # always shows
+    print("You are still a kid! 👶")
 \`\`\``,
         },
         commands: [
@@ -1922,157 +1399,52 @@ print("Thank you for participating!")   # always shows
         xpReward: 35,
         hasFlowchart: true,
         content: {
-          th: `## คำสั่ง elif
+          th: `## หลายทางเลือก (elif) 🛤️
 
-elif (else if) ใช้เมื่อมีเงื่อนไข**มากกว่า 2 ทาง**
+บางครั้งชีวิตเราไม่ได้มีแค่ 2 ทางเลือก! ถ้าเราอยากมีทางเลือกที่ 3, 4, 5 เราจะใช้ \`elif\` (ย่อมาจาก else if) มาคั่นตรงกลางระหว่าง \`if\` กับ \`else\` ครับ!
 
-\`\`\`python
-if เงื่อนไข1:
-    # ทาง 1
-elif เงื่อนไข2:
-    # ทาง 2
-elif เงื่อนไข3:
-    # ทาง 3
-else:
-    # ทางสุดท้าย
-\`\`\`
-
-### ตัวอย่าง: ระบบเกรด
+### เครื่องตัดเกรด 🅰️🅱️🆎
 
 \`\`\`python
-score = int(input("คะแนน (0-100): "))
+score = int(input("ได้คะแนนเท่าไหร่? "))
 
 if score >= 80:
-    grade = "A"
-    msg = "ยอดเยี่ยม! 🌟"
+    print("เก่งมาก! เอาเกรด A ไปเลย! 🏆")
 elif score >= 70:
-    grade = "B"
-    msg = "ดีมาก! 👍"
+    print("ดีมาก! ได้เกรด B จ้า 🥈")
 elif score >= 60:
-    grade = "C"
-    msg = "พอใช้ได้"
-elif score >= 50:
-    grade = "D"
-    msg = "ต้องพยายามมากขึ้น"
+    print("พอใช้! ได้เกรด C นะ 🥉")
 else:
-    grade = "F"
-    msg = "สอบไม่ผ่าน ❌"
-
-print(f"เกรด: {grade} — {msg}")
+    print("ตกจ้า! ต้องขยันกว่านี้นะ 😭")
 \`\`\`
 
-### ตัวดำเนินการตรรกะ
+**ข้อควรรู้:**
+- คอมพิวเตอร์จะเช็คเงื่อนไขจาก **บนลงล่าง**
+- ถ้าเจอเงื่อนไขไหนเป็นจริงแล้ว มันจะทำคำสั่งนั้น และ **ข้ามเงื่อนไขที่เหลือทั้งหมดทันที!** (ไม่เช็คต่อแล้วนะ!)
+- เราจะมี \`elif\` กี่อันก็ได้ตามใจชอบเลย!`,
+          en: `## Multiple Choices (elif) 🛤️
+
+Sometimes life has more than 2 choices! If we want a 3rd, 4th, or 5th choice, we use \`elif\` (short for else if) in between \`if\` and \`else\`!
+
+### The Grade Calculator 🅰️🅱️🆎
 
 \`\`\`python
-age = 25
-has_id = True
-is_vip = False
-
-# and — ทุกเงื่อนไขต้องจริง
-if age >= 18 and has_id:
-    print("เข้าได้")
-
-# or — อย่างน้อยหนึ่งต้องจริง
-if is_vip or age >= 60:
-    print("ได้รับส่วนลด")
-
-# not — กลับค่า
-if not is_vip:
-    print("ไม่ใช่ VIP")
-
-# รวมหลายตัว
-day = "เสาร์"
-time_hour = 10
-if (day == "เสาร์" or day == "อาทิตย์") and (9 <= time_hour <= 17):
-    print("ร้านเปิดวันหยุด")
-\`\`\`
-
-### ตัวอย่าง: สถานีรถไฟ (ตั๋ว)
-
-\`\`\`python
-age = int(input("อายุผู้โดยสาร: "))
-full_price = 100
-
-if age <= 5:
-    price = 0
-    desc = "เด็กเล็ก (ฟรี)"
-elif age <= 12:
-    price = full_price * 0.5
-    desc = "เด็ก (50%)"
-elif age <= 59:
-    price = full_price
-    desc = "ผู้ใหญ่ (เต็ม)"
-else:
-    price = full_price * 0.7
-    desc = "ผู้สูงอายุ (70%)"
-
-print(f"ประเภท: {desc}")
-print(f"ราคาตั๋ว: {price:.0f} บาท")
-\`\`\``,
-          en: `## elif Statement
-
-elif (else if) is used when you have **more than 2 conditions**.
-
-\`\`\`python
-if condition1:
-    # path 1
-elif condition2:
-    # path 2
-elif condition3:
-    # path 3
-else:
-    # final path
-\`\`\`
-
-### Example: Grade System
-
-\`\`\`python
-score = int(input("Score (0-100): "))
+score = int(input("What is your score? "))
 
 if score >= 80:
-    grade = "A"
-    msg = "Excellent! 🌟"
+    print("Awesome! You get an A! 🏆")
 elif score >= 70:
-    grade = "B"
-    msg = "Very Good! 👍"
+    print("Good job! You get a B 🥈")
 elif score >= 60:
-    grade = "C"
-    msg = "Satisfactory"
-elif score >= 50:
-    grade = "D"
-    msg = "Needs improvement"
+    print("Not bad! You get a C 🥉")
 else:
-    grade = "F"
-    msg = "Failed ❌"
-
-print(f"Grade: {grade} — {msg}")
+    print("You failed! Try harder next time 😭")
 \`\`\`
 
-### Logical Operators
-
-\`\`\`python
-age = 25
-has_id = True
-is_vip = False
-
-# and — all conditions must be true
-if age >= 18 and has_id:
-    print("You may enter")
-
-# or — at least one must be true
-if is_vip or age >= 60:
-    print("Discount applied")
-
-# not — reverses
-if not is_vip:
-    print("Not a VIP member")
-
-# Combined
-day = "Saturday"
-hour = 10
-if (day == "Saturday" or day == "Sunday") and (9 <= hour <= 17):
-    print("Weekend store hours")
-\`\`\``,
+**Things to know:**
+- The computer checks conditions from **top to bottom**.
+- If it finds a True condition, it will run that block and **skip all the rest immediately!** (It won't check anymore!)
+- You can have as many \`elif\` blocks as you want!`,
         },
         commands: [
           {
@@ -2089,118 +1461,54 @@ if (day == "Saturday" or day == "Sunday") and (9 <= hour <= 17):
         xpReward: 35,
         hasFlowchart: true,
         content: {
-          th: `## Nested if — เงื่อนไขซ้อนกัน
+          th: `## ทางแยกซ้อนทางแยก (Nested if) 🪆
 
-เราสามารถใส่ if ไว้ข้างใน if อีกทีได้ เหมือน **ประตูด่านแรก ผ่านแล้วมีด่านที่สอง**
+เหมือนกับตุ๊กตารัสเซียที่มีตุ๊กตาซ้อนอยู่ข้างใน! บางครั้งหลังจากเราเลือกทางแยกแล้ว เราเจอทางแยกข้างในอีกที เราสามารถเอา \`if\` ไปซ้อนใน \`if\` ได้นะ!
+
+### ตัวอย่าง: สวนสนุก 🎢
 
 \`\`\`python
-if เงื่อนไขภายนอก:
-    if เงื่อนไขภายใน:
-        # รันเมื่อผ่านทั้งสองด่าน
+height = int(input("คุณสูงเท่าไหร่ (ซม.)? "))
+
+if height >= 120:
+    print("ผ่านเกณฑ์ความสูง! ได้เข้าเครื่องเล่น")
+    
+    # ทางแยกซ้อนข้างใน! (ต้องย่อหน้าเข้าไปอีกระดับนึงนะ)
+    age = int(input("แล้วคุณอายุเท่าไหร่? "))
+    if age >= 15:
+        print("คุณเล่นรถไฟเหาะตีลังกาได้! 🎢")
     else:
-        # ผ่านด่านแรก แต่ไม่ผ่านด่านสอง
+        print("คุณเล่นได้แค่ม้าหมุนนะ 🎠")
+        
 else:
-    # ไม่ผ่านด่านแรก
+    print("เสียใจด้วย ความสูงไม่ถึง อดเล่น 😭")
 \`\`\`
 
-### ตัวอย่าง: ระบบเข้างาน
+**สังเกตดีๆ นะ:** \`if\` ที่อยู่ข้างใน จะทำงานก็ต่อเมื่อ \`if\` ตัวนอกมันเป็นจริงเท่านั้น! ถ้าความสูงไม่ถึงแต่แรก มันก็จะไม่ถามอายุเลย เด้งไปที่ \`else\` ตัวล่างสุดทันที!`,
+          en: `## Decisions inside Decisions (Nested if) 🪆
+
+Just like Russian nesting dolls! Sometimes after we make a decision, we face another decision inside it. We can put an \`if\` inside another \`if\`!
+
+### Example: Theme Park 🎢
 
 \`\`\`python
-has_badge = input("มีบัตรผ่าน? (y/n): ") == "y"
+height = int(input("How tall are you (cm)? "))
 
-if has_badge:
-    # ผ่านด่านแรก → ตรวจเวลา
-    hour = int(input("เวลาปัจจุบัน (ชั่วโมง): "))
-    if 8 <= hour <= 18:
-        print("✅ เข้าได้! อยู่ในเวลาทำงาน")
+if height >= 120:
+    print("You are tall enough! Welcome to the ride")
+    
+    # A decision inside! (Notice the extra indentation)
+    age = int(input("How old are you? "))
+    if age >= 15:
+        print("You can ride the Rollercoaster! 🎢")
     else:
-        print("⚠️ นอกเวลาทำงาน ต้องขออนุญาต")
+        print("You can only ride the Carousel 🎠")
+        
 else:
-    print("❌ ไม่มีบัตรผ่าน เข้าไม่ได้")
+    print("Sorry, you are not tall enough. No rides for you 😭")
 \`\`\`
 
-### ตัวอย่าง: เกม RPG เลือกตัวละคร
-
-\`\`\`python
-race = input("เลือกเผ่า (human/elf/dwarf): ")
-class_ = input("เลือกอาชีพ (warrior/mage): ")
-
-if race == "human":
-    if class_ == "warrior":
-        bonus = "+10 HP, +5 ATK"
-    else:
-        bonus = "+10 MP, +8 INT"
-elif race == "elf":
-    if class_ == "warrior":
-        bonus = "+5 HP, +10 AGI"
-    else:
-        bonus = "+20 MP, +12 INT"
-else:  # dwarf
-    if class_ == "warrior":
-        bonus = "+20 HP, +8 ATK"
-    else:
-        bonus = "+5 MP, +5 INT, +10 DEF"
-
-print(f"ตัวละคร: {race.capitalize()} {class_.capitalize()}")
-print(f"Bonus: {bonus}")
-\`\`\`
-
-### One-liner if (Ternary)
-
-\`\`\`python
-# รูปแบบ: ค่าถ้าจริง if เงื่อนไข else ค่าถ้าเท็จ
-age = 20
-status = "ผู้ใหญ่" if age >= 18 else "เด็ก"
-print(status)  # ผู้ใหญ่
-
-# ใช้ใน f-string
-score = 75
-result = f"ผ่าน ✅" if score >= 50 else "ไม่ผ่าน ❌"
-print(result)
-\`\`\``,
-          en: `## Nested if — Conditions Inside Conditions
-
-You can put an if inside another if — like **passing gate 1 to reach gate 2**.
-
-\`\`\`python
-if outer_condition:
-    if inner_condition:
-        # runs when both conditions pass
-    else:
-        # passed outer, failed inner
-else:
-    # failed outer condition
-\`\`\`
-
-### Example: Building Access System
-
-\`\`\`python
-has_badge = input("Have badge? (y/n): ") == "y"
-
-if has_badge:
-    # passed gate 1 → check time
-    hour = int(input("Current hour: "))
-    if 8 <= hour <= 18:
-        print("✅ Access granted! Working hours.")
-    else:
-        print("⚠️ Outside working hours. Need permission.")
-else:
-    print("❌ No badge. Access denied.")
-\`\`\`
-
-### One-liner if (Ternary)
-
-\`\`\`python
-# Format: value_if_true if condition else value_if_false
-age = 20
-status = "Adult" if age >= 18 else "Minor"
-print(status)  # Adult
-
-# Use in f-string
-score = 75
-result = f"Pass ✅" if score >= 50 else "Fail ❌"
-print(result)
-\`\`\``,
+**Look closely:** The inside \`if\` will only run if the outside \`if\` is True! If you are not tall enough from the start, it won't even ask for your age; it skips straight to the bottom \`else\`!`,
         },
         commands: [
           {
@@ -2236,152 +1544,77 @@ print(result)
         xpReward: 40,
         hasFlowchart: true,
         content: {
-          th: `## for loop
+          th: `## วนรอบตามที่สั่ง (for loop) 🔄
 
-for loop ใช้เมื่อ **รู้จำนวนรอบที่แน่นอน** เปรียบเหมือนนับลูกปัดที่รู้จำนวนแน่นอน
+\`for\` loop เปรียบเหมือนเครื่องนับก้าว! เราจะใช้มันตอนที่เรา **รู้จำนวนรอบที่แน่นอน** ว่าอยากให้มันทำกี่รอบ
 
-### กับ range()
+เรามักจะใช้ \`for\` คู่กับเวทมนตร์ \`range()\` ซึ่งทำหน้าที่สร้าง "ป้ายบอกรอบ" ให้เรา!
+
+### สั่งให้ทำ 5 รอบ 🖐️
 
 \`\`\`python
-# range(stop) — นับ 0 ถึง stop-1
+# i คือตัวแปรที่เราสร้างขึ้นมาเพื่อนับรอบ (นับเริ่มจาก 0 เสมอ!)
 for i in range(5):
-    print(i)
-# 0 1 2 3 4
-
-# range(start, stop) — นับ start ถึง stop-1
-for i in range(1, 6):
-    print(i)
-# 1 2 3 4 5
-
-# range(start, stop, step) — กำหนด step
-for i in range(0, 11, 2):
-    print(i)
-# 0 2 4 6 8 10
-
-# นับถอยหลัง
-for i in range(5, 0, -1):
-    print(i)
-# 5 4 3 2 1
+    print("รอบที่", i)
 \`\`\`
 
-### วนใน String
+**คอมพิวเตอร์จะนับแบบนี้:**
+- รอบที่ 0
+- รอบที่ 1
+- รอบที่ 2
+- รอบที่ 3
+- รอบที่ 4
+*(อ้าว! ไม่มีเลข 5 หรอ? ใช่แล้ว! คอมพิวเตอร์นับเริ่มที่ 0 พอครบ 5 นิ้ว มันจะหยุดที่เลข 4 เสมอ!)*
+
+### ควบคุม range() ดั่งใจนึก 🕹️
+
+\`range()\` สามารถรับตัวเลขได้ถึง 3 ตัวเลยนะ!
+\`range(เริ่มต้น, สิ้นสุด, นับทีละเท่าไหร่)\`
 
 \`\`\`python
-word = "Python"
-for char in word:
-    print(char)
-# P y t h o n
+# เริ่มที่เลข 1 ไปจนถึงเลข 10 (หยุดก่อนเลข 11)
+for i in range(1, 11):
+    print(i)
 
-# นับสระ
-vowels = "aeiouAEIOU"
-word = input("กรอกคำ: ")
-count = 0
-for ch in word:
-    if ch in vowels:
-        count += 1
-print(f"มีสระ {count} ตัว")
-\`\`\`
-
-### enumerate() — ได้ทั้ง index และ ค่า
-
-\`\`\`python
-fruits = ["แอปเปิ้ล", "กล้วย", "มะม่วง"]
-for i, fruit in enumerate(fruits):
-    print(f"{i+1}. {fruit}")
-# 1. แอปเปิ้ล
-# 2. กล้วย
-# 3. มะม่วง
-
-# เริ่ม index ที่ 1
-for i, fruit in enumerate(fruits, start=1):
-    print(f"{i}. {fruit}")
-\`\`\`
-
-### ตัวอย่างการคำนวณ
-
-\`\`\`python
-# ผลรวม 1 ถึง 100
-total = 0
-for i in range(1, 101):
-    total += i
-print(f"ผลรวม 1-100 = {total}")   # 5050
-
-# แฟกทอเรียล 5! = 1×2×3×4×5
-factorial = 1
-for i in range(1, 6):
-    factorial *= i
-print(f"5! = {factorial}")   # 120
-
-# หาเลขจากผู้ใช้
-numbers = []
-n = int(input("จำนวนข้อมูล: "))
-for i in range(n):
-    num = float(input(f"ข้อมูลที่ {i+1}: "))
-    numbers.append(num)
-print(f"เฉลี่ย: {sum(numbers)/len(numbers):.2f}")
+# เริ่มที่ 2 ไปจนถึง 10 แต่อยากให้นับข้ามทีละ 2 (เลขคู่!)
+for i in range(2, 11, 2):
+    print(i)  # จะได้ 2, 4, 6, 8, 10
 \`\`\``,
-          en: `## for Loop
+          en: `## Repeat as Instructed (for loop) 🔄
 
-A for loop is used when you **know exactly how many times to repeat**.
+\`for\` loop is like a step counter! We use it when we **know exactly how many times** we want to repeat something.
 
-### With range()
+We usually use \`for\` with the \`range()\` magic, which creates a list of numbers for us!
+
+### Command to run 5 times 🖐️
 
 \`\`\`python
-# range(stop) — count 0 to stop-1
+# 'i' is the variable we create to count the laps (always starts at 0!)
 for i in range(5):
-    print(i)
-# 0 1 2 3 4
-
-# range(start, stop) — count start to stop-1
-for i in range(1, 6):
-    print(i)
-# 1 2 3 4 5
-
-# range(start, stop, step) — custom step
-for i in range(0, 11, 2):
-    print(i)
-# 0 2 4 6 8 10
-
-# Count down
-for i in range(5, 0, -1):
-    print(i)
-# 5 4 3 2 1
+    print("Lap number", i)
 \`\`\`
 
-### Looping Over a String
+**The computer will count like this:**
+- Lap number 0
+- Lap number 1
+- Lap number 2
+- Lap number 3
+- Lap number 4
+*(Wait! No number 5? Correct! The computer starts counting at 0. Once it counts 5 times, it stops at number 4!)*
+
+### Controlling range() like a boss 🕹️
+
+\`range()\` can actually take up to 3 numbers!
+\`range(start, end, step)\`
 
 \`\`\`python
-word = "Python"
-for char in word:
-    print(char)
-# P y t h o n
-\`\`\`
+# Start at 1, go up to 10 (stops BEFORE 11)
+for i in range(1, 11):
+    print(i)
 
-### enumerate() — Get Both Index and Value
-
-\`\`\`python
-fruits = ["Apple", "Banana", "Mango"]
-for i, fruit in enumerate(fruits, start=1):
-    print(f"{i}. {fruit}")
-# 1. Apple
-# 2. Banana
-# 3. Mango
-\`\`\`
-
-### Calculation Examples
-
-\`\`\`python
-# Sum 1 to 100
-total = 0
-for i in range(1, 101):
-    total += i
-print(f"Sum 1-100 = {total}")   # 5050
-
-# Factorial 5! = 1×2×3×4×5
-factorial = 1
-for i in range(1, 6):
-    factorial *= i
-print(f"5! = {factorial}")   # 120
+# Start at 2, go up to 10, but count by 2s (Even numbers!)
+for i in range(2, 11, 2):
+    print(i)  # Gives 2, 4, 6, 8, 10
 \`\`\``,
         },
         commands: [
@@ -2405,127 +1638,75 @@ print(f"5! = {factorial}")   # 120
         xpReward: 40,
         hasFlowchart: true,
         content: {
-          th: `## while loop
+          th: `## วนรอบไปเรื่อยๆ จนกว่าจะหยุด! (while loop) 🎡
 
-while loop ใช้เมื่อ **ไม่รู้จำนวนรอบ แต่มีเงื่อนไขหยุด**
+ต่างจาก \`for\` ตรงที่ \`while\` loop ใช้ตอนที่เรา **ไม่รู้จำนวนรอบที่แน่นอน** แต่รู้ว่า "จะหยุดทำเมื่อไหร่"
+มันเหมือนกับการเปิดน้ำใส่ถังน้ำ เราไม่รู้ว่ากี่วิจะเต็ม แต่เรารู้ว่า "ถ้าถังเต็มเมื่อไหร่ ให้หยุดทันที!"
 
 \`\`\`python
-while เงื่อนไข:
-    # วนซ้ำจนเงื่อนไขเป็น False
+water = 0
+
+# ตราบใดที่ (while) น้ำยังน้อยกว่า 10 ลิตร ให้ทำไปเรื่อยๆ!
+while water < 10:
+    print(f"ตอนนี้น้ำมี {water} ลิตร")
+    water += 2   # เติมน้ำเพิ่มทีละ 2 ลิตร
+    
+print("ถังน้ำเต็มแล้ว! ปิดน้ำได้!")
 \`\`\`
 
-### ตัวอย่างพื้นฐาน
+### ⚠️ ระวัง Loop นรก! (Infinite Loop) 😱
+
+ถ้าเราลืมเติมเงื่อนไขให้มันหยุด (ลืมเขียน \`water += 2\`) เครื่องมันก็จะรันไปเรื่อยๆ ไม่มีวันจบ! ทำให้คอมพิวเตอร์ค้างได้เลย ต้องระวังให้ดีนะ!
+
+### คำสั่งฉุกเฉิน: break และ continue 🛑
+
+- **break**: เหมือนการทุบกระจกฉุกเฉิน! กระโดดหนีออกจาก loop ทันที!
+- **continue**: ข้ามรอบนี้ไปเลย แล้วไปเริ่มนับรอบต่อไป!
 
 \`\`\`python
-# นับถอยหลัง
-count = 5
-while count > 0:
-    print(f"{count}...")
-    count -= 1
-print("🚀 ปล่อยยาน!")
-
-# รับข้อมูลจนกว่าจะถูกต้อง
-while True:
-    age = int(input("อายุ (1-120): "))
-    if 1 <= age <= 120:
-        break   # ออกจาก loop
-    print("อายุไม่ถูกต้อง กรอกใหม่")
-print(f"อายุ: {age} ปี")
-\`\`\`
-
-### break — หยุด loop ทันที
-
-\`\`\`python
-# หาตัวเลขแรกที่หารด้วย 7 ลงตัวในช่วง 1-100
-for i in range(1, 101):
-    if i % 7 == 0:
-        print(f"พบเลข: {i}")
-        break   # หยุดทันที
-\`\`\`
-
-### continue — ข้ามรอบนี้
-
-\`\`\`python
-# แสดงเลข 1-10 ยกเว้น 5
-for i in range(1, 11):
-    if i == 5:
-        continue   # ข้าม 5 แล้วไปรอบถัดไป
-    print(i)
-# 1 2 3 4 6 7 8 9 10
-\`\`\`
-
-### ตัวอย่าง: เกมทายเลข
-
-\`\`\`python
-import random
-secret = random.randint(1, 100)
-attempts = 0
-max_attempts = 7
-
-print("🎮 เกมทายเลข 1-100")
-print(f"คุณมี {max_attempts} โอกาส!")
-
-while attempts < max_attempts:
-    guess = int(input(f"ทาย (เหลือ {max_attempts - attempts} ครั้ง): "))
-    attempts += 1
-
-    if guess == secret:
-        print(f"🎉 ถูกต้อง! เลขคือ {secret} (ทาย {attempts} ครั้ง)")
-        break
-    elif guess < secret:
-        print("⬆️ มากกว่านี้")
+while True:  # อันนี้คือ Loop นรกของแท้ มันจะรันตลอดไป
+    password = input("รหัสผ่านคืออะไร? ")
+    
+    if password == "1234":
+        print("ถูกต้อง! เข้าสู่ระบบได้!")
+        break   # ใช้ break เพื่อกระโดดหนีออกจาก Loop นรก!
     else:
-        print("⬇️ น้อยกว่านี้")
-else:
-    print(f"😢 หมดโอกาส! เลขคือ {secret}")
+        print("ผิด! พิมพ์ใหม่นะ")
 \`\`\``,
-          en: `## while Loop
+          en: `## Loop Until Stopped! (while loop) 🎡
 
-A while loop is used when you **don't know how many times, but have a stopping condition**.
+Unlike \`for\`, we use \`while\` loop when we **don't know exactly how many times** to repeat, but we know "when to stop".
+It's like filling a bucket with water. We don't know how many seconds it takes, but we know "when it's full, STOP!"
 
 \`\`\`python
-while condition:
-    # repeat until condition is False
+water = 0
+
+# As long as (while) water is less than 10 liters, keep doing this!
+while water < 10:
+    print(f"Current water: {water} liters")
+    water += 2   # Add 2 liters of water
+    
+print("Bucket is full! Turn off the tap!")
 \`\`\`
 
-### Basic Examples
+### ⚠️ Beware the Infinite Loop! 😱
+
+If we forget to update the condition (like forgetting \`water += 2\`), it will run forever and never end! It can freeze the computer, so be careful!
+
+### Emergency Commands: break and continue 🛑
+
+- **break**: Like smashing the emergency glass! Jumps out of the loop immediately!
+- **continue**: Skips the rest of this current lap, and jumps to the next lap!
 
 \`\`\`python
-# Countdown
-count = 5
-while count > 0:
-    print(f"{count}...")
-    count -= 1
-print("🚀 Launch!")
-
-# Accept input until valid
-while True:
-    age = int(input("Age (1-120): "))
-    if 1 <= age <= 120:
-        break   # exit loop
-    print("Invalid age. Try again.")
-print(f"Age: {age}")
-\`\`\`
-
-### break — Stop the Loop Immediately
-
-\`\`\`python
-# Find first number divisible by 7 from 1-100
-for i in range(1, 101):
-    if i % 7 == 0:
-        print(f"Found: {i}")
-        break   # stop immediately
-\`\`\`
-
-### continue — Skip This Iteration
-
-\`\`\`python
-# Print 1-10, skip 5
-for i in range(1, 11):
-    if i == 5:
-        continue   # skip 5
-    print(i)
-# 1 2 3 4 6 7 8 9 10
+while True:  # This is a real infinite loop, it runs forever
+    password = input("What is the password? ")
+    
+    if password == "1234":
+        print("Correct! Access Granted!")
+        break   # Use break to escape the infinite loop!
+    else:
+        print("Wrong! Try again")
 \`\`\``,
         },
         commands: [
@@ -2549,123 +1730,46 @@ for i in range(1, 11):
         xpReward: 45,
         hasFlowchart: false,
         content: {
-          th: `## Nested Loops — Loop ซ้อนกัน
+          th: `## ห่วงซ้อนห่วง (Nested Loops) 🧅
 
-Loop ซ้อนกันใช้สำหรับ **ข้อมูล 2 มิติ** เช่น ตาราง, สมการ, pattern ต่างๆ
+เราสามารถเอา Loop ไปซ้อนใน Loop ได้ด้วยนะ เหมือนหัวหอมที่มีหลายๆ ชั้น!
 
-### ตัวอย่าง: ตารางสูตรคูณ
+คอมพิวเตอร์จะทำ Loop ข้างในจนเสร็จหมดก่อน แล้วค่อยขยับ Loop ข้างนอกไป 1 ก้าว!
+เหมือนเข็มนาฬิกาไง เข็มวินาทีต้องเดินครบ 60 รอบ (Loop ใน) เข็มนาทีถึงจะเดิน 1 ก้าว (Loop นอก)
+
+### สร้างตารางสูตรคูณ ✖️
 
 \`\`\`python
-# Loop ภายนอก: แถว (row)
-for i in range(1, 4):
-    # Loop ภายใน: คอลัมน์ (column)
-    for j in range(1, 4):
-        print(f"{i}×{j}={i*j}", end="  ")
-    print()  # ขึ้นบรรทัดใหม่
-# 1×1=1  1×2=2  1×3=3
-# 2×1=2  2×2=4  2×3=6
-# 3×1=3  3×2=6  3×3=9
+# แม่ 2 ถึง แม่ 3 (Loop นอก)
+for i in range(2, 4):
+    print(f"=== แม่ {i} ===")
+    
+    # คูณ 1 ถึง 12 (Loop ใน)
+    for j in range(1, 13):
+        print(f"{i} x {j} = {i*j}")
 \`\`\`
 
-### ตัวอย่าง: วาด Pattern รูปดาว
+เห็นไหม! Loop นอกจะดึง \`i\` มาเป็น 2 ก่อน แล้วปล่อยให้ Loop ในทำงานตั้งแต่ \`j = 1\` ถึง \`12\` พอเสร็จปุ๊บ Loop นอกค่อยดึง \`i\` เป็น 3 แล้วทำแบบเดิมอีกครั้ง!`,
+          en: `## Loop Inside a Loop (Nested Loops) 🧅
+
+We can put a Loop inside another Loop! Just like an onion with many layers.
+
+The computer will finish all the laps of the INNER loop completely before moving the OUTER loop by 1 step!
+Just like a clock! The second hand has to move 60 times (Inner loop) before the minute hand moves 1 step (Outer loop).
+
+### Making a Multiplication Table ✖️
 
 \`\`\`python
-n = 5
-
-# สามเหลี่ยมด้านขวา
-print("สามเหลี่ยม:")
-for i in range(1, n+1):
-    print("★" * i)
-# ★
-# ★★
-# ★★★
-# ★★★★
-# ★★★★★
-
-# สามเหลี่ยมกลับด้าน
-print("\\nกลับด้าน:")
-for i in range(n, 0, -1):
-    print("★" * i)
-
-# ปิรามิด
-print("\\nปิรามิด:")
-for i in range(1, n+1):
-    spaces = " " * (n - i)
-    stars = "★" * (2*i - 1)
-    print(spaces + stars)
+# Times table 2 to 3 (Outer Loop)
+for i in range(2, 4):
+    print(f"=== Table of {i} ===")
+    
+    # Multiply by 1 to 12 (Inner Loop)
+    for j in range(1, 13):
+        print(f"{i} x {j} = {i*j}")
 \`\`\`
 
-### ตัวอย่าง: หาเลขเฉพาะ (Prime Numbers)
-
-\`\`\`python
-print("เลขเฉพาะตั้งแต่ 2-50:")
-for num in range(2, 51):
-    is_prime = True
-    for divisor in range(2, int(num**0.5) + 1):
-        if num % divisor == 0:
-            is_prime = False
-            break
-    if is_prime:
-        print(num, end=" ")
-# 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47
-\`\`\`
-
-### zip() — วนหลาย list พร้อมกัน
-
-\`\`\`python
-names = ["Alice", "Bob", "Charlie"]
-scores = [95, 82, 78]
-grades = ["A", "B", "C"]
-
-for name, score, grade in zip(names, scores, grades):
-    print(f"{name:<10} {score:>5}  {grade}")
-# Alice         95  A
-# Bob           82  B
-# Charlie       78  C
-\`\`\``,
-          en: `## Nested Loops
-
-Nested loops work on **2D data** like tables, grids, and patterns.
-
-### Example: Multiplication Table
-
-\`\`\`python
-# Outer loop: rows
-for i in range(1, 4):
-    # Inner loop: columns
-    for j in range(1, 4):
-        print(f"{i}×{j}={i*j}", end="  ")
-    print()  # newline
-# 1×1=1  1×2=2  1×3=3
-# 2×1=2  2×2=4  2×3=6
-# 3×1=3  3×2=6  3×3=9
-\`\`\`
-
-### Example: Star Patterns
-
-\`\`\`python
-n = 5
-
-# Right triangle
-for i in range(1, n+1):
-    print("★" * i)
-
-# Pyramid
-for i in range(1, n+1):
-    spaces = " " * (n - i)
-    stars = "★" * (2*i - 1)
-    print(spaces + stars)
-\`\`\`
-
-### zip() — Loop Multiple Lists Together
-
-\`\`\`python
-names = ["Alice", "Bob", "Charlie"]
-scores = [95, 82, 78]
-
-for name, score in zip(names, scores):
-    print(f"{name:<10} {score:>5}")
-\`\`\``,
+See? The Outer loop grabs \`i\` as 2 first, and lets the Inner loop run from \`j = 1\` to \`12\`. Once that is done, the Outer loop changes \`i\` to 3, and runs the whole thing again!`,
         },
         commands: [
           {
@@ -2701,128 +1805,99 @@ for name, score in zip(names, scores):
         xpReward: 45,
         hasFlowchart: false,
         content: {
-          th: `## List คืออะไร?
+          th: `## กล่องเก็บของวิเศษ (List) 📦
 
-List คือ **กล่องเก็บของหลายชิ้น** เรียงลำดับกัน เปรียบเหมือนตะกร้าที่ใส่ผลไม้ได้หลายอย่าง
+เวลาที่เรามีของเยอะๆ เช่น มีเพื่อน 5 คน เราขี้เกียจสร้างตัวแปร \`friend1\`, \`friend2\`, ... ไปเรื่อยๆ ใช่ไหม?
+เราเลยใช้ **List (กล่องเก็บของ)** แทน! 
+
+List เป็นเหมือนตู้ลิ้นชักยาวๆ ที่เก็บของได้หลายอย่างไว้ด้วยกัน เราใช้เครื่องหมายก้ามปู \`[ ]\` ในการสร้าง List นะ!
+
+### วิธีเก็บของลงกล่อง 🎒
 
 \`\`\`python
-fruits = ["แอปเปิ้ล", "กล้วย", "มะม่วง"]
-numbers = [1, 2, 3, 4, 5]
-mixed = [1, "hello", True, 3.14]   # ผสมชนิดได้!
-empty = []                           # list ว่าง
+# เก็บข้อความ
+friends = ["โนบิตะ", "ชิซูกะ", "ไจแอนท์", "ซึเนโอะ"]
+
+# เก็บตัวเลขก็ได้!
+scores = [10, 20, 30, 40, 50]
+
+# เก็บปนกันก็ยังได้! (Python ใจดีมาก)
+mix = ["สวัสดี", 100, True, 3.14]
 \`\`\`
 
-### เข้าถึงสมาชิก (Index เริ่มที่ 0!)
+### วิธีหยิบของออกมาดู (Indexing) 🎯
+
+เหมือนกับข้อความเป๊ะเลย! คอมพิวเตอร์จะแปะป้ายเลขลิ้นชัก เริ่มที่ 0 เสมอ
 
 \`\`\`python
-fruits = ["แอปเปิ้ล", "กล้วย", "มะม่วง", "องุ่น"]
-#          0           1        2         3
+friends = ["โนบิตะ", "ชิซูกะ", "ไจแอนท์"]
+# ป้ายลิ้นชัก:    0         1          2
 
-print(fruits[0])    # แอปเปิ้ล  (แรกสุด)
-print(fruits[2])    # มะม่วง
-print(fruits[-1])   # องุ่น    (ท้ายสุด)
-print(fruits[-2])   # มะม่วง
-print(len(fruits))  # 4        (จำนวนสมาชิก)
+print(friends[0])   # หยิบลิ้นชักที่ 0 ได้ "โนบิตะ"
+print(friends[-1])  # ถ้าติดลบ คือหยิบจากหลังสุด ได้ "ไจแอนท์"
 \`\`\`
 
-### การตัด List (Slicing)
+### วิธีเอาของใส่เพิ่ม / เอาออก 🔧
+
+เราสามารถเติมของเข้ากล่อง หรือโยนของทิ้งได้ตามใจชอบ!
 
 \`\`\`python
-nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+bag = ["ดินสอ", "ยางลบ"]
 
-print(nums[2:5])     # [2, 3, 4]
-print(nums[:4])      # [0, 1, 2, 3]
-print(nums[6:])      # [6, 7, 8, 9]
-print(nums[::2])     # [0, 2, 4, 6, 8]  (ทีละ 2)
-print(nums[::-1])    # [9,8,7,6,5,4,3,2,1,0] (กลับหัว)
-\`\`\`
+# เพิ่มของ (append) จะไปต่อท้ายสุดเสมอ!
+bag.append("ไม้บรรทัด")
+# ตอนนี้ bag กลายเป็น ["ดินสอ", "ยางลบ", "ไม้บรรทัด"]
 
-### เพิ่ม ลบ แก้ไขสมาชิก
-
-\`\`\`python
-fruits = ["แอปเปิ้ล", "กล้วย"]
-
-# เพิ่ม
-fruits.append("มะม่วง")          # เพิ่มท้าย
-fruits.insert(1, "ส้ม")          # แทรกที่ index 1
-fruits.extend(["องุ่น", "แตงโม"]) # เพิ่มหลายอัน
-
-print(fruits)
-# ["แอปเปิ้ล", "ส้ม", "กล้วย", "มะม่วง", "องุ่น", "แตงโม"]
-
-# แก้ไข
-fruits[0] = "สับปะรด"
-
-# ลบ
-fruits.remove("กล้วย")    # ลบโดยค่า
-popped = fruits.pop()     # ลบตัวสุดท้าย คืนค่ากลับ
-fruits.pop(0)             # ลบที่ index 0
-del fruits[1]             # ลบที่ index 1
-fruits.clear()            # ล้างทั้งหมด
-\`\`\`
-
-### ค้นหาและตรวจสอบ
-
-\`\`\`python
-nums = [3, 1, 4, 1, 5, 9, 2, 6, 5]
-
-print(5 in nums)          # True (มีอยู่ไหม?)
-print(7 not in nums)      # True (ไม่มีอยู่?)
-print(nums.count(1))      # 2   (นับจำนวน 1)
-print(nums.index(4))      # 2   (อยู่ที่ index ไหน)
-
-print(max(nums))          # 9
-print(min(nums))          # 1
-print(sum(nums))          # 36
+# เอาของออก (remove) 
+bag.remove("ยางลบ")
+# ตอนนี้ bag กลายเป็น ["ดินสอ", "ไม้บรรทัด"]
 \`\`\``,
-          en: `## What is a List?
+          en: `## The Magic Storage Box (List) 📦
 
-A List is an **ordered container for multiple items** — like a basket that holds many fruits.
+When we have a lot of things, like 5 friends, we don't want to create variables like \`friend1\`, \`friend2\`, ... right?
+So we use a **List (Storage Box)** instead!
+
+A List is like a long drawer cabinet that can store many things together. We use square brackets \`[ ]\` to create a List!
+
+### How to pack the box 🎒
 
 \`\`\`python
-fruits = ["Apple", "Banana", "Mango"]
-numbers = [1, 2, 3, 4, 5]
-mixed = [1, "hello", True, 3.14]   # mixed types!
-empty = []                           # empty list
+# Storing text
+friends = ["Nobita", "Shizuka", "Giant", "Suneo"]
+
+# Storing numbers works too!
+scores = [10, 20, 30, 40, 50]
+
+# You can even mix them! (Python is very kind)
+mix = ["Hello", 100, True, 3.14]
 \`\`\`
 
-### Accessing Items (Index starts at 0!)
+### How to pick things out (Indexing) 🎯
+
+Just like Strings! The computer puts a number label on each drawer, always starting at 0.
 
 \`\`\`python
-fruits = ["Apple", "Banana", "Mango", "Grape"]
-#          0          1        2        3
+friends = ["Nobita", "Shizuka", "Giant"]
+# Labels:      0          1         2
 
-print(fruits[0])    # Apple  (first)
-print(fruits[2])    # Mango
-print(fruits[-1])   # Grape  (last)
-print(len(fruits))  # 4
+print(friends[0])   # Open drawer 0, gets "Nobita"
+print(friends[-1])  # Negative means from the back, gets "Giant"
 \`\`\`
 
-### Slicing
+### How to Add / Remove things 🔧
+
+We can put more things into the box, or throw things away!
 
 \`\`\`python
-nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+bag = ["Pencil", "Eraser"]
 
-print(nums[2:5])     # [2, 3, 4]
-print(nums[:4])      # [0, 1, 2, 3]
-print(nums[6:])      # [6, 7, 8, 9]
-print(nums[::2])     # [0, 2, 4, 6, 8]
-print(nums[::-1])    # [9,8,7,6,5,4,3,2,1,0]
-\`\`\`
+# Add item (append) always goes to the very end!
+bag.append("Ruler")
+# Now bag is ["Pencil", "Eraser", "Ruler"]
 
-### Add, Remove, Modify
-
-\`\`\`python
-fruits = ["Apple", "Banana"]
-
-fruits.append("Mango")            # add to end
-fruits.insert(1, "Orange")        # insert at index 1
-fruits.extend(["Grape", "Melon"]) # add multiple
-
-fruits.remove("Banana")           # remove by value
-popped = fruits.pop()             # remove last, return it
-del fruits[0]                     # delete at index
-fruits.clear()                    # remove all
+# Remove item (remove)
+bag.remove("Eraser")
+# Now bag is ["Pencil", "Ruler"]
 \`\`\``,
         },
         commands: [
@@ -2858,131 +1933,85 @@ fruits.clear()                    # remove all
         xpReward: 45,
         hasFlowchart: false,
         content: {
-          th: `## การเรียงลำดับ List
+          th: `## จัดระเบียบกล่องสมบัติ (List ขั้นสูง) ✨
+
+เมื่อเรามีของในกล่องเยอะแยะไปหมด เราสามารถจัดระเบียบมันได้นะ!
+
+### เช็คความยาวกล่องด้วย len() 📏
+
+อยากรู้ไหมว่ามีของกี่ชิ้น? ให้ใช้ \`len()\`
 
 \`\`\`python
-nums = [3, 1, 4, 1, 5, 9, 2, 6]
-
-# เรียงแบบ in-place (แก้ List เดิม)
-nums.sort()
-print(nums)   # [1, 1, 2, 3, 4, 5, 6, 9]
-
-nums.sort(reverse=True)
-print(nums)   # [9, 6, 5, 4, 3, 2, 1, 1]
-
-# sorted() — คืน List ใหม่ โดยไม่แก้ของเดิม
-nums2 = [3, 1, 4, 1, 5]
-sorted_nums = sorted(nums2)
-print(nums2)        # [3, 1, 4, 1, 5]  (ไม่เปลี่ยน)
-print(sorted_nums)  # [1, 1, 3, 4, 5]
-
-# เรียง string
-words = ["banana", "apple", "cherry"]
-words.sort()
-print(words)   # ['apple', 'banana', 'cherry']
-
-# เรียงตามความยาว
-words.sort(key=len)
-print(words)   # ['apple', 'banana', 'cherry']
+friends = ["โดเรม่อน", "โนบิตะ"]
+print(len(friends))  # จะตอบว่า 2 (เพราะมี 2 คน)
 \`\`\`
 
-### List Comprehension — สร้าง List อย่างรวดเร็ว
+### สั่งเรียงของ (Sorting) 📊
+
+ถ้าของในกล่องรกเกินไป เราสั่งให้มันเรียงได้!
 
 \`\`\`python
-# แบบปกติ (5 บรรทัด)
-squares = []
-for i in range(1, 6):
-    squares.append(i ** 2)
+# เรียงเลขจากน้อยไปมาก
+numbers = [5, 2, 9, 1]
+numbers.sort()  
+# กลายเป็น [1, 2, 5, 9] ทันที!
 
-# แบบ List Comprehension (1 บรรทัด)
-squares = [i**2 for i in range(1, 6)]
-print(squares)   # [1, 4, 9, 16, 25]
-
-# พร้อมเงื่อนไข
-evens = [i for i in range(1, 21) if i % 2 == 0]
-print(evens)   # [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
-
-# แปลง List
-names = ["alice", "bob", "charlie"]
-upper_names = [name.upper() for name in names]
-print(upper_names)   # ['ALICE', 'BOB', 'CHARLIE']
-
-# กรอง List
-scores = [45, 90, 62, 38, 85, 71]
-passing = [s for s in scores if s >= 60]
-print(passing)   # [90, 62, 85, 71]
+# เรียงตัวอักษรก็ยังได้! (ตามพจนานุกรม)
+names = ["Zebra", "Apple", "Dog"]
+names.sort()
+# กลายเป็น ["Apple", "Dog", "Zebra"]
 \`\`\`
 
-### ตัวอย่าง: วิเคราะห์คะแนน
+### ของสิ่งนี้อยู่ในกล่องไหมนะ? (in) 🔍
+
+เราสามารถให้คอมพิวเตอร์ช่วยหาของในกล่องได้!
 
 \`\`\`python
-# รับคะแนน
-n = int(input("จำนวนนักเรียน: "))
-scores = []
-for i in range(n):
-    s = float(input(f"คะแนนคนที่ {i+1}: "))
-    scores.append(s)
+bag = ["สมุด", "ดินสอ"]
 
-# วิเคราะห์
-avg = sum(scores) / len(scores)
-highest = max(scores)
-lowest = min(scores)
-passing = [s for s in scores if s >= 50]
-
-print(f"\\n📊 ผลการวิเคราะห์")
-print(f"เฉลี่ย: {avg:.2f}")
-print(f"สูงสุด: {highest}")
-print(f"ต่ำสุด: {lowest}")
-print(f"ผ่าน: {len(passing)}/{n} คน ({len(passing)/n*100:.1f}%)")
-
-# เรียงคะแนน
-scores_sorted = sorted(scores, reverse=True)
-print(f"\\nอันดับคะแนน: {scores_sorted}")
+# หาคำว่า สมุด ใน bag
+if "สมุด" in bag:
+    print("มีสมุดอยู่ในกระเป๋า!")
 \`\`\``,
-          en: `## Sorting Lists
+          en: `## Organizing the Treasure Box (Advanced List) ✨
+
+When we have too many things in our box, we can organize them!
+
+### Check the box size with len() 📏
+
+Want to know how many things are inside? Use \`len()\`
 
 \`\`\`python
-nums = [3, 1, 4, 1, 5, 9, 2, 6]
-
-# In-place sort (modifies original)
-nums.sort()
-print(nums)   # [1, 1, 2, 3, 4, 5, 6, 9]
-
-nums.sort(reverse=True)
-print(nums)   # [9, 6, 5, 4, 3, 2, 1, 1]
-
-# sorted() — returns new list, keeps original
-nums2 = [3, 1, 4, 1, 5]
-sorted_nums = sorted(nums2)
-print(nums2)        # [3, 1, 4, 1, 5]  (unchanged)
-print(sorted_nums)  # [1, 1, 3, 4, 5]
+friends = ["Doraemon", "Nobita"]
+print(len(friends))  # Will answer 2 (Because there are 2 people)
 \`\`\`
 
-### List Comprehension — Create Lists Quickly
+### Sort the items (Sorting) 📊
+
+If the items are messy, we can tell Python to sort them!
 
 \`\`\`python
-# Normal way (5 lines)
-squares = []
-for i in range(1, 6):
-    squares.append(i ** 2)
+# Sort numbers from small to big
+numbers = [5, 2, 9, 1]
+numbers.sort()  
+# Magically becomes [1, 2, 5, 9]!
 
-# List Comprehension (1 line!)
-squares = [i**2 for i in range(1, 6)]
-print(squares)   # [1, 4, 9, 16, 25]
+# We can sort alphabets too! (Dictionary order)
+names = ["Zebra", "Apple", "Dog"]
+names.sort()
+# Becomes ["Apple", "Dog", "Zebra"]
+\`\`\`
 
-# With condition
-evens = [i for i in range(1, 21) if i % 2 == 0]
-print(evens)   # [2, 4, 6, 8, 10, ...]
+### Is this thing in the box? (in) 🔍
 
-# Transform list
-names = ["alice", "bob"]
-upper = [n.upper() for n in names]
-print(upper)   # ['ALICE', 'BOB']
+We can ask the computer to find something in the box!
 
-# Filter list
-scores = [45, 90, 62, 38, 85]
-passing = [s for s in scores if s >= 60]
-print(passing)   # [90, 62, 85]
+\`\`\`python
+bag = ["Notebook", "Pencil"]
+
+# Find the word "Notebook" in the bag
+if "Notebook" in bag:
+    print("You have a notebook in your bag!")
 \`\`\``,
         },
         commands: [
@@ -3025,136 +2054,105 @@ print(passing)   # [90, 62, 85]
         xpReward: 50,
         hasFlowchart: false,
         content: {
-          th: `## ฟังก์ชัน (Functions)
+          th: `## สร้างคำสั่งส่วนตัว (def) 🛠️
 
-ฟังก์ชันเหมือน **เครื่องใช้ไฟฟ้า** — ใช้ซ้ำได้, ทำงานได้มาก, กดปุ่มเดียว
+ถ้ามีอะไรที่เราต้องทำซ้ำๆ บ่อยๆ เราคงขี้เกียจเขียนโค้ดเดิมซ้ำๆ ใช่ไหมล่ะ?
 
-### ทำไมต้องใช้ฟังก์ชัน?
+เราเลยสร้าง **ฟังก์ชัน (Function)** ขึ้นมา! มันคือการมัดรวมโค้ดหลายๆ บรรทัด แล้วตั้งชื่อให้มัน เหมือนสร้าง "คาถาเวทมนตร์" ส่วนตัวขึ้นมาใช้เอง!
 
-\`\`\`python
-# ❌ ไม่ดี: โค้ดซ้ำซาก
-name1 = "Alice"
-msg1 = f"สวัสดี {name1}! ยินดีต้อนรับ"
-print(msg1)
+### วิธีสร้างฟังก์ชัน (def)
 
-name2 = "Bob"
-msg2 = f"สวัสดี {name2}! ยินดีต้อนรับ"
-print(msg2)
-
-# ✅ ดี: ใช้ฟังก์ชัน
-def greet(name):
-    print(f"สวัสดี {name}! ยินดีต้อนรับ")
-
-greet("Alice")
-greet("Bob")
-greet("Charlie")   # ง่ายมาก!
-\`\`\`
-
-### รูปแบบฟังก์ชัน
+เราใช้คำว่า \`def\` (ย่อมาจาก define = กำหนด) ในการสร้างคาถาใหม่!
 
 \`\`\`python
-def ชื่อฟังก์ชัน(parameter1, parameter2):
-    """Docstring: อธิบายว่าฟังก์ชันทำอะไร"""
-    # โค้ด
-    return ค่าที่ส่งกลับ
-\`\`\`
-
-### ตัวอย่างฟังก์ชันต่างๆ
-
-\`\`\`python
-# ไม่มี parameter, ไม่ return
+# เราสร้างคาถาชื่อว่า say_hello()
 def say_hello():
-    print("สวัสดี!")
+    print("สวัสดีจ้า!")
+    print("กินข้าวหรือยัง?")
 
-say_hello()   # สวัสดี!
+# ตอนนี้เรามีคาถาแล้ว แต่ยังไม่ได้ใช้นะ!
 
-# มี parameter, ไม่ return
-def greet(name, age):
-    print(f"ชื่อ {name} อายุ {age} ปี")
-
-greet("Alice", 20)
-
-# มี parameter, มี return
-def add(a, b):
-    return a + b
-
-result = add(5, 3)   # result = 8
-print(result)
-
-# return หลายค่า
-def min_max(numbers):
-    return min(numbers), max(numbers)
-
-lo, hi = min_max([3, 1, 4, 1, 5, 9])
-print(f"ต่ำสุด: {lo}, สูงสุด: {hi}")
+# วิธีร่ายคาถา! (เรียกใช้ฟังก์ชัน)
+say_hello()  # คอมพิวเตอร์จะพิมพ์ สวัสดีจ้า! กินข้าวหรือยัง?
 \`\`\`
 
-### Default Parameters
+### ฟังก์ชันที่รับของได้ด้วยนะ (Parameters) 🎁
+
+บางทีเราก็อยากให้ฟังก์ชันทำงานต่างกันไปตามคน
 
 \`\`\`python
-def introduce(name, age=18, city="กรุงเทพฯ"):
-    print(f"ฉันชื่อ {name}, อายุ {age}, อยู่ที่{city}")
-
-introduce("Alice")                  # ใช้ค่าเริ่มต้น
-introduce("Bob", 25)                # age=25, city ค่าเริ่มต้น
-introduce("Charlie", 30, "เชียงใหม่")  # ระบุทุกค่า
-introduce("Dave", city="ภูเก็ต")    # ข้ามบางค่า (keyword arg)
-\`\`\``,
-          en: `## Functions
-
-A function is like an **appliance** — reusable, does a lot, just press a button.
-
-### Why Use Functions?
-
-\`\`\`python
-# ❌ Bad: repetitive code
-name1 = "Alice"
-msg1 = f"Hello {name1}! Welcome!"
-print(msg1)
-
-name2 = "Bob"
-msg2 = f"Hello {name2}! Welcome!"
-print(msg2)
-
-# ✅ Good: use a function
+# สร้างคาถาที่รับชื่อคนเข้าไปได้ด้วย!
 def greet(name):
-    print(f"Hello {name}! Welcome!")
+    print(f"สวัสดีคุณ {name}!")
 
-greet("Alice")
-greet("Bob")
-greet("Charlie")   # easy!
+# ร่ายคาถา!
+greet("โดเรม่อน")  # ได้: สวัสดีคุณ โดเรม่อน!
+greet("โนบิตะ")    # ได้: สวัสดีคุณ โนบิตะ!
 \`\`\`
 
-### Function Structure
+### ฟังก์ชันที่คืนของให้เรา (return) 🔄
+
+นอกจากพูดแล้ว ฟังก์ชันยัง "คำนวณแล้วส่งของคืน" ให้เราได้ด้วย!
 
 \`\`\`python
-def function_name(param1, param2):
-    """Docstring: describe what the function does"""
-    # code
-    return return_value
+# ฟังก์ชันบวกเลข 2 ตัว
+def add(a, b):
+    answer = a + b
+    return answer  # โยนคำตอบกลับมา!
+
+# เรียกใช้ และรับค่ามาเก็บในกล่อง result
+result = add(5, 10)
+print(f"คำตอบคือ {result}")  # ได้: คำตอบคือ 15
+\`\`\``,
+          en: `## Creating Personal Commands (def) 🛠️
+
+If there is something we have to do very often, we don't want to type the same code again and again, right?
+
+So we create a **Function**! It's like bundling many lines of code and giving it a name. Just like creating your own personal "Magic Spell"!
+
+### How to create a function (def)
+
+We use the word \`def\` (Define) to create a new spell!
+
+\`\`\`python
+# We create a spell called say_hello()
+def say_hello():
+    print("Hello there!")
+    print("Have you eaten yet?")
+
+# We have the spell, but we haven't used it yet!
+
+# How to cast the spell! (Call the function)
+say_hello()  # Computer prints: Hello there! Have you eaten yet?
 \`\`\`
 
-### Various Examples
+### Functions that can accept things! (Parameters) 🎁
+
+Sometimes we want the function to do slightly different things.
 
 \`\`\`python
-# Return multiple values
-def min_max(numbers):
-    return min(numbers), max(numbers)
+# Create a spell that accepts a name!
+def greet(name):
+    print(f"Hello Mr. {name}!")
 
-lo, hi = min_max([3, 1, 4, 1, 5, 9])
-print(f"Min: {lo}, Max: {hi}")
+# Cast the spell!
+greet("Doraemon")  # Gets: Hello Mr. Doraemon!
+greet("Nobita")    # Gets: Hello Mr. Nobita!
 \`\`\`
 
-### Default Parameters
+### Functions that give things back! (return) 🔄
+
+Functions don't just speak, they can "Calculate and Return" an answer to us!
 
 \`\`\`python
-def introduce(name, age=18, city="Bangkok"):
-    print(f"I'm {name}, age {age}, from {city}")
+# A function that adds 2 numbers
+def add(a, b):
+    answer = a + b
+    return answer  # Throws the answer back!
 
-introduce("Alice")                 # uses defaults
-introduce("Bob", 25)               # age=25, city default
-introduce("Charlie", 30, "Phuket") # all specified
-introduce("Dave", city="Chiang Mai") # keyword argument
+# Call it, and catch the answer in the box 'result'
+result = add(5, 10)
+print(f"The answer is {result}")  # Gets: The answer is 15
 \`\`\``,
         },
         commands: [
@@ -3178,149 +2176,44 @@ introduce("Dave", city="Chiang Mai") # keyword argument
         xpReward: 45,
         hasFlowchart: false,
         content: {
-          th: `## ขอบเขตของตัวแปร (Variable Scope)
+          th: `## เขตหวงห้ามของตัวแปร (Scope) 🚧
 
-ตัวแปรมี "ขอบเขต" ที่ใช้ได้ เหมือนกุญแจที่เปิดได้แค่ห้องบางห้อง
-
-### Local vs Global
+เวลาเราสร้างกล่องเก็บของ (ตัวแปร) ไว้ในฟังก์ชัน กล่องนั้นจะเป็น **กล่องส่วนตัว**
+คนข้างนอกจะมองไม่เห็นนะ!
 
 \`\`\`python
-x = 10   # Global variable (ใช้ได้ทุกที่)
+def secret_room():
+    # อันนี้คือตัวแปรส่วนตัว อยู่ในห้องความลับ
+    treasure = "ทองคำ!"
+    print(f"ในห้องมี {treasure}")
 
-def my_function():
-    y = 20   # Local variable (ใช้ได้แค่ในฟังก์ชัน)
-    print(x)   # ✅ เข้าถึง global ได้
-    print(y)   # ✅ ใช้ local ได้
+secret_room()  # อันนี้ทำงานได้ปกติ พิมพ์ ทองคำ!
 
-my_function()
-print(x)   # ✅ ใช้ global ได้
-print(y)   # ❌ Error! y ไม่มีนอกฟังก์ชัน
+# ❌ แต่ถ้าเราพยายามแอบดูขุมทรัพย์จากข้างนอกล่ะ?
+# print(treasure)  <-- คอมพิวเตอร์จะโวยวาย (Error) ทันที!
+# เพราะมันมองไม่เห็นของที่อยู่ในฟังก์ชันจ้า
 \`\`\`
 
-### แก้ไข Global Variable
+**จำง่ายๆ:** ของที่อยู่ใน \`def\` จะใช้ได้แค่ในนั้นเท่านั้น พอร่ายคาถาเสร็จ ของพวกนั้นก็จะสลายไป! ✨`,
+          en: `## Restricted Zones for Variables (Scope) 🚧
+
+When we create a box (variable) inside a function, it is a **Private Box**.
+People outside cannot see it!
 
 \`\`\`python
-counter = 0
+def secret_room():
+    # This is a private variable inside the secret room
+    treasure = "Gold!"
+    print(f"The room has {treasure}")
 
-def increment():
-    global counter   # บอกว่าจะแก้ global
-    counter += 1
+secret_room()  # This works normally, prints Gold!
 
-increment()
-increment()
-print(counter)   # 2
+# ❌ But what if we try to peek at the treasure from the outside?
+# print(treasure)  <-- The computer will complain (Error) instantly!
+# Because it cannot see things that are locked inside a function.
 \`\`\`
 
-### Lambda Functions — ฟังก์ชันสั้นๆ
-
-\`\`\`python
-# ฟังก์ชันปกติ
-def square(x):
-    return x ** 2
-
-# Lambda แบบย่อ (บรรทัดเดียว)
-square = lambda x: x ** 2
-
-print(square(5))   # 25
-
-# ใช้กับ sorted
-students = [("Alice", 85), ("Bob", 92), ("Charlie", 78)]
-students.sort(key=lambda s: s[1], reverse=True)  # เรียงตามคะแนน
-for name, score in students:
-    print(f"{name}: {score}")
-\`\`\`
-
-### ฟังก์ชัน Recursive (เรียกตัวเอง)
-
-\`\`\`python
-# แฟกทอเรียลแบบ recursive
-def factorial(n):
-    if n == 0 or n == 1:   # Base case
-        return 1
-    return n * factorial(n - 1)  # Recursive case
-
-print(factorial(5))   # 120  (5! = 5×4×3×2×1)
-
-# Fibonacci
-def fib(n):
-    if n <= 1:
-        return n
-    return fib(n-1) + fib(n-2)
-
-for i in range(10):
-    print(fib(i), end=" ")
-# 0 1 1 2 3 5 8 13 21 34
-\`\`\`
-
-### ตัวอย่าง: ฟังก์ชัน Utility
-
-\`\`\`python
-def is_palindrome(text):
-    """ตรวจว่าคำอ่านกลับได้ไหม"""
-    clean = text.lower().replace(" ", "")
-    return clean == clean[::-1]
-
-print(is_palindrome("racecar"))    # True
-print(is_palindrome("level"))      # True
-print(is_palindrome("hello"))      # False
-
-def celsius_to_fahrenheit(c):
-    """แปลง Celsius เป็น Fahrenheit"""
-    return (c * 9/5) + 32
-
-print(f"100°C = {celsius_to_fahrenheit(100)}°F")  # 212°F
-\`\`\``,
-          en: `## Variable Scope
-
-Variables have a "scope" — where they can be accessed, like a key that only opens certain rooms.
-
-### Local vs Global
-
-\`\`\`python
-x = 10   # Global variable
-
-def my_function():
-    y = 20   # Local variable
-    print(x)   # ✅ can access global
-    print(y)   # ✅ can use local
-
-my_function()
-print(x)   # ✅ global works here
-print(y)   # ❌ Error! y not accessible outside function
-\`\`\`
-
-### Lambda Functions — Short Functions
-
-\`\`\`python
-# Regular function
-def square(x):
-    return x ** 2
-
-# Lambda (one-liner)
-square = lambda x: x ** 2
-
-print(square(5))   # 25
-
-# Use with sorted
-students = [("Alice", 85), ("Bob", 92)]
-students.sort(key=lambda s: s[1], reverse=True)
-\`\`\`
-
-### Recursive Functions
-
-\`\`\`python
-def factorial(n):
-    if n == 0 or n == 1:
-        return 1
-    return n * factorial(n - 1)
-
-print(factorial(5))   # 120
-
-def fib(n):
-    if n <= 1:
-        return n
-    return fib(n-1) + fib(n-2)
-\`\`\``,
+**Easy to remember:** Things inside \`def\` can only be used inside it. Once the spell finishes, those things vanish! ✨`,
         },
         commands: [
           {
@@ -3343,137 +2236,76 @@ def fib(n):
         xpReward: 40,
         hasFlowchart: false,
         content: {
-          th: `## Module คืออะไร?
+          th: `## ยืมพลังเพื่อนมาใช้ (Module & Import) 🤝
 
-Module คือ **ไฟล์ Python ที่รวมฟังก์ชันที่เกี่ยวข้องกัน** เหมือนกล่องเครื่องมือเฉพาะทาง
+ในโลก Python มีโปรแกรมเมอร์ใจดีมากมาย เขียนโค้ดแจกฟรีเพียบเลย!
+เราสามารถไปยืมโค้ดของพวกเขามาใช้ได้ง่ายๆ เราเรียกการยืมนี้ว่าการใช้ **Module (โมดูล)**
 
-### import Modules
+เราจะใช้คาถาที่ชื่อว่า \`import\` แปลว่า "นำเข้ามา"
+
+### ลองยืมเครื่องคิดเลขขั้นเทพมาใช้! 🧮
+
+สมมติเราอยากหารากที่สอง (Square root) ไม่ต้องนั่งคิดเอง! ไปเรียก \`math\` มาช่วยเลย
 
 \`\`\`python
-# import ทั้ง module
-import math
-print(math.pi)          # 3.14159...
-print(math.sqrt(25))    # 5.0
-print(math.ceil(3.2))   # 4
-print(math.floor(3.8))  # 3
-print(math.pow(2, 10))  # 1024.0
+import math  # บรรทัดนี้คือการไปสะกิดเรียกโมดูล math เข้ามาช่วยเรา!
 
-# import เฉพาะที่ต้องการ
-from math import pi, sqrt, factorial
-print(pi)           # 3.14159...
-print(sqrt(16))     # 4.0
-print(factorial(5)) # 120
+# ลองให้ math ช่วยหารากที่สองของ 16
+answer = math.sqrt(16)
+print(answer)  # ได้ 4.0
 
-# ตั้งชื่อย่อ
-import math as m
-print(m.sin(m.pi/2))  # 1.0
+# ขอดูค่า Pi หน่อย!
+print(math.pi)  # ได้ 3.14159...
 \`\`\`
 
-### random — สุ่มตัวเลข
+### ลองยืมลูกเต๋ามาทอย! 🎲
+
+ถ้าเราอยากสุ่มตัวเลข เราก็ไปเรียกโมดูล \`random\` เข้ามา!
 
 \`\`\`python
 import random
 
-# สุ่มจำนวนเต็ม
-print(random.randint(1, 6))       # สุ่มลูกเต๋า
-
-# สุ่มทศนิยม 0.0-1.0
-print(random.random())
-
-# สุ่มจาก List
-fruits = ["แอปเปิ้ล", "กล้วย", "มะม่วง"]
-print(random.choice(fruits))
-
-# สับไพ่ (สุ่มลำดับ)
-cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-random.shuffle(cards)
-print(cards)
-
-# สุ่มหลายตัว
-print(random.sample(range(1, 50), 6))  # ล็อตเตอรี่!
+# สุ่มเลขตั้งแต่ 1 ถึง 10
+lucky_number = random.randint(1, 10)
+print(f"เลขเด็ดของคุณคือ {lucky_number}")
 \`\`\`
 
-### datetime — วันและเวลา
+การ \`import\` นี่แหละที่ทำให้ Python เก่งที่สุดในโลก เพราะมีเครื่องมือให้เรายืมใช้เพียบ! 🎉`,
+          en: `## Borrowing Friends' Powers (Module & Import) 🤝
+
+In the Python world, there are lots of kind programmers who write free code for us to use!
+We can easily borrow their code. We call this borrowing a **Module**.
+
+We use a magic word called \`import\` which means "bring in".
+
+### Let's borrow an advanced calculator! 🧮
+
+Suppose we want to find a Square Root. No need to calculate it yourself! Just call \`math\` to help.
 
 \`\`\`python
-from datetime import datetime, date
+import math  # This line taps the 'math' module on the shoulder to come help us!
 
-now = datetime.now()
-print(f"วันที่: {now.strftime('%d/%m/%Y')}")
-print(f"เวลา: {now.strftime('%H:%M:%S')}")
+# Ask math to find the square root of 16
+answer = math.sqrt(16)
+print(answer)  # Gives 4.0
 
-today = date.today()
-print(f"วันนี้: {today}")
-
-# คำนวณอายุ
-birthday = date(2000, 6, 15)
-age_days = (date.today() - birthday).days
-print(f"อายุ: {age_days // 365} ปี")
+# Ask for the Pi value!
+print(math.pi)  # Gives 3.14159...
 \`\`\`
 
-### สร้าง Module ของตัวเอง
+### Let's borrow some dice to roll! 🎲
 
-\`\`\`python
-# ไฟล์: my_utils.py
-def greet(name):
-    return f"สวัสดี {name}!"
-
-def add(a, b):
-    return a + b
-
-PI = 3.14159
-
-# ไฟล์: main.py
-import my_utils
-print(my_utils.greet("Alice"))
-print(my_utils.add(5, 3))
-print(my_utils.PI)
-\`\`\``,
-          en: `## What is a Module?
-
-A module is a **Python file containing related functions** — like a specialized toolbox.
-
-### Importing Modules
-
-\`\`\`python
-import math
-print(math.pi)          # 3.14159...
-print(math.sqrt(25))    # 5.0
-print(math.ceil(3.2))   # 4
-print(math.floor(3.8))  # 3
-
-from math import pi, sqrt
-print(pi)           # 3.14159...
-print(sqrt(16))     # 4.0
-\`\`\`
-
-### random — Random Numbers
+If we want a random number, we just call the \`random\` module!
 
 \`\`\`python
 import random
 
-print(random.randint(1, 6))    # dice roll
-print(random.random())          # float 0.0-1.0
-
-fruits = ["Apple", "Banana", "Mango"]
-print(random.choice(fruits))    # random choice
-
-cards = [1,2,3,4,5]
-random.shuffle(cards)           # shuffle in-place
-print(cards)
-
-print(random.sample(range(1, 50), 6))  # lottery!
+# Random a number from 1 to 10
+lucky_number = random.randint(1, 10)
+print(f"Your lucky number is {lucky_number}")
 \`\`\`
 
-### datetime — Dates and Times
-
-\`\`\`python
-from datetime import datetime, date
-
-now = datetime.now()
-print(f"Date: {now.strftime('%d/%m/%Y')}")
-print(f"Time: {now.strftime('%H:%M:%S')}")
-\`\`\``,
+The \`import\` command is what makes Python the best in the world, because there are so many free tools we can borrow! 🎉`,
         },
         commands: [
           {

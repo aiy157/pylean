@@ -64,9 +64,6 @@ function LoginPanel({ onLogin, lang, t }) {
       <button onClick={handleLogin} className="btn-primary" style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         <Lock size={14} /> {t.admin.login}
       </button>
-      <p style={{ marginTop: '1.25rem', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-        {lang === 'th' ? 'รหัสผ่านเริ่มต้น: admin1234' : 'Default password: admin1234'}
-      </p>
     </div>
   );
 }

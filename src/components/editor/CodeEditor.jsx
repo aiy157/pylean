@@ -22,6 +22,17 @@ const EDITOR_OPTIONS = {
     verticalScrollbarSize: 6,
     horizontalScrollbarSize: 6,
   },
+  autoClosingBrackets: 'always',
+  autoClosingQuotes: 'always',
+  formatOnPaste: true,
+  formatOnType: true,
+  suggestOnTriggerCharacters: true,
+  quickSuggestions: {
+    other: true,
+    comments: false,
+    strings: true
+  },
+  wordBasedSuggestions: 'allDocuments',
 };
 
 export default function CodeEditor({ value, onChange, height = '300px', readOnly = false }) {
