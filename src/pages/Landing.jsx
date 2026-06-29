@@ -114,8 +114,9 @@ export default function Landing() {
             <span style={{ fontSize: '0.75rem', color: '#4a4a6a', marginLeft: '0.5rem' }}>hello.py</span>
           </div>
           <pre style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.85rem', lineHeight: 1.7, color: '#e2e8f0' }}>
-{`\x1b[35mname\x1b[0m = \x1b[32minput\x1b[0m(\x1b[33m"ชื่อของคุณ: "\x1b[0m)
-\x1b[32mprint\x1b[0m(\x1b[33mf\x1b[0m\x1b[33m"สวัสดี, {name}!"\x1b[0m)`}
+            <span style={{ color: '#d8b4fe' }}>name</span> = <span style={{ color: '#6ee7b7' }}>input</span>(<span style={{ color: '#fcd34d' }}>"ชื่อของคุณ: "</span>)
+            <br />
+            <span style={{ color: '#6ee7b7' }}>print</span>(<span style={{ color: '#fcd34d' }}>f"สวัสดี, &#123;name&#125;!"</span>)
           </pre>
           <div style={{ marginTop: '0.75rem', padding: '0.5rem 0.75rem', background: '#161b22', borderRadius: '0.4rem', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.8rem', color: '#10b981' }}>
             {'> สวัสดี, สมชาย!'}

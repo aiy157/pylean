@@ -37,10 +37,10 @@ export default function Navbar() {
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
           <div style={{
             width: 32, height: 32, borderRadius: '0.5rem',
-            background: 'linear-gradient(135deg, #7c3aed, #10b981)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '1rem',
-          }}>🐍</div>
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <img src="/favicon.svg" alt="PyLearn Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          </div>
           <span style={{
             fontWeight: 800, fontSize: '1.1rem',
             background: 'linear-gradient(135deg, #a78bfa, #10b981)',
