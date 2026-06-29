@@ -14,10 +14,10 @@ import { useProgressStore } from './store/progressStore';
 import { useAdminStore } from './store/adminStore';
 
 const AdminUnlock = () => {
-  const unlockAllModulesAdmin = useProgressStore(state => state.unlockAllModulesAdmin);
+  const enableAdminUnlockMode = useProgressStore(state => state.enableAdminUnlockMode);
   useEffect(() => {
-    unlockAllModulesAdmin();
-  }, [unlockAllModulesAdmin]);
+    enableAdminUnlockMode();
+  }, [enableAdminUnlockMode]);
   return <Navigate to="/dashboard" replace />;
 };
 

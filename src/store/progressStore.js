@@ -63,6 +63,7 @@ const initialState = {
   exerciseScores: {},   // { [exerciseId]: scorePercent (0–100) }
   unlockedModules: [1],
   badges: [],
+  isAdminUnlockMode: sessionStorage.getItem('pylearn_admin_unlock') === 'true',
 };
 
 const computeUnlockedModules = (xp) => {
@@ -181,13 +182,13 @@ export const useProgressStore = create((set, get) => {
       return { grantXP, nowPasses, newScore };
     },
 
-    isLessonComplete: (lessonId) => get().completedLessons.includes(lessonId),
-    isExerciseComplete: (exerciseId) => get().completedExercises.includes(exerciseId),
-    isModuleUnlocked: (moduleId) => get().unlockedModules.includes(moduleId),
+    isLessonComplete: (lessonId) => get().isAdminUnlockMode || get().completedLessons.includes(lessonId),
+    isExerciseComplete: (exerciseId) => get().isAdminUnlockMode || get().completedExercises.includes(exerciseId),
+    isModuleUnlocked: (moduleId) => get().isAdminUnlockMode || get().unlockedModules.includes(moduleId),
 
-    getExerciseScore: (exerciseId) => get().exerciseScores[exerciseId] ?? -1,
+    getExerciseScore: (exerciseId) => get().isAdminUnlockMode ? 100 : (get().exerciseScores[exerciseId] ?? -1),
 
-    isExercisePassed: (exerciseId) => (get().exerciseScores[exerciseId] ?? -1) >= 80,
+    isExercisePassed: (exerciseId) => get().isAdminUnlockMode || (get().exerciseScores[exerciseId] ?? -1) >= 80,
 
     getModuleProgress: (moduleId) => {
       const state = get();
@@ -206,12 +207,9 @@ export const useProgressStore = create((set, get) => {
       supabase.from('user_progress').delete().eq('device_id', deviceId).catch(() => {});
     },
 
-    unlockAllModulesAdmin: () => {
-      const allModules = MODULES.map(m => m.id);
-      const newState = { unlockedModules: allModules };
-      set(newState);
-      saveToStorage({ ...get(), ...newState });
-      syncProgressToCloud({ ...get(), ...newState });
+    enableAdminUnlockMode: () => {
+      sessionStorage.setItem('pylearn_admin_unlock', 'true');
+      set({ isAdminUnlockMode: true });
     },
   };
 });
