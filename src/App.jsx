@@ -1,6 +1,6 @@
 // src/App.jsx
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/layout/Navbar';
 import Landing from './pages/Landing';
@@ -10,25 +10,24 @@ import LessonPage from './pages/LessonPage';
 import ExercisePage from './pages/ExercisePage';
 import FlowchartPage from './pages/FlowchartPage';
 import AdminPage from './pages/AdminPage';
+import LoginPage from './pages/LoginPage';
+import AllPassPage from './pages/AllPassPage';
 import { useProgressStore } from './store/progressStore';
 import { useAdminStore } from './store/adminStore';
-
-const AdminUnlock = () => {
-  const enableAdminUnlockMode = useProgressStore(state => state.enableAdminUnlockMode);
-  useEffect(() => {
-    enableAdminUnlockMode();
-  }, [enableAdminUnlockMode]);
-  return <Navigate to="/dashboard" replace />;
-};
+import { useAuthStore } from './store/authStore';
 
 export default function App() {
   const fetchProgress = useProgressStore(state => state.fetchProgress);
   const fetchExercises = useAdminStore(state => state.fetchExercises);
+  const initAuth = useAuthStore(state => state.init);
 
   useEffect(() => {
-    fetchProgress();
-    fetchExercises();
-  }, [fetchProgress, fetchExercises]);
+    // Init auth first, then fetch progress (needs user session)
+    initAuth().then(() => {
+      fetchProgress();
+      fetchExercises();
+    });
+  }, [initAuth, fetchProgress, fetchExercises]);
 
   return (
     <BrowserRouter>
@@ -36,8 +35,9 @@ export default function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/allpass" element={<AdminUnlock />} />
+          <Route path="/dashboard/allpass" element={<AllPassPage />} />
           <Route path="/lessons" element={<LessonsListPage />} />
           <Route path="/lessons/:moduleId" element={<LessonsListPage />} />
           <Route path="/lessons/:moduleId/:lessonId" element={<LessonPage />} />
@@ -50,4 +50,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-

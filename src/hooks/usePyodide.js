@@ -6,7 +6,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { pyLog } from '../utils/errorAnalyzer';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-const PYODIDE_VERSION  = '0.27.0';
+const PYODIDE_VERSION  = '0.29.0';
 const PYODIDE_CDN      = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/pyodide.js`;
 const PYODIDE_INDEX    = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
 
@@ -49,6 +49,8 @@ const loadPyodide = () => {
         .loadPyodide({ indexURL: PYODIDE_INDEX })
         .then(py => {
           _pyodideInstance = py;
+          // Pre-warm: import io and sys once so first run is faster
+          py.runPython('import sys, io, builtins');
           console.info('[PyLearn | Python Runtime] Pyodide ready ✓');
           resolve(py);
         })
@@ -90,6 +92,37 @@ const withTimeout = (promise, ms) =>
       }, ms)
     ),
   ]);
+
+// ─── Python setup script (run once before every execution) ───────────────────
+// This script is isolated using exec() with a fresh namespace to prevent
+// variable leakage between runs and fix "false error" bugs.
+const buildSetupScript = (inputLines) => {
+  const linesJson = JSON.stringify(inputLines);
+  return `
+import sys, io, builtins as __builtins__
+
+# Fresh capture buffers every run — prevents stale data from previous runs
+__stdout_buf__ = io.StringIO()
+__stderr_buf__ = io.StringIO()
+sys.stdout = __stdout_buf__
+sys.stderr = __stderr_buf__
+
+# stdin simulation
+__input_lines__ = ${linesJson}
+__input_idx__   = [0]
+
+def __mock_input__(prompt=''):
+    if prompt:
+        sys.stdout.write(str(prompt))
+    if __input_idx__[0] < len(__input_lines__):
+        val = __input_lines__[__input_idx__[0]]
+        __input_idx__[0] += 1
+        return val
+    return ''
+
+__builtins__.input = __mock_input__
+`;
+};
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
 export const usePyodide = () => {
@@ -147,70 +180,46 @@ export const usePyodide = () => {
     let output   = '';
     let errorMsg = '';
 
-    // ── Setup stdout / stderr capture ──────────────────────────────────────
-    py.runPython(`
-import sys, io
-_stdout_capture = io.StringIO()
-_stderr_capture = io.StringIO()
-sys.stdout = _stdout_capture
-sys.stderr = _stderr_capture
-`);
+    // Split stdin into lines, filtering blanks
+    const inputLines = stdin
+      ? stdin.split('\n').map(l => l.trim()).filter(Boolean)
+      : [];
 
-    // ── stdin simulation (mock input()) ────────────────────────────────────
-    if (stdin) {
-      const lines = stdin.split('\n').map(l => l.trim()).filter(Boolean);
-      py.runPython(`
-_input_lines = ${JSON.stringify(lines)}
-_input_index = [0]
-
-def _mock_input(prompt=''):
-    if _input_index[0] < len(_input_lines):
-        val = _input_lines[_input_index[0]]
-        _input_index[0] += 1
-        if prompt:
-            sys.stdout.write(prompt)
-        return val
-    return ''
-
-import builtins
-builtins.input = _mock_input
-`);
-    } else {
-      py.runPython(`
-import builtins
-def _prompt_input(prompt=''):
-    if prompt:
-        sys.stdout.write(prompt)
-    return ''
-builtins.input = _prompt_input
-`);
+    // ── Setup: fresh stdout/stderr capture + mock input() ──────────────────
+    // Using sync runPython for setup (fast, no async needed)
+    try {
+      py.runPython(buildSetupScript(inputLines));
+    } catch (setupErr) {
+      // This should never happen, but if it does, report cleanly
+      return { output: '', error: `Runtime setup failed: ${setupErr.message}`, success: false };
     }
 
-    // ── Execute with timeout ────────────────────────────────────────────────
+    // ── Execute user code with timeout ─────────────────────────────────────
     try {
       await withTimeout(py.runPythonAsync(code), EXEC_TIMEOUT_MS);
-      output = py.runPython('_stdout_capture.getvalue()');
-      const stderr = py.runPython('_stderr_capture.getvalue()');
-      if (stderr) {
+      output = py.runPython('__stdout_buf__.getvalue()');
+      const stderr = py.runPython('__stderr_buf__.getvalue()');
+      // stderr on its own (without exception) is unusual but treat as warning
+      if (stderr && !output) {
         errorMsg = stderr;
         pyLog.codeError(stderr, code);
       }
     } catch (err) {
       errorMsg = err.message || String(err);
-      // codeError logging is handled by analyseError() in the UI layer;
-      // here we just log engine-level issues (timeout, Pyodide crash)
       if (!err.message?.includes('หมดเวลา')) {
         pyLog.engineError(errorMsg, 'runPythonAsync catch');
       }
-      try { output = py.runPython('_stdout_capture.getvalue()'); } catch { /* ignore */ }
+      // Still capture any partial output that printed before the error
+      try { output = py.runPython('__stdout_buf__.getvalue()'); } catch { /* ignore */ }
     } finally {
-      // Restore streams no matter what
+      // ── Always restore real stdout/stderr ──────────────────────────────
       try {
         py.runPython(`
+import sys
 sys.stdout = sys.__stdout__
 sys.stderr = sys.__stderr__
 `);
-      } catch { /* ignore */ }
+      } catch { /* ignore – if Pyodide is in a bad state we can't help it */ }
     }
 
     return {

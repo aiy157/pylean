@@ -4,17 +4,8 @@ import { MODULES } from '../data/curriculum';
 import { supabase } from '../utils/supabase';
 
 const STORAGE_KEY = 'pylearn_progress';
-const DEVICE_ID_KEY = 'pylearn_device_id';
 
-const getDeviceId = () => {
-  let id = localStorage.getItem(DEVICE_ID_KEY);
-  if (!id) {
-    id = 'dev-' + crypto.randomUUID();
-    localStorage.setItem(DEVICE_ID_KEY, id);
-  }
-  return id;
-};
-
+// ─── Local Storage helpers ───────────────────────────────────────────────────
 const loadFromStorage = () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -35,13 +26,16 @@ const saveToStorage = (state) => {
   } catch {}
 };
 
+// ─── Cloud sync (uses Supabase Auth user_id if logged in) ────────────────────
 const syncProgressToCloud = async (state) => {
-  const deviceId = getDeviceId();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;   // Guest mode — no cloud sync
+
   try {
     const { error } = await supabase
       .from('user_progress')
       .upsert({
-        device_id: deviceId,
+        user_id: user.id,
         xp: state.xp,
         completed_lessons: state.completedLessons,
         completed_exercises: state.completedExercises,
@@ -60,7 +54,7 @@ const initialState = {
   xp: 0,
   completedLessons: [],
   completedExercises: [],
-  exerciseScores: {},   // { [exerciseId]: scorePercent (0–100) }
+  exerciseScores: {},
   unlockedModules: [1],
   badges: [],
   isAdminUnlockMode: sessionStorage.getItem('pylearn_admin_unlock') === 'true',
@@ -79,31 +73,32 @@ export const useProgressStore = create((set, get) => {
   return {
     ...init,
 
+    // ── fetchProgress: load cloud data if logged in, merge with local ────
     fetchProgress: async () => {
-      const deviceId = getDeviceId();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;  // Guest — use localStorage only
+
       try {
         const { data, error } = await supabase
           .from('user_progress')
           .select('*')
-          .eq('device_id', deviceId)
+          .eq('user_id', user.id)
           .single();
 
         if (error && error.code !== 'PGRST116') throw error;
 
         if (data) {
           const local = get();
-          if (data.xp > local.xp || data.completed_lessons.length > local.completedLessons.length) {
-            const merged = {
-              xp: Math.max(local.xp, data.xp),
-              completedLessons: Array.from(new Set([...local.completedLessons, ...data.completed_lessons])),
-              completedExercises: Array.from(new Set([...local.completedExercises, ...data.completed_exercises])),
-              exerciseScores: { ...data.exercise_scores, ...local.exerciseScores },
-              unlockedModules: Array.from(new Set([...local.unlockedModules, ...data.unlocked_modules])),
-              badges: Array.from(new Set([...local.badges, ...data.badges])),
-            };
-            set(merged);
-            saveToStorage(merged);
-          }
+          const merged = {
+            xp: Math.max(local.xp, data.xp),
+            completedLessons: Array.from(new Set([...local.completedLessons, ...(data.completed_lessons || [])])),
+            completedExercises: Array.from(new Set([...local.completedExercises, ...(data.completed_exercises || [])])),
+            exerciseScores: { ...(data.exercise_scores || {}), ...local.exerciseScores },
+            unlockedModules: Array.from(new Set([...local.unlockedModules, ...(data.unlocked_modules || [1])])),
+            badges: Array.from(new Set([...local.badges, ...(data.badges || [])])),
+          };
+          set(merged);
+          saveToStorage(merged);
         }
       } catch (err) {
         console.warn('Supabase progress fetch failed:', err.message);
@@ -149,24 +144,19 @@ export const useProgressStore = create((set, get) => {
 
       const alreadyPassed = prevScore >= 80;
       const nowPasses = scorePercent >= 80;
-      const grantXP = !alreadyPassed && nowPasses;
 
-      const newXP = grantXP ? state.xp + xpReward : state.xp;
-      const newCompleted = nowPasses && !state.completedExercises.includes(exerciseId)
-        ? [...state.completedExercises, exerciseId]
-        : state.completedExercises;
+      const grantXP = nowPasses && !alreadyPassed ? xpReward : 0;
+      const newXP = state.xp + grantXP;
+
+      const newCompleted = alreadyPassed
+        ? state.completedExercises
+        : Array.from(new Set([...state.completedExercises, exerciseId]));
+
       const newUnlocked = computeUnlockedModules(newXP);
 
       const newBadges = [...state.badges];
-      if (newCompleted.length === 1 && !newBadges.includes('first_exercise')) {
-        newBadges.push('first_exercise');
-      }
-      if (newCompleted.length >= 5 && !newBadges.includes('exercise_5')) {
-        newBadges.push('exercise_5');
-      }
-      if (newCompleted.length >= 10 && !newBadges.includes('exercise_10')) {
-        newBadges.push('exercise_10');
-      }
+      if (newXP >= 100 && !newBadges.includes('xp_100')) newBadges.push('xp_100');
+      if (newXP >= 300 && !newBadges.includes('xp_300')) newBadges.push('xp_300');
 
       const newState = {
         xp: newXP,
@@ -203,8 +193,12 @@ export const useProgressStore = create((set, get) => {
     resetProgress: () => {
       localStorage.removeItem(STORAGE_KEY);
       set(initialState);
-      const deviceId = getDeviceId();
-      supabase.from('user_progress').delete().eq('device_id', deviceId).catch(() => {});
+      // Clear cloud progress too
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        if (user) {
+          supabase.from('user_progress').delete().eq('user_id', user.id).catch(() => {});
+        }
+      });
     },
 
     enableAdminUnlockMode: () => {
@@ -213,5 +207,3 @@ export const useProgressStore = create((set, get) => {
     },
   };
 });
-
-

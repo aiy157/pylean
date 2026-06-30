@@ -1,19 +1,27 @@
 // src/components/layout/Navbar.jsx
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguageStore } from '../../store/languageStore';
 import { useProgressStore } from '../../store/progressStore';
-import { Zap, Globe, LayoutDashboard, BookOpen, Code2, GitBranch, Shield } from 'lucide-react';
+import { useAuthStore } from '../../store/authStore';
+import { Zap, Globe, LayoutDashboard, BookOpen, GitBranch, LogOut, LogIn, User } from 'lucide-react';
 
 export default function Navbar() {
   const { t, lang, toggleLang } = useLanguageStore();
   const { xp } = useProgressStore();
+  const { user, logout, getUsername } = useAuthStore();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navLinks = [
     { to: '/dashboard', icon: LayoutDashboard, label: t.nav.dashboard },
     { to: '/lessons', icon: BookOpen, label: t.nav.lessons },
     { to: '/flowchart', icon: GitBranch, label: t.nav.flowchart },
   ];
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
   return (
     <nav style={{
@@ -35,10 +43,7 @@ export default function Navbar() {
       }}>
         {/* Logo */}
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: '0.5rem',
-            display: 'flex', alignItems: 'center', justifyContent: 'center'
-          }}>
+          <div style={{ width: 32, height: 32, borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <img src="/favicon.svg" alt="PyLearn Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </div>
           <span style={{
@@ -62,7 +67,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Right side: XP + Language + Admin */}
+        {/* Right side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           {/* XP Display */}
           <div style={{
@@ -86,14 +91,42 @@ export default function Navbar() {
             {lang === 'th' ? 'TH' : 'EN'}
           </button>
 
-          {/* Admin Link */}
-          <Link
-            to="/admin"
-            style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center' }}
-            title="Admin"
-          >
-            <Shield size={16} />
-          </Link>
+          {/* Auth: User info or Login button */}
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              {/* Username chip */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '0.4rem',
+                background: 'rgba(16,185,129,0.1)',
+                border: '1px solid rgba(16,185,129,0.2)',
+                borderRadius: '999px',
+                padding: '0.3rem 0.75rem',
+              }}>
+                <User size={12} style={{ color: '#10b981' }} />
+                <span style={{ fontSize: '0.78rem', fontWeight: 600, color: '#10b981', maxWidth: 80, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {getUsername()}
+                </span>
+              </div>
+              {/* Logout */}
+              <button
+                onClick={handleLogout}
+                className="btn-ghost"
+                title={lang === 'th' ? 'ออกจากระบบ' : 'Logout'}
+                style={{ padding: '0.35rem 0.6rem', display: 'flex', alignItems: 'center' }}
+              >
+                <LogOut size={15} />
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="btn-primary"
+              style={{ padding: '0.35rem 0.875rem', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}
+            >
+              <LogIn size={13} />
+              {lang === 'th' ? 'เข้าสู่ระบบ' : 'Login'}
+            </Link>
+          )}
         </div>
       </div>
     </nav>
