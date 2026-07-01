@@ -54,10 +54,18 @@ export default function LoginPage() {
       const msg = err.message || 'เกิดข้อผิดพลาด';
       if (msg.includes('Invalid login credentials')) {
         setErrorMsg(lang === 'th' ? 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' : 'Invalid email or password');
-      } else if (msg.includes('already registered')) {
-        setErrorMsg(lang === 'th' ? 'อีเมลนี้มีบัญชีแล้ว' : 'This email is already registered');
+      } else if (msg.includes('already registered') || msg.includes('User already registered')) {
+        setErrorMsg(lang === 'th' ? 'อีเมลนี้มีบัญชีแล้ว — ลองเข้าสู่ระบบแทน' : 'This email is already registered — try logging in');
       } else if (msg.includes('Password should be at least')) {
         setErrorMsg(lang === 'th' ? 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร' : 'Password must be at least 6 characters');
+      } else if (msg.includes('rate limit') || msg.includes('email rate')) {
+        setErrorMsg(lang === 'th'
+          ? 'ส่งอีเมลบ่อยเกินไป — รอสักครู่แล้วลองใหม่ (หรือใช้อีเมลอื่น)'
+          : 'Too many attempts — please wait a moment and try again');
+      } else if (msg.includes('Email not confirmed')) {
+        setErrorMsg(lang === 'th'
+          ? 'อีเมลนี้ยังไม่ยืนยัน — เช็คกล่องจดหมาย หรือติดต่อแอดมิน'
+          : 'Email not confirmed — check your inbox or contact admin');
       } else {
         setErrorMsg(msg);
       }
