@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, User, Eye, EyeOff, LogIn, UserPlus, AlertCircle } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, LogIn, UserPlus, AlertCircle, CheckCircle } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useLanguageStore } from '../store/languageStore';
 import { useProgressStore } from '../store/progressStore';
@@ -17,6 +17,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
   const [form, setForm] = useState({ email: '', password: '', username: '' });
   const update = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -24,6 +25,7 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
+    setSuccessMsg('');
     setIsLoading(true);
     try {
       if (tab === 'login') {
@@ -35,8 +37,18 @@ export default function LoginPage() {
           setErrorMsg(lang === 'th' ? 'กรุณาใส่ชื่อผู้ใช้' : 'Please enter a username');
           return;
         }
-        await register(form.email, form.password, form.username.trim());
-        navigate('/dashboard');
+        const result = await register(form.email, form.password, form.username.trim());
+        // Supabase returns user but session is null when email confirmation is required
+        if (result.user && !result.session) {
+          setSuccessMsg(
+            lang === 'th'
+              ? `📩 ส่งอีเมลยืนยันไปที่ ${form.email} แล้ว — กรุณากดลิงก์ในอีเมลเพื่อเปิดใช้บัญชี`
+              : `📩 Confirmation email sent to ${form.email} — click the link to activate your account`
+          );
+        } else {
+          // Email confirmation disabled in Supabase → auto-login
+          navigate('/dashboard');
+        }
       }
     } catch (err) {
       const msg = err.message || 'เกิดข้อผิดพลาด';
@@ -244,6 +256,30 @@ export default function LoginPage() {
             )}
           </button>
         </form>
+
+        {/* Success message (email confirmation) */}
+        <AnimatePresence>
+          {successMsg && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              style={{
+                marginTop: '1.25rem',
+                background: 'rgba(16,185,129,0.08)',
+                border: '1px solid rgba(16,185,129,0.25)',
+                borderRadius: '0.75rem',
+                padding: '1rem',
+                display: 'flex', alignItems: 'flex-start', gap: '0.6rem',
+              }}
+            >
+              <CheckCircle size={18} style={{ color: '#10b981', flexShrink: 0, marginTop: '0.1rem' }} />
+              <div style={{ fontSize: '0.82rem', color: '#34d399', lineHeight: 1.6 }}>
+                {successMsg}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Guest note */}
         <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>

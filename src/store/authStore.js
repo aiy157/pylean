@@ -25,7 +25,10 @@ export const useAuthStore = create((set, get) => ({
       email,
       password,
       options: {
-        data: { username }, // stored in user_metadata
+        data: { username },
+        // Redirect URL after email confirmation — uses current domain automatically
+        // so it works on localhost (dev) AND production (Vercel) without hardcoding
+        emailRedirectTo: `${window.location.origin}/dashboard`,
       },
     });
     if (error) throw error;
