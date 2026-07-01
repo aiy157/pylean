@@ -26,28 +26,31 @@ const saveToStorage = (state) => {
   } catch {}
 };
 
-// ─── Cloud sync (uses Supabase Auth user_id if logged in) ────────────────────
-const syncProgressToCloud = async (state) => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;   // Guest mode — no cloud sync
-
-  try {
-    const { error } = await supabase
-      .from('user_progress')
-      .upsert({
-        user_id: user.id,
-        xp: state.xp,
-        completed_lessons: state.completedLessons,
-        completed_exercises: state.completedExercises,
-        exercise_scores: state.exerciseScores,
-        unlocked_modules: state.unlockedModules,
-        badges: state.badges,
-        updated_at: new Date().toISOString(),
-      });
-    if (error) throw error;
-  } catch (err) {
-    console.warn('Supabase progress sync failed:', err.message);
-  }
+// ─── Cloud sync with debounce (prevents API flooding) ───────────────────────
+let _syncTimer = null;
+const syncProgressToCloud = (state) => {
+  if (_syncTimer) clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;   // Guest mode — no cloud sync
+    try {
+      const { error } = await supabase
+        .from('user_progress')
+        .upsert({
+          user_id: user.id,
+          xp: state.xp,
+          completed_lessons: state.completedLessons,
+          completed_exercises: state.completedExercises,
+          exercise_scores: state.exerciseScores,
+          unlocked_modules: state.unlockedModules,
+          badges: state.badges,
+          updated_at: new Date().toISOString(),
+        });
+      if (error) throw error;
+    } catch (err) {
+      console.warn('Supabase progress sync failed:', err.message);
+    }
+  }, 2000);  // debounce 2 s
 };
 
 const initialState = {

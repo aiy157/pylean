@@ -1,5 +1,5 @@
 // src/pages/ExercisePage.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useLanguageStore } from '../store/languageStore';
 import { useProgressStore } from '../store/progressStore';
@@ -12,8 +12,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import {
   Play, Send, RotateCcw, Lightbulb, CheckCircle, XCircle,
-  ChevronLeft, Loader2, Terminal, AlertCircle
+  ChevronLeft, Loader2, Terminal, AlertCircle, LayoutPanelLeft, LayoutPanelTop
 } from 'lucide-react';
+
+// ─── Responsive breakpoint hook ──────────────────────────────────────────────
+const useIsNarrow = (breakpoint = 900) => {
+  const [narrow, setNarrow] = useState(() => window.innerWidth < breakpoint);
+  useEffect(() => {
+    const handler = () => setNarrow(window.innerWidth < breakpoint);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, [breakpoint]);
+  return narrow;
+};
 
 export default function ExercisePage() {
   const { exerciseId } = useParams();
@@ -21,6 +32,8 @@ export default function ExercisePage() {
   const { completeExercise, isExerciseComplete, getExerciseScore } = useProgressStore();
   const { getAllExercises } = useAdminStore();
   const { isReady, isLoading: pyLoading, error: pyError, loadProgress, isWasmSupported, runCode } = usePyodide();
+  const isNarrow = useIsNarrow();  // true on mobile / iPad portrait
+  const [layoutColumn, setLayoutColumn] = useState(false); // manual toggle override
 
   const exercise = getAllExercises().find(ex => ex.id === exerciseId);
 
@@ -104,9 +117,10 @@ export default function ExercisePage() {
     hard: { th: 'ยาก', en: 'Hard', color: '#f43f5e' },
   };
   const diff = diffLabels[exercise.difficulty] || diffLabels.easy;
+  const useColumnLayout = isNarrow || layoutColumn;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 60px)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: useColumnLayout ? 'auto' : 'calc(100vh - 60px)', minHeight: useColumnLayout ? 'calc(100vh - 60px)' : 'auto' }}>
       {/* Top Bar */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: '1rem',
@@ -142,15 +156,37 @@ export default function ExercisePage() {
             {lang === 'th' ? `คะแนนล่าสุด: ${bestScore}%` : `Best: ${bestScore}%`}
           </span>
         )}
+        {/* Layout Toggle (desktop only) */}
+        {!isNarrow && (
+          <button
+            onClick={() => setLayoutColumn(c => !c)}
+            className="btn-ghost"
+            title={layoutColumn ? 'Switch to side-by-side' : 'Switch to stacked'}
+            style={{ padding: '0.35rem 0.5rem', marginLeft: 'auto' }}
+          >
+            {layoutColumn
+              ? <LayoutPanelLeft size={14} />
+              : <LayoutPanelTop size={14} />}
+          </button>
+        )}
       </div>
 
       {/* Main Split Layout */}
-      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        {/* Left: Problem Description */}
+      <div style={{
+        display: 'flex',
+        flexDirection: useColumnLayout ? 'column' : 'row',
+        flex: useColumnLayout ? 'none' : 1,
+        overflow: useColumnLayout ? 'visible' : 'hidden',
+      }}>
+        {/* Problem Description Panel */}
         <div style={{
-          width: '40%', flexShrink: 0, overflow: 'auto',
-          borderRight: '1px solid var(--color-border-subtle)',
+          width: useColumnLayout ? '100%' : '40%',
+          flexShrink: 0,
+          overflow: 'auto',
+          borderRight: useColumnLayout ? 'none' : '1px solid var(--color-border-subtle)',
+          borderBottom: useColumnLayout ? '1px solid var(--color-border-subtle)' : 'none',
           padding: '1.5rem',
+          maxHeight: useColumnLayout ? '45vh' : 'none',
         }}>
           <div style={{
             background: 'var(--color-bg-card)',

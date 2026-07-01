@@ -1,8 +1,8 @@
-// src/pages/Dashboard.jsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguageStore } from '../store/languageStore';
 import { useProgressStore } from '../store/progressStore';
+import { useAuthStore } from '../store/authStore';
 import { MODULES } from '../data/curriculum';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, CheckCircle, PlayCircle, RotateCcw, AlertTriangle, X } from 'lucide-react';
@@ -20,7 +20,9 @@ const BADGES_CONFIG = {
 export default function Dashboard() {
   const { t, lang } = useLanguageStore();
   const { xp, badges, isModuleUnlocked, getModuleProgress, resetProgress } = useProgressStore();
+  const { user, getUsername } = useAuthStore();
   const [showResetModal, setShowResetModal] = useState(false);
+  const username = user ? getUsername() : null;
 
   const totalXPNeeded = MODULES[MODULES.length - 1].requiredXP + 100;
   const overallProgress = Math.min(100, Math.round((xp / totalXPNeeded) * 100));
@@ -179,6 +181,13 @@ export default function Dashboard() {
         style={{ marginBottom: '2rem', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}
       >
         <div>
+          {username && (
+            <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span>👋</span>
+              <span style={{ color: '#10b981', fontWeight: 600 }}>{username}</span>
+              <span>{lang === 'th' ? 'ยินดีต้อนรับกลับ!' : 'Welcome back!'}</span>
+            </div>
+          )}
           <h1 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '0.25rem' }}>{t.dashboard.title}</h1>
           <p style={{ color: 'var(--color-text-secondary)' }}>{t.dashboard.subtitle}</p>
         </div>

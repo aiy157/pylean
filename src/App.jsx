@@ -1,50 +1,78 @@
 // src/App.jsx
-import { useEffect } from 'react';
+import { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/layout/Navbar';
-import Landing from './pages/Landing';
-import Dashboard from './pages/Dashboard';
-import LessonsListPage from './pages/LessonsListPage';
-import LessonPage from './pages/LessonPage';
-import ExercisePage from './pages/ExercisePage';
-import FlowchartPage from './pages/FlowchartPage';
-import AdminPage from './pages/AdminPage';
-import LoginPage from './pages/LoginPage';
-import AllPassPage from './pages/AllPassPage';
+import ErrorBoundary from './components/ErrorBoundary';
 import { useProgressStore } from './store/progressStore';
 import { useAdminStore } from './store/adminStore';
 import { useAuthStore } from './store/authStore';
 
+// ─── Lazy-loaded pages (improves initial bundle load time) ───────────────────
+const Landing        = lazy(() => import('./pages/Landing'));
+const Dashboard      = lazy(() => import('./pages/Dashboard'));
+const LoginPage      = lazy(() => import('./pages/LoginPage'));
+const AllPassPage    = lazy(() => import('./pages/AllPassPage'));
+const LessonsListPage= lazy(() => import('./pages/LessonsListPage'));
+const LessonPage     = lazy(() => import('./pages/LessonPage'));
+const ExercisePage   = lazy(() => import('./pages/ExercisePage'));
+const FlowchartPage  = lazy(() => import('./pages/FlowchartPage'));
+const AdminPage      = lazy(() => import('./pages/AdminPage'));
+
+// ─── Minimal spinner while lazy page loads ───────────────────────────────────
+const PageSpinner = () => (
+  <div style={{
+    minHeight: '60vh', display: 'flex', alignItems: 'center',
+    justifyContent: 'center', flexDirection: 'column', gap: '1rem',
+  }}>
+    <div style={{
+      width: 40, height: 40,
+      border: '3px solid rgba(124,58,237,0.2)',
+      borderTopColor: '#7c3aed',
+      borderRadius: '50%',
+      animation: 'spin 0.8s linear infinite',
+    }} />
+    <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>กำลังโหลด…</span>
+  </div>
+);
+
 export default function App() {
   const fetchProgress = useProgressStore(state => state.fetchProgress);
   const fetchExercises = useAdminStore(state => state.fetchExercises);
-  const initAuth = useAuthStore(state => state.init);
+  const { init: initAuth, user } = useAuthStore();
 
+  // ── Step 1: Init auth on mount ──────────────────────────────────────────
   useEffect(() => {
-    // Init auth first, then fetch progress (needs user session)
-    initAuth().then(() => {
-      fetchProgress();
-      fetchExercises();
-    });
-  }, [initAuth, fetchProgress, fetchExercises]);
+    initAuth();
+    fetchExercises();
+  }, [initAuth, fetchExercises]);
+
+  // ── Step 2: Fetch progress ONLY after user state is known ────────────────
+  // This fixes the race condition: progressStore needs user_id from Auth session
+  useEffect(() => {
+    fetchProgress();
+  }, [user, fetchProgress]);   // re-runs whenever login/logout happens
 
   return (
     <BrowserRouter>
       <div style={{ minHeight: '100vh', background: 'var(--color-bg-primary)' }}>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/allpass" element={<AllPassPage />} />
-          <Route path="/lessons" element={<LessonsListPage />} />
-          <Route path="/lessons/:moduleId" element={<LessonsListPage />} />
-          <Route path="/lessons/:moduleId/:lessonId" element={<LessonPage />} />
-          <Route path="/exercise/:exerciseId" element={<ExercisePage />} />
-          <Route path="/flowchart" element={<FlowchartPage />} />
-          <Route path="/admin" element={<AdminPage />} />
-        </Routes>
+        <ErrorBoundary>
+          <Suspense fallback={<PageSpinner />}>
+            <Routes>
+              <Route path="/"                            element={<Landing />} />
+              <Route path="/login"                       element={<LoginPage />} />
+              <Route path="/dashboard"                   element={<Dashboard />} />
+              <Route path="/dashboard/allpass"           element={<AllPassPage />} />
+              <Route path="/lessons"                     element={<LessonsListPage />} />
+              <Route path="/lessons/:moduleId"           element={<LessonsListPage />} />
+              <Route path="/lessons/:moduleId/:lessonId" element={<LessonPage />} />
+              <Route path="/exercise/:exerciseId"        element={<ExercisePage />} />
+              <Route path="/flowchart"                   element={<FlowchartPage />} />
+              <Route path="/admin"                       element={<AdminPage />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
         <Toaster position="bottom-right" />
       </div>
     </BrowserRouter>

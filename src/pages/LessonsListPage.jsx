@@ -55,15 +55,20 @@ export default function LessonsListPage() {
               // Check if locked
               let isLocked = !unlocked;
               if (unlocked && i > 0) {
-                // Check if previous lesson is done
                 const prev = mod.lessons[i - 1];
                 const prevDone = isLessonComplete(prev.id);
-                
-                // Check if previous lesson's linked exercise is passed
+
+                // Fix: match exercise by lessonId field first, fall back to same-order index
+                // This prevents wrong locking when exercise count != lesson count
                 const moduleExercisesSorted = [...allExercises].sort((a, b) => a.order - b.order);
-                const prevLinkedExercise = moduleExercisesSorted[i - 1] ?? null;
-                const prevExercisePassed = prevLinkedExercise ? isExercisePassed(prevLinkedExercise.id) : true;
-                
+                const prevLinkedExercise =
+                  moduleExercisesSorted.find(ex => ex.lessonId === prev.id) ??
+                  moduleExercisesSorted[i - 1] ??
+                  null;
+                const prevExercisePassed = prevLinkedExercise
+                  ? isExercisePassed(prevLinkedExercise.id)
+                  : true;  // no exercise linked to prev lesson → not required
+
                 if (!prevDone || !prevExercisePassed) {
                   isLocked = true;
                 }

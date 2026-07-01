@@ -1,7 +1,96 @@
 // src/components/editor/CodeEditor.jsx
-import Editor from '@monaco-editor/react';
-import { useRef } from 'react';
+// Monaco-based Python code editor with:
+// - Full Python keyword / builtin autocomplete
+// - 4-space indent (Python standard)
+// - Proper suggestion popup (no blocking autocomplete on every keypress)
+import Editor, { loader } from '@monaco-editor/react';
+import { useRef, useCallback } from 'react';
 
+// ─── Python snippets / autocomplete items ────────────────────────────────────
+const PYTHON_COMPLETIONS = [
+  // Keywords
+  { label: 'print',      kind: 1, insert: 'print($1)',         doc: 'print(value) — พิมพ์ข้อความออกหน้าจอ' },
+  { label: 'input',      kind: 1, insert: 'input($1)',          doc: 'input(prompt) — รับค่าจากผู้ใช้' },
+  { label: 'int',        kind: 1, insert: 'int($1)',            doc: 'int(x) — แปลงเป็นจำนวนเต็ม' },
+  { label: 'float',      kind: 1, insert: 'float($1)',          doc: 'float(x) — แปลงเป็นจำนวนทศนิยม' },
+  { label: 'str',        kind: 1, insert: 'str($1)',            doc: 'str(x) — แปลงเป็น string' },
+  { label: 'len',        kind: 1, insert: 'len($1)',            doc: 'len(x) — ความยาวของ list/string' },
+  { label: 'range',      kind: 1, insert: 'range($1)',          doc: 'range(stop) หรือ range(start, stop, step)' },
+  { label: 'type',       kind: 1, insert: 'type($1)',           doc: 'type(x) — บอกประเภทของตัวแปร' },
+  { label: 'list',       kind: 1, insert: 'list($1)',           doc: 'list(iterable) — สร้าง list' },
+  { label: 'dict',       kind: 1, insert: 'dict()',             doc: 'สร้าง dictionary' },
+  { label: 'set',        kind: 1, insert: 'set($1)',            doc: 'สร้าง set' },
+  { label: 'tuple',      kind: 1, insert: 'tuple($1)',          doc: 'สร้าง tuple' },
+  { label: 'abs',        kind: 1, insert: 'abs($1)',            doc: 'ค่าสัมบูรณ์' },
+  { label: 'max',        kind: 1, insert: 'max($1)',            doc: 'ค่ามากที่สุด' },
+  { label: 'min',        kind: 1, insert: 'min($1)',            doc: 'ค่าน้อยที่สุด' },
+  { label: 'sum',        kind: 1, insert: 'sum($1)',            doc: 'ผลรวม' },
+  { label: 'sorted',     kind: 1, insert: 'sorted($1)',         doc: 'เรียงลำดับ (คืน list ใหม่)' },
+  { label: 'enumerate',  kind: 1, insert: 'enumerate($1)',      doc: 'คืน (index, value) สำหรับ loop' },
+  { label: 'zip',        kind: 1, insert: 'zip($1)',            doc: 'รวม iterables เข้าด้วยกัน' },
+  { label: 'map',        kind: 1, insert: 'map($1)',            doc: 'map(func, iterable)' },
+  { label: 'filter',     kind: 1, insert: 'filter($1)',         doc: 'filter(func, iterable)' },
+  { label: 'round',      kind: 1, insert: 'round($1)',          doc: 'ปัดเศษ' },
+  { label: 'bool',       kind: 1, insert: 'bool($1)',           doc: 'แปลงเป็น True/False' },
+  { label: 'open',       kind: 1, insert: 'open($1)',           doc: 'เปิดไฟล์' },
+  // Snippets (kind: 14 = Snippet in Monaco)
+  { label: 'if',         kind: 14, insert: 'if $1:\n    $2',       doc: 'if condition:' },
+  { label: 'elif',       kind: 14, insert: 'elif $1:\n    $2',     doc: 'elif condition:' },
+  { label: 'else',       kind: 14, insert: 'else:\n    $1',         doc: 'else:' },
+  { label: 'for',        kind: 14, insert: 'for $1 in $2:\n    $3', doc: 'for loop' },
+  { label: 'while',      kind: 14, insert: 'while $1:\n    $2',     doc: 'while loop' },
+  { label: 'def',        kind: 14, insert: 'def $1($2):\n    $3',   doc: 'นิยามฟังก์ชัน' },
+  { label: 'class',      kind: 14, insert: 'class $1:\n    $2',     doc: 'นิยาม class' },
+  { label: 'try',        kind: 14, insert: 'try:\n    $1\nexcept $2:\n    $3', doc: 'try/except' },
+  { label: 'import',     kind: 14, insert: 'import $1',             doc: 'import module' },
+  { label: 'from',       kind: 14, insert: 'from $1 import $2',     doc: 'from module import ...' },
+  { label: 'return',     kind: 14, insert: 'return $1',             doc: 'คืนค่าจากฟังก์ชัน' },
+  { label: 'lambda',     kind: 14, insert: 'lambda $1: $2',         doc: 'ฟังก์ชันแบบย่อ' },
+  { label: 'with',       kind: 14, insert: 'with $1 as $2:\n    $3', doc: 'context manager' },
+  { label: 'assert',     kind: 14, insert: 'assert $1, "$2"',       doc: 'ตรวจสอบเงื่อนไข' },
+  { label: 'raise',      kind: 14, insert: 'raise $1',              doc: 'โยน exception' },
+  // Common patterns
+  { label: 'fstring',    kind: 14, insert: 'f"$1{$2}$3"',          doc: 'f-string (interpolation)' },
+  { label: 'list-comp',  kind: 14, insert: '[$1 for $2 in $3]',    doc: 'list comprehension' },
+];
+
+// ─── Register completions once globally ──────────────────────────────────────
+let _completionsRegistered = false;
+
+const registerPythonCompletions = (monaco) => {
+  if (_completionsRegistered) return;
+  _completionsRegistered = true;
+
+  monaco.languages.registerCompletionItemProvider('python', {
+    // Trigger on any letter, not just special chars
+    triggerCharacters: [],
+    provideCompletionItems: (model, position) => {
+      const wordInfo = model.getWordUntilPosition(position);
+      const range = {
+        startLineNumber: position.lineNumber,
+        endLineNumber: position.lineNumber,
+        startColumn: wordInfo.startColumn,
+        endColumn: wordInfo.endColumn,
+      };
+
+      const suggestions = PYTHON_COMPLETIONS.map(item => ({
+        label: item.label,
+        kind: item.kind === 14
+          ? monaco.languages.CompletionItemKind.Snippet
+          : monaco.languages.CompletionItemKind.Function,
+        insertText: item.insert,
+        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+        documentation: item.doc,
+        range,
+        sortText: item.label,  // alphabetical sort
+      }));
+
+      return { suggestions };
+    },
+  });
+};
+
+// ─── Editor options ───────────────────────────────────────────────────────────
 const EDITOR_OPTIONS = {
   minimap: { enabled: false },
   fontSize: 14,
@@ -12,6 +101,7 @@ const EDITOR_OPTIONS = {
   automaticLayout: true,
   tabSize: 4,
   insertSpaces: true,
+  detectIndentation: false,   // always use tabSize=4 (Python standard)
   wordWrap: 'on',
   cursorBlinking: 'smooth',
   cursorSmoothCaretAnimation: 'on',
@@ -24,25 +114,44 @@ const EDITOR_OPTIONS = {
   },
   autoClosingBrackets: 'always',
   autoClosingQuotes: 'always',
-  formatOnPaste: true,
-  formatOnType: true,
-  suggestOnTriggerCharacters: true,
+  // Suggestions
+  suggest: {
+    showKeywords: true,
+    showSnippets: true,
+    showFunctions: true,
+    showVariables: true,
+    filterGraceful: true,
+    preview: true,
+  },
   quickSuggestions: {
     other: true,
     comments: false,
-    strings: true
+    strings: false,
   },
-  wordBasedSuggestions: 'allDocuments',
+  suggestOnTriggerCharacters: true,
+  wordBasedSuggestions: 'currentDocument',
+  acceptSuggestionOnEnter: 'on',
+  // ─── DISABLE word-based popup that competes with our custom provider ─
+  parameterHints: { enabled: true },
 };
 
 export default function CodeEditor({ value, onChange, height = '300px', readOnly = false }) {
   const editorRef = useRef(null);
 
-  const handleMount = (editor) => {
+  const handleBeforeMount = useCallback((monaco) => {
+    registerPythonCompletions(monaco);
+  }, []);
+
+  const handleMount = useCallback((editor) => {
     editorRef.current = editor;
-    // Focus on mount
+    // Add Ctrl+Space keyboard shortcut to trigger suggestions manually
+    editor.addCommand(
+      // eslint-disable-next-line no-bitwise
+      (window.monaco?.KeyMod?.CtrlCmd | window.monaco?.KeyCode?.Space) ?? 2048 + 49,
+      () => editor.trigger('keyboard', 'editor.action.triggerSuggest', {})
+    );
     editor.focus();
-  };
+  }, []);
 
   return (
     <div className="monaco-container" style={{ height }}>
@@ -52,6 +161,7 @@ export default function CodeEditor({ value, onChange, height = '300px', readOnly
         theme="vs-dark"
         value={value}
         onChange={onChange}
+        beforeMount={handleBeforeMount}
         onMount={handleMount}
         options={{ ...EDITOR_OPTIONS, readOnly }}
       />
