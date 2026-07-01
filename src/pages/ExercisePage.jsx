@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import {
   Play, Send, RotateCcw, Lightbulb, CheckCircle, XCircle,
-  ChevronLeft, Loader2, Terminal, AlertCircle, LayoutPanelLeft, LayoutPanelTop
+  ChevronLeft, Loader2, Terminal, AlertCircle, LayoutPanelLeft, LayoutPanelTop, Keyboard
 } from 'lucide-react';
 
 // ─── Responsive breakpoint hook ──────────────────────────────────────────────
@@ -45,6 +45,16 @@ export default function ExercisePage() {
   const [gradeResults, setGradeResults] = useState(null);
   const [showHint, setShowHint] = useState(false);
 
+  const [customInput, setCustomInput] = useState(exercise?.testCases?.[0]?.input || '');
+  const [showCustomInput, setShowCustomInput] = useState(false);
+
+  useEffect(() => {
+    if (exercise) {
+      setCustomInput(exercise.testCases?.[0]?.input || '');
+      setShowCustomInput(false);
+    }
+  }, [exercise?.id]);
+
   if (!exercise) {
     return (
       <div style={{ padding: '3rem', textAlign: 'center' }}>
@@ -64,7 +74,9 @@ export default function ExercisePage() {
     setOutput('');
     setRunError('');
     setGradeResults(null);
-    const result = await runCode(code);
+
+    const result = await runCode(code, customInput);
+    
     setOutput(result.output);
     setRunError(result.error);
     setIsRunning(false);
@@ -413,6 +425,13 @@ export default function ExercisePage() {
                 <RotateCcw size={12} /> {t.exercise.reset}
               </button>
               <button
+                onClick={() => setShowCustomInput(s => !s)}
+                className="btn-ghost"
+                style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: '0.35rem', background: showCustomInput ? 'rgba(124,58,237,0.15)' : 'transparent', color: showCustomInput ? '#a78bfa' : 'inherit' }}
+              >
+                <Keyboard size={12} /> {lang === 'th' ? 'ข้อมูลนำเข้า' : 'Custom Input'}
+              </button>
+              <button
                 onClick={handleRun}
                 disabled={!isReady || isRunning || !isWasmSupported}
                 className="btn-ghost"
@@ -436,6 +455,33 @@ export default function ExercisePage() {
           <div style={{ flex: 1, overflow: 'hidden' }}>
             <CodeEditor value={code} onChange={setCode} height="100%" />
           </div>
+
+          <AnimatePresence>
+            {showCustomInput && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 120, opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                style={{ borderTop: '1px solid var(--color-border-subtle)', background: 'var(--color-bg-card)', flexShrink: 0 }}
+              >
+                <div style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem', color: 'var(--color-text-muted)', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                   <span>{lang === 'th' ? 'ข้อมูลนำเข้า (Standard Input)' : 'Custom Input (Standard Input)'}</span>
+                   <span style={{ fontSize: '0.65rem' }}>{lang === 'th' ? 'ใส่ 1 ค่า ต่อ 1 บรรทัด' : 'Enter 1 value per line'}</span>
+                </div>
+                <textarea
+                  value={customInput}
+                  onChange={e => setCustomInput(e.target.value)}
+                  placeholder={lang === 'th' ? 'พิมพ์ค่าที่ต้องการให้ฟังก์ชัน input() รับที่นี่...' : 'Type input values here...'}
+                  style={{
+                    width: '100%', height: 'calc(100% - 30px)', padding: '0.5rem 0.75rem',
+                    background: 'transparent', border: 'none', outline: 'none',
+                    color: '#c4cde4', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.8rem',
+                    resize: 'none'
+                  }}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div style={{ padding: '0.75rem', borderTop: '1px solid var(--color-border-subtle)', flexShrink: 0 }}>
             <OutputPanel
