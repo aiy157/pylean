@@ -30,7 +30,7 @@ export default function LessonPage() {
   const { moduleId, lessonId } = useParams();
   const navigate = useNavigate();
   const { t, lang } = useLanguageStore();
-  const { completeLesson, isLessonComplete, isModuleUnlocked, isExercisePassed, getExerciseScore } = useProgressStore();
+  const { completeLesson, isLessonComplete, isModuleUnlocked, isExercisePassed, getExerciseScore, completeExercise } = useProgressStore();
   const { getAllExercises } = useAdminStore();
   const { isLoading: pyLoading, isReady, error: pyError, loadProgress, isWasmSupported, runCode } = usePyodide();
 
@@ -350,20 +350,20 @@ export default function LessonPage() {
                   {gradeResults && (
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{
                       padding: '1rem', marginTop: '1rem', borderRadius: '0.5rem',
-                      background: gradeResults.passed ? 'rgba(16,185,129,0.1)' : 'rgba(244,63,94,0.1)',
-                      border: `1px solid ${gradeResults.passed ? 'rgba(16,185,129,0.3)' : 'rgba(244,63,94,0.3)'}`
+                      background: gradeResults.allPassed ? 'rgba(16,185,129,0.1)' : 'rgba(244,63,94,0.1)',
+                      border: `1px solid ${gradeResults.allPassed ? 'rgba(16,185,129,0.3)' : 'rgba(244,63,94,0.3)'}`
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                        {gradeResults.passed ? <CheckCircle size={16} color="#10b981" /> : <XCircle size={16} color="#f43f5e" />}
-                        <span style={{ fontWeight: 600, color: gradeResults.passed ? '#34d399' : '#fb7185' }}>
+                        {gradeResults.allPassed ? <CheckCircle size={16} color="#10b981" /> : <XCircle size={16} color="#f43f5e" />}
+                        <span style={{ fontWeight: 600, color: gradeResults.allPassed ? '#34d399' : '#fb7185' }}>
                           {lang === 'th' ? 'ผลตรวจ:' : 'Results:'} {gradeResults.scorePercent}%
                         </span>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        {gradeResults.tests.map((t, i) => (
+                        {gradeResults.results.map((t, i) => (
                           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
-                            {t.pass ? <CheckCircle size={12} color="#10b981" /> : <XCircle size={12} color="#f43f5e" />}
-                            <span>Test {i + 1}: {t.pass ? (lang === 'th' ? 'ผ่าน' : 'Passed') : (lang === 'th' ? 'ไม่ผ่าน' : 'Failed')}</span>
+                            {t.passed ? <CheckCircle size={12} color="#10b981" /> : <XCircle size={12} color="#f43f5e" />}
+                            <span>Test {i + 1}: {t.passed ? (lang === 'th' ? 'ผ่าน' : 'Passed') : (lang === 'th' ? 'ไม่ผ่าน' : 'Failed')}</span>
                           </div>
                         ))}
                       </div>
