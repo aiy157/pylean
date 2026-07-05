@@ -61,10 +61,7 @@ export default function LessonsListPage() {
                 // Fix: match exercise by lessonId field first, fall back to same-order index
                 // This prevents wrong locking when exercise count != lesson count
                 const moduleExercisesSorted = [...allExercises].sort((a, b) => a.order - b.order);
-                const prevLinkedExercise =
-                  moduleExercisesSorted.find(ex => ex.lessonId === prev.id) ??
-                  moduleExercisesSorted[i - 1] ??
-                  null;
+                const prevLinkedExercise = moduleExercisesSorted.find(ex => ex.lessonId === prev.id) ?? null;
                 const prevExercisePassed = prevLinkedExercise
                   ? isExercisePassed(prevLinkedExercise.id)
                   : true;  // no exercise linked to prev lesson → not required
@@ -139,10 +136,11 @@ export default function LessonsListPage() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
               <Dumbbell size={15} style={{ color: '#f59e0b' }} />
-              <h2 style={{ fontSize: '1rem', fontWeight: 700 }}>{lang === 'th' ? 'แบบฝึกหัด' : 'Exercises'}</h2>
+              <h2 style={{ fontSize: '1rem', fontWeight: 700 }}>{lang === 'th' ? 'แบบฝึกหัด & ท้าทายท้ายโมดูล' : 'Exercises & Challenges'}</h2>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               {allExercises.map((ex, i) => {
+                const isChallenge = !ex.lessonId;
                 const done = isExerciseComplete(ex.id);
                 const diffColors = { easy: '#10b981', medium: '#f59e0b', hard: '#f43f5e' };
                 const diffLabels = {
@@ -183,7 +181,19 @@ export default function LessonsListPage() {
                           {done ? <CheckCircle size={16} style={{ color: '#10b981' }} /> : '💻'}
                         </div>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontWeight: 600, fontSize: '0.95rem', marginBottom: '0.15rem' }}>{ex.title[lang]}</div>
+                          <div style={{ fontWeight: 600, fontSize: '0.95rem', marginBottom: '0.15rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            {ex.title[lang]}
+                            {isChallenge && (
+                              <span style={{ fontSize: '0.65rem', background: 'rgba(245,158,11,0.15)', color: '#fbbf24', padding: '0.15rem 0.4rem', borderRadius: '4px', border: '1px solid rgba(245,158,11,0.3)' }}>
+                                {lang === 'th' ? '⭐ ท้าทายท้ายโมดูล' : '⭐ Final Challenge'}
+                              </span>
+                            )}
+                            {!isChallenge && (
+                              <span style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)' }}>
+                                {lang === 'th' ? '(โหมดทบทวน)' : '(Review)'}
+                              </span>
+                            )}
+                          </div>
                           <div style={{ fontSize: '0.75rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                             <span style={{ color: diffColors[ex.difficulty], fontWeight: 600 }}>● {diffLabels[ex.difficulty]?.[lang]}</span>
                             <span style={{ color: 'var(--color-text-muted)' }}>+{ex.xpReward} XP</span>

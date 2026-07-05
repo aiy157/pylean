@@ -46,12 +46,10 @@ export default function ExercisePage() {
   const [showHint, setShowHint] = useState(false);
 
   const [customInput, setCustomInput] = useState(exercise?.testCases?.[0]?.input || '');
-  const [showCustomInput, setShowCustomInput] = useState(false);
 
   useEffect(() => {
     if (exercise) {
       setCustomInput(exercise.testCases?.[0]?.input || '');
-      setShowCustomInput(false);
     }
   }, [exercise?.id]);
 
@@ -109,8 +107,8 @@ export default function ExercisePage() {
     } else {
       toast.error(
         lang === 'th'
-          ? `ยังไม่ผ่าน (${scorePercent}%) — ต้องได้ ≥ 80% ถึงจะปลดล็อก`
-          : `Not passed yet (${scorePercent}%) — need ≥ 80% to unlock`,
+          ? `ยังไม่ผ่าน (${scorePercent}%) — ลองใหม่อีกครั้ง`
+          : `Not passed yet (${scorePercent}%) — please try again`,
         { style: { background: '#1a1a2e', color: '#fb7185', border: '1px solid rgba(244,63,94,0.3)' }, duration: 4000 }
       );
     }
@@ -145,7 +143,10 @@ export default function ExercisePage() {
           <ChevronLeft size={14} /> {lang === 'th' ? 'กลับ' : 'Back'}
         </Link>
         <span style={{ color: 'rgba(255,255,255,0.15)' }}>/</span>
-        <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>{exercise.title[lang]}</span>
+        <span style={{ fontWeight: 600, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {exercise.title[lang]}
+          <span style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', fontWeight: 400 }}>{lang === 'th' ? '(โหมดฝึกซ้อม)' : '(Practice)'}</span>
+        </span>
         <span style={{
           fontSize: '0.72rem', fontWeight: 700, color: diff.color,
           background: `${diff.color}15`, border: `1px solid ${diff.color}30`,
@@ -425,13 +426,6 @@ export default function ExercisePage() {
                 <RotateCcw size={12} /> {t.exercise.reset}
               </button>
               <button
-                onClick={() => setShowCustomInput(s => !s)}
-                className="btn-ghost"
-                style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: '0.35rem', background: showCustomInput ? 'rgba(124,58,237,0.15)' : 'transparent', color: showCustomInput ? '#a78bfa' : 'inherit' }}
-              >
-                <Keyboard size={12} /> {lang === 'th' ? 'ข้อมูลนำเข้า' : 'Custom Input'}
-              </button>
-              <button
                 onClick={handleRun}
                 disabled={!isReady || isRunning || !isWasmSupported}
                 className="btn-ghost"
@@ -456,33 +450,6 @@ export default function ExercisePage() {
             <CodeEditor value={code} onChange={setCode} height="100%" />
           </div>
 
-          <AnimatePresence>
-            {showCustomInput && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 120, opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                style={{ borderTop: '1px solid var(--color-border-subtle)', background: 'var(--color-bg-card)', flexShrink: 0 }}
-              >
-                <div style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem', color: 'var(--color-text-muted)', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                   <span>{lang === 'th' ? 'ข้อมูลนำเข้า (Standard Input)' : 'Custom Input (Standard Input)'}</span>
-                   <span style={{ fontSize: '0.65rem' }}>{lang === 'th' ? 'ใส่ 1 ค่า ต่อ 1 บรรทัด' : 'Enter 1 value per line'}</span>
-                </div>
-                <textarea
-                  value={customInput}
-                  onChange={e => setCustomInput(e.target.value)}
-                  placeholder={lang === 'th' ? 'พิมพ์ค่าที่ต้องการให้ฟังก์ชัน input() รับที่นี่...' : 'Type input values here...'}
-                  style={{
-                    width: '100%', height: 'calc(100% - 30px)', padding: '0.5rem 0.75rem',
-                    background: 'transparent', border: 'none', outline: 'none',
-                    color: '#c4cde4', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.8rem',
-                    resize: 'none'
-                  }}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
-
           <div style={{ padding: '0.75rem', borderTop: '1px solid var(--color-border-subtle)', flexShrink: 0 }}>
             <OutputPanel
               output={output}
@@ -493,6 +460,8 @@ export default function ExercisePage() {
               loadProgress={loadProgress}
               isWasmSupported={isWasmSupported}
               pyError={pyError}
+              customInput={customInput}
+              setCustomInput={setCustomInput}
             />
           </div>
         </div>

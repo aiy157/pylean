@@ -54,6 +54,8 @@ export default function LoginPage() {
       const msg = err.message || 'เกิดข้อผิดพลาด';
       if (msg.includes('Invalid login credentials')) {
         setErrorMsg(lang === 'th' ? 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' : 'Invalid email or password');
+      } else if (msg === 'USERNAME_TAKEN') {
+        setErrorMsg(lang === 'th' ? 'Username นี้ถูกใช้งานไปแล้ว โปรดใช้ชื่ออื่น' : 'This Username is already taken, please choose another.');
       } else if (msg.includes('already registered') || msg.includes('User already registered')) {
         setErrorMsg(lang === 'th' ? 'อีเมลนี้มีบัญชีแล้ว — ลองเข้าสู่ระบบแทน' : 'This email is already registered — try logging in');
       } else if (msg.includes('Password should be at least')) {

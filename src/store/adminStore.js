@@ -158,5 +158,35 @@ export const useAdminStore = create((set, get) => ({
       console.warn('Supabase delete failed:', err.message);
     }
   },
+
+  searchUserProgress: async (username) => {
+    try {
+      // 1. Get user_id from profiles table
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, username')
+        .eq('username', username)
+        .single();
+      
+      if (profileError) {
+        if (profileError.code === 'PGRST116') return { found: false }; // Not found
+        throw profileError;
+      }
+
+      // 2. Fetch progress from user_progress
+      const { data: progress, error: progressError } = await supabase
+        .from('user_progress')
+        .select('*')
+        .eq('user_id', profile.id)
+        .single();
+
+      if (progressError && progressError.code !== 'PGRST116') throw progressError;
+
+      return { found: true, profile, progress: progress || null };
+    } catch (err) {
+      console.warn('Search user failed:', err);
+      return { found: false, error: err.message };
+    }
+  },
 }));
 

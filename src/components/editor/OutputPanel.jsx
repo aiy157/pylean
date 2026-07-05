@@ -306,6 +306,8 @@ export default function OutputPanel({
   loadProgress    = '',
   isWasmSupported = true,
   pyError         = null,
+  customInput     = '',
+  setCustomInput  = null,
 }) {
   const hasError  = Boolean(error);
   const hasOutput = Boolean(output);
@@ -391,19 +393,45 @@ export default function OutputPanel({
 
     // OUTPUT tab
     if (tab === 'output') {
-      if (hasError && !hasOutput) return (
-        <div style={{ color: '#5a5a80', fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <AlertCircle size={14} style={{ color: '#f43f5e' }} />
-          {lang === 'th' ? 'โค้ดเกิด error — ดูรายละเอียดที่แท็บ Log หรือ แปล Log' : 'Code errored — see Log or Explain Log tab'}
-        </div>
-      );
-      if (hasOutput) return (
-        <pre style={{ color: '#e2e8f0', whiteSpace: 'pre-wrap', margin: 0 }}>{output}</pre>
-      );
       return (
-        <span style={{ color: '#4a4a6a', fontFamily: 'Inter, sans-serif', fontSize: '0.82rem' }}>
-          {lang === 'th' ? '▶ กด Run เพื่อรันโค้ด' : '▶ Press Run to execute code'}
-        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', height: '100%' }}>
+          {/* Custom Input Section */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+             <span style={{ fontSize: '0.72rem', color: '#5a5a80', fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>
+               {lang === 'th' ? 'ข้อมูลนำเข้า (Standard Input):' : 'Custom Input:'}
+             </span>
+             <textarea
+                value={customInput}
+                onChange={e => setCustomInput && setCustomInput(e.target.value)}
+                placeholder={lang === 'th' ? 'พิมพ์ข้อมูลนำเข้า... (1 ค่าต่อ 1 บรรทัด)' : 'Enter input values... (1 per line)'}
+                style={{
+                  width: '100%', minHeight: '50px', padding: '0.5rem 0.6rem',
+                  background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '0.375rem',
+                  color: '#c4cde4', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.8rem',
+                  resize: 'vertical', outline: 'none'
+                }}
+             />
+          </div>
+
+          {/* Output Section */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', flex: 1 }}>
+             <span style={{ fontSize: '0.72rem', color: '#5a5a80', fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>
+               {lang === 'th' ? 'ผลลัพธ์ (Standard Output):' : 'Output:'}
+             </span>
+             {hasError && !hasOutput ? (
+               <div style={{ color: '#5a5a80', fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                 <AlertCircle size={14} style={{ color: '#f43f5e' }} />
+                 {lang === 'th' ? 'โค้ดเกิด error — ดูรายละเอียดที่แท็บ Log หรือ แปล Log' : 'Code errored — see Log or Explain Log tab'}
+               </div>
+             ) : hasOutput ? (
+               <pre style={{ color: '#e2e8f0', whiteSpace: 'pre-wrap', margin: 0, flex: 1, fontFamily: "'JetBrains Mono', monospace", fontSize: '0.8rem' }}>{output}</pre>
+             ) : (
+               <span style={{ color: '#4a4a6a', fontFamily: 'Inter, sans-serif', fontSize: '0.82rem' }}>
+                 {lang === 'th' ? '▶ กด Run เพื่อรันโค้ด' : '▶ Press Run to execute code'}
+               </span>
+             )}
+          </div>
+        </div>
       );
     }
 

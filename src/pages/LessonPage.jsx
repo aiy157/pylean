@@ -1,10 +1,11 @@
 // src/pages/LessonPage.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useLanguageStore } from '../store/languageStore';
 import { useProgressStore } from '../store/progressStore';
 import { useAdminStore } from '../store/adminStore';
 import { usePyodide } from '../hooks/usePyodide';
+import { gradeExercise } from '../utils/grader';
 import { MODULES } from '../data/curriculum';
 import CodeEditor from '../components/editor/CodeEditor';
 import OutputPanel from '../components/editor/OutputPanel';
@@ -17,12 +18,13 @@ import toast from 'react-hot-toast';
 import {
   ChevronLeft, ChevronRight, Play, CheckCircle,
   BookOpen, Code2, Loader2, GitBranch, Terminal, Hash,
-  Lock, AlertTriangle, ExternalLink
+  Lock, AlertTriangle, ExternalLink, Send, Lightbulb, AlertCircle, XCircle
 } from 'lucide-react';
 
 const TAB_THEORY = 'theory';
 const TAB_EXAMPLE = 'example';
 const TAB_COMMANDS = 'commands';
+const TAB_EXERCISE = 'exercise';
 
 export default function LessonPage() {
   const { moduleId, lessonId } = useParams();
@@ -41,6 +43,10 @@ export default function LessonPage() {
   const [output, setOutput] = useState('');
   const [runError, setRunError] = useState('');
   const [isRunning, setIsRunning] = useState(false);
+  const [isGrading, setIsGrading] = useState(false);
+  const [gradeResults, setGradeResults] = useState(null);
+  const [customInput, setCustomInput] = useState('');
+  const [showHint, setShowHint] = useState(false);
 
   if (!mod || !lesson) {
     return (
@@ -71,21 +77,59 @@ export default function LessonPage() {
   const moduleExercises = allExercises
     .filter(ex => ex.moduleId === mod.id)
     .sort((a, b) => a.order - b.order);
-  const linkedExercise = moduleExercises[lessonIdx] ?? null;  // lesson 0 → exercise 0, etc.
+  const linkedExercise = moduleExercises.find(ex => ex.lessonId === lesson.id) ?? null;
   const exercisePassed = linkedExercise ? isExercisePassed(linkedExercise.id) : true;
   const exerciseBestScore = linkedExercise ? getExerciseScore(linkedExercise.id) : -1;
   // Block going to next lesson if there's a linked exercise that hasn't been passed
   const isNextBlocked = !!nextLesson && !!linkedExercise && !exercisePassed;
+
+  useEffect(() => {
+    if (linkedExercise && activeTab === TAB_EXERCISE) {
+      setCode(linkedExercise.starterCode || '');
+      setCustomInput(linkedExercise.testCases?.[0]?.input || '');
+      setOutput('');
+      setRunError('');
+      setGradeResults(null);
+      setShowHint(false);
+    } else if (activeTab === TAB_EXAMPLE) {
+      setCode('# ลองพิมพ์โค้ด Python ที่นี่\nprint("สวัสดีชาวโลก!")');
+      setOutput('');
+      setRunError('');
+    }
+  }, [linkedExercise?.id, activeTab]);
 
   const handleRun = async () => {
     if (!isReady) return;
     setIsRunning(true);
     setOutput('');
     setRunError('');
-    const result = await runCode(code);
+    setGradeResults(null);
+    const result = await runCode(code, customInput);
     setOutput(result.output);
     setRunError(result.error);
     setIsRunning(false);
+  };
+
+  const handleSubmit = async () => {
+    if (!isReady || !linkedExercise) return;
+    setIsGrading(true);
+    setGradeResults(null);
+    const results = await gradeExercise(linkedExercise, code, runCode);
+    setGradeResults(results);
+    setIsGrading(false);
+
+    const scorePercent = results.scorePercent;
+    const { grantXP, nowPasses } = completeExercise(linkedExercise.id, linkedExercise.xpReward, scorePercent);
+
+    if (nowPasses) {
+      if (grantXP) {
+        toast.success(`🎉 ผ่านแล้ว! ได้รับ +${linkedExercise.xpReward} XP`, { style: { background: '#1a1a2e', color: '#34d399', border: '1px solid rgba(16,185,129,0.3)' }, duration: 4000 });
+      } else {
+        toast.success('✅ ผ่านแล้ว!', { style: { background: '#1a1a2e', color: '#34d399', border: '1px solid rgba(16,185,129,0.3)' } });
+      }
+    } else {
+      toast.error(`ยังไม่ผ่าน (${scorePercent}%) — ต้องได้ ≥ 80% ถึงจะปลดล็อกบทถัดไป`, { style: { background: '#1a1a2e', color: '#fb7185', border: '1px solid rgba(244,63,94,0.3)' }, duration: 4000 });
+    }
   };
 
   const handleComplete = () => {
@@ -107,6 +151,7 @@ export default function LessonPage() {
     { id: TAB_THEORY, icon: BookOpen, label: t.lesson.theory },
     { id: TAB_EXAMPLE, icon: Code2, label: t.lesson.example },
     ...(lesson.commands?.length ? [{ id: TAB_COMMANDS, icon: Hash, label: t.lesson.command_ref }] : []),
+    ...(linkedExercise ? [{ id: TAB_EXERCISE, icon: GitBranch, label: lang === 'th' ? 'แบบฝึกหัด' : 'Exercise' }] : []),
   ];
 
   return (
@@ -138,26 +183,9 @@ export default function LessonPage() {
             </Link>
           )}
           {isNextBlocked ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Link to={`/exercise/${linkedExercise.id}`}>
-                <button className="btn-ghost" style={{
-                  padding: '0.4rem 0.875rem', fontSize: '0.8rem',
-                  display: 'flex', alignItems: 'center', gap: '0.4rem',
-                  color: '#fbbf24', borderColor: 'rgba(245,158,11,0.4)',
-                  background: 'rgba(245,158,11,0.07)',
-                }}>
-                  <ExternalLink size={13} />
-                  {lang === 'th' ? 'ทำโจทย์ก่อน' : 'Do Exercise First'}
-                </button>
-              </Link>
-              <button disabled className="btn-primary" style={{
-                padding: '0.4rem 1rem', fontSize: '0.82rem',
-                display: 'flex', alignItems: 'center', gap: '0.4rem',
-                opacity: 0.4, cursor: 'not-allowed',
-              }}>
-                <Lock size={13} /> {t.lesson.next}
-              </button>
-            </div>
+            <button onClick={() => setActiveTab(TAB_EXERCISE)} className="btn-primary" style={{ padding: '0.4rem 1rem', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#fbbf24', color: '#000' }}>
+              <AlertTriangle size={13} /> {lang === 'th' ? 'ทำแบบฝึกหัดก่อน' : 'Do Exercise First'}
+            </button>
           ) : (
             <button onClick={handleComplete} className="btn-primary" style={{ padding: '0.4rem 1rem', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               {nextLesson ? (<>{t.lesson.next} <ChevronRight size={13} /></>) : (<>{t.lesson.complete} <CheckCircle size={13} /></>)}
@@ -165,41 +193,6 @@ export default function LessonPage() {
           )}
         </div>
       </div>
-
-      {/* ── Gate Warning Banner ── */}
-      {isNextBlocked && (
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '0.75rem',
-          padding: '0.625rem 1.5rem',
-          background: 'rgba(245,158,11,0.08)',
-          borderBottom: '2px solid rgba(245,158,11,0.3)',
-          flexShrink: 0,
-        }}>
-          <AlertTriangle size={15} style={{ color: '#fbbf24', flexShrink: 0 }} />
-          <span style={{ fontSize: '0.82rem', color: '#fbbf24', fontWeight: 600 }}>
-            {lang === 'th'
-              ? `ต้องผ่านโจทย์ "${linkedExercise.title.th}" ≥ 80% ก่อนไปบทถัดไป`
-              : `Complete exercise "${linkedExercise.title.en}" with ≥ 80% to unlock next lesson`}
-          </span>
-          {exerciseBestScore >= 0 && (
-            <span style={{ marginLeft: '0.5rem', fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>
-              ({lang === 'th' ? 'คะแนนล่าสุด' : 'Best score'}: {exerciseBestScore}%)
-            </span>
-          )}
-          <Link to={`/exercise/${linkedExercise.id}`} style={{ marginLeft: 'auto', textDecoration: 'none' }}>
-            <button style={{
-              padding: '0.3rem 0.875rem', fontSize: '0.78rem',
-              display: 'flex', alignItems: 'center', gap: '0.35rem',
-              background: 'rgba(245,158,11,0.15)', color: '#fbbf24',
-              border: '1px solid rgba(245,158,11,0.4)',
-              borderRadius: '0.4rem', cursor: 'pointer',
-            }}>
-              <ExternalLink size={12} />
-              {lang === 'th' ? 'ไปทำโจทย์' : 'Go to Exercise'}
-            </button>
-          </Link>
-        </div>
-      )}
 
       {/* ── Exercise Passed Badge ── */}
       {linkedExercise && exercisePassed && (
@@ -321,6 +314,63 @@ export default function LessonPage() {
                   </div>
                 </motion.div>
               )}
+
+              {activeTab === TAB_EXERCISE && linkedExercise && (
+                <motion.div key="exercise" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--color-text-primary)' }}>
+                    {linkedExercise.title[lang]}
+                  </h2>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', marginBottom: '1rem' }}>
+                    +{linkedExercise.xpReward} XP
+                  </p>
+                  
+                  <div className="exercise-content" style={{ marginBottom: '1.5rem', lineHeight: 1.6, fontSize: '0.9rem' }}>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {linkedExercise.description[lang]}
+                    </ReactMarkdown>
+                  </div>
+                  
+                  {linkedExercise.hint && (
+                    <div style={{ marginBottom: '1.5rem' }}>
+                      <button onClick={() => setShowHint(h => !h)} className="btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', padding: '0.4rem 0.75rem', color: '#f59e0b', background: 'rgba(245,158,11,0.1)' }}>
+                        <Lightbulb size={14} /> {lang === 'th' ? 'คำใบ้ (Hint)' : 'Hint'}
+                      </button>
+                      <AnimatePresence>
+                        {showHint && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} style={{ overflow: 'hidden' }}>
+                            <div style={{ padding: '0.875rem', marginTop: '0.5rem', background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '0.5rem', fontSize: '0.85rem', color: 'var(--color-text-primary)' }}>
+                              <ReactMarkdown>{linkedExercise.hint[lang]}</ReactMarkdown>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  )}
+
+                  {gradeResults && (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{
+                      padding: '1rem', marginTop: '1rem', borderRadius: '0.5rem',
+                      background: gradeResults.passed ? 'rgba(16,185,129,0.1)' : 'rgba(244,63,94,0.1)',
+                      border: `1px solid ${gradeResults.passed ? 'rgba(16,185,129,0.3)' : 'rgba(244,63,94,0.3)'}`
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                        {gradeResults.passed ? <CheckCircle size={16} color="#10b981" /> : <XCircle size={16} color="#f43f5e" />}
+                        <span style={{ fontWeight: 600, color: gradeResults.passed ? '#34d399' : '#fb7185' }}>
+                          {lang === 'th' ? 'ผลตรวจ:' : 'Results:'} {gradeResults.scorePercent}%
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        {gradeResults.tests.map((t, i) => (
+                          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
+                            {t.pass ? <CheckCircle size={12} color="#10b981" /> : <XCircle size={12} color="#f43f5e" />}
+                            <span>Test {i + 1}: {t.pass ? (lang === 'th' ? 'ผ่าน' : 'Passed') : (lang === 'th' ? 'ไม่ผ่าน' : 'Failed')}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </motion.div>
+              )}
             </AnimatePresence>
           </div>
         </div>
@@ -351,13 +401,24 @@ export default function LessonPage() {
               )}
               <button
                 onClick={handleRun}
-                disabled={!isReady || isRunning || !isWasmSupported}
+                disabled={!isReady || isRunning || isGrading || !isWasmSupported}
                 className="btn-emerald"
-                style={{ padding: '0.35rem 0.875rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem', opacity: (!isReady || isRunning || !isWasmSupported) ? 0.5 : 1 }}
+                style={{ padding: '0.35rem 0.875rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem', opacity: (!isReady || isRunning || isGrading || !isWasmSupported) ? 0.5 : 1 }}
               >
                 {isRunning ? <Loader2 size={13} className="animate-spin" /> : <Play size={13} />}
                 {t.exercise.run}
               </button>
+              {activeTab === TAB_EXERCISE && linkedExercise && (
+                <button
+                  onClick={handleSubmit}
+                  disabled={!isReady || isRunning || isGrading || !isWasmSupported}
+                  className="btn-primary"
+                  style={{ padding: '0.35rem 0.875rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem', opacity: (!isReady || isRunning || isGrading || !isWasmSupported) ? 0.5 : 1 }}
+                >
+                  {isGrading ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
+                  {lang === 'th' ? 'ส่งคำตอบ' : 'Submit'}
+                </button>
+              )}
             </div>
           </div>
 
@@ -365,7 +426,19 @@ export default function LessonPage() {
             <CodeEditor value={code} onChange={setCode} height="100%" />
           </div>
 
-          <div style={{ padding: '0.75rem', borderTop: '1px solid var(--color-border-subtle)', flexShrink: 0 }}>
+          <div style={{ padding: '0.75rem', borderTop: '1px solid var(--color-border-subtle)', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {activeTab === TAB_EXERCISE && linkedExercise && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', minWidth: '80px' }}>Custom Input:</span>
+                <input
+                  type="text"
+                  value={customInput}
+                  onChange={e => setCustomInput(e.target.value)}
+                  placeholder="Enter inputs separated by space..."
+                  style={{ flex: 1, padding: '0.3rem 0.5rem', fontSize: '0.8rem', background: '#0d1117', border: '1px solid var(--color-border-subtle)', borderRadius: '0.25rem', color: '#e2e8f0', fontFamily: "'JetBrains Mono', monospace" }}
+                />
+              </div>
+            )}
             <OutputPanel
               output={output}
               error={runError}

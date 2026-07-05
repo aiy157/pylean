@@ -21,6 +21,22 @@ export const useAuthStore = create((set, get) => ({
 
   // ── Register ─────────────────────────────────────────────────────────────
   register: async (email, password, username) => {
+    // 1. Check if username is taken in profiles table
+    const { data: existingUser, error: checkError } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('username', username)
+      .maybeSingle();
+
+    if (checkError && checkError.code !== 'PGRST205') {
+      // PGRST205 means table doesn't exist yet (user hasn't run the SQL). We ignore it to not break the app.
+      console.warn('Error checking username:', checkError);
+    }
+    if (existingUser) {
+      throw new Error('USERNAME_TAKEN');
+    }
+
+    // 2. Proceed with signup
     const { data, error } = await supabase.auth.signUp({
       email,
       password,

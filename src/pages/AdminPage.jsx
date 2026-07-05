@@ -5,7 +5,7 @@ import { useAdminStore } from '../store/adminStore';
 import { MODULES } from '../data/curriculum';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { Plus, Edit2, Trash2, Shield, LogOut, Save, X, Lock, Eye } from 'lucide-react';
+import { Plus, Edit2, Trash2, Shield, LogOut, Save, X, Lock, Eye, Search, User } from 'lucide-react';
 
 const EMPTY_EXERCISE = {
   moduleId: 1,
@@ -18,6 +18,86 @@ const EMPTY_EXERCISE = {
   testCases: [{ input: '', expectedOutput: '' }],
   xpReward: 25,
 };
+
+function UserSearchPanel({ lang, t }) {
+  const [username, setUsername] = useState('');
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { searchUserProgress } = useAdminStore();
+
+  const handleSearch = async () => {
+    if (!username.trim()) return;
+    setLoading(true);
+    setResult(null);
+    const res = await searchUserProgress(username.trim());
+    setResult(res);
+    setLoading(false);
+  };
+
+  return (
+    <div style={{ background: 'var(--color-bg-card)', padding: '1.5rem', borderRadius: '1rem', border: '1px solid var(--color-border-subtle)' }}>
+      <h2 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem' }}>
+        {lang === 'th' ? 'ค้นหาความคืบหน้าผู้เรียน' : 'Search User Progress'}
+      </h2>
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        <input 
+          className="input-dark" 
+          placeholder={lang === 'th' ? 'พิมพ์ Username...' : 'Type Username...'}
+          value={username} 
+          onChange={e => setUsername(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && handleSearch()}
+          style={{ flex: 1 }}
+        />
+        <button onClick={handleSearch} disabled={loading} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Search size={16} /> {loading ? '...' : (lang === 'th' ? 'ค้นหา' : 'Search')}
+        </button>
+      </div>
+
+      {result && !result.found && (
+        <div style={{ padding: '1rem', background: 'rgba(244,63,94,0.1)', color: '#fb7185', borderRadius: '0.5rem', textAlign: 'center' }}>
+          {result.error 
+            ? (lang === 'th' ? `เกิดข้อผิดพลาด: ${result.error}` : `Error: ${result.error}`)
+            : (lang === 'th' ? 'ไม่พบผู้ใช้นี้ในระบบ' : 'User not found')}
+        </div>
+      )}
+
+      {result && result.found && (
+        <div style={{ padding: '1.25rem', background: 'var(--color-bg-elevated)', borderRadius: '0.75rem', border: '1px solid rgba(124,58,237,0.3)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+            <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--color-bg-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <User size={20} style={{ color: '#a78bfa' }} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{result.profile.username}</div>
+              <div style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>{result.profile.id}</div>
+            </div>
+          </div>
+
+          {result.progress ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+              <div style={{ background: 'var(--color-bg-card)', padding: '1rem', borderRadius: '0.5rem' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>XP</div>
+                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f59e0b' }}>{result.progress.xp}</div>
+              </div>
+              <div style={{ background: 'var(--color-bg-card)', padding: '1rem', borderRadius: '0.5rem' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>{lang === 'th' ? 'บทเรียนที่ผ่าน' : 'Lessons'}</div>
+                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#10b981' }}>{result.progress.completed_lessons?.length || 0}</div>
+              </div>
+              <div style={{ background: 'var(--color-bg-card)', padding: '1rem', borderRadius: '0.5rem' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>{lang === 'th' ? 'โจทย์ที่ผ่าน' : 'Exercises'}</div>
+                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#3b82f6' }}>{result.progress.completed_exercises?.length || 0}</div>
+              </div>
+            </div>
+          ) : (
+            <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
+              {lang === 'th' ? 'ผู้ใช้นี้ยังไม่มีความคืบหน้า (ยังไม่ได้เริ่มเรียน)' : 'No progress recorded yet.'}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function LoginPanel({ onLogin, lang, t }) {
   const [pwd, setPwd] = useState('');
@@ -260,6 +340,7 @@ export default function AdminPage() {
   const { isLoggedIn, login, logout, customExercises, addExercise, updateExercise, deleteExercise } = useAdminStore();
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [adminTab, setAdminTab] = useState('exercises');
 
   if (!isLoggedIn) {
     return <LoginPanel onLogin={login} lang={lang} t={t} />;
@@ -289,24 +370,52 @@ export default function AdminPage() {
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1.5rem' }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
         <div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{t.admin.title}</h1>
-          <p style={{ color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>{t.admin.exercises}</p>
+          <p style={{ color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>Admin Dashboard</p>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button
-            onClick={() => { setShowForm(true); setEditingId(null); }}
-            className="btn-primary"
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-          >
-            <Plus size={15} /> {t.admin.add_exercise}
-          </button>
           <button onClick={logout} className="btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <LogOut size={14} /> {t.admin.logout}
           </button>
         </div>
       </div>
+
+      {/* Tabs */}
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', borderBottom: '1px solid var(--color-border-subtle)', paddingBottom: '0.5rem' }}>
+        <button 
+          onClick={() => setAdminTab('exercises')}
+          className={`tab-item ${adminTab === 'exercises' ? 'active' : ''}`}
+          style={{ border: 'none', background: 'none' }}
+        >
+          {lang === 'th' ? 'จัดการโจทย์ (Exercises)' : 'Manage Exercises'}
+        </button>
+        <button 
+          onClick={() => setAdminTab('users')}
+          className={`tab-item ${adminTab === 'users' ? 'active' : ''}`}
+          style={{ border: 'none', background: 'none' }}
+        >
+          {lang === 'th' ? 'ผู้เรียน (Users)' : 'Users'}
+        </button>
+      </div>
+
+      {adminTab === 'users' ? (
+        <UserSearchPanel lang={lang} t={t} />
+      ) : (
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-secondary)' }}>
+              {lang === 'th' ? `โจทย์ที่สร้างเอง (${customExercises.length})` : `Custom Exercises (${customExercises.length})`}
+            </h2>
+            <button
+              onClick={() => { setShowForm(true); setEditingId(null); }}
+              className="btn-primary"
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
+            >
+              <Plus size={14} /> {t.admin.add_exercise}
+            </button>
+          </div>
 
       {/* Add/Edit Form */}
       <AnimatePresence>
@@ -325,9 +434,6 @@ export default function AdminPage() {
 
       {/* Custom Exercises List */}
       <div>
-        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--color-text-secondary)' }}>
-          {lang === 'th' ? `โจทย์ที่สร้างเอง (${customExercises.length})` : `Custom Exercises (${customExercises.length})`}
-        </h2>
         {customExercises.length === 0 ? (
           <div style={{
             padding: '3rem', textAlign: 'center',
@@ -392,6 +498,8 @@ export default function AdminPage() {
           </div>
         )}
       </div>
+      </div>
+      )}
     </div>
   );
 }
