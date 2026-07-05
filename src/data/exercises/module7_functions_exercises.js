@@ -157,5 +157,71 @@ export const exercises7 = [
     testCases: [
       { input: '3\nAlice,85\nBob,92\nCharlie,78', expectedOutput: 'Charlie\nAlice\nBob' },
     ],
+  },
+  {
+    id: 'ex-7-8',
+    lessonId: '7-7',
+    moduleId: 7,
+    difficulty: 'medium',
+    order: 8,
+    xpReward: 60,
+    title: { th: '8. Pass by Reference (การแก้ไข List)', en: '8. Pass by Reference' },
+    description: {
+      th: 'คุณได้รับโค้ดที่ฟังก์ชัน `multiply_list(lst, factor)` พยายามคูณตัวเลขทุกตัวใน List ด้วย factor แต่มันไม่คืนค่าอะไรกลับมาเลย (return None)\n**ภารกิจ:** จงแก้ไขฟังก์ชันให้ทำงานแบบ "In-place" คือดัดแปลง list ตัวเดิมที่รับเข้ามา (โดยไม่สร้าง list ใหม่และไม่ต้อง return)',
+      en: 'Fix `multiply_list(lst, factor)` to modify the given list in-place (multiply every element by factor) without returning anything.',
+    },
+    starterCode: 'def multiply_list(lst, factor):\n    # แก้ไขโค้ดนี้ให้เปลี่ยนค่าใน lst ตัวเดิม\n    pass\n\n# --- ห้ามแก้โค้ดด้านล่าง ---\ndata = list(map(int, input().split()))\nfactor = int(input())\nmultiply_list(data, factor)\nprint(" ".join(map(str, data)))\n',
+    hint: {
+      th: 'ใช้ for i in range(len(lst)): แล้วสั่ง lst[i] = lst[i] * factor',
+      en: 'Use for i in range(len(lst)): then lst[i] = lst[i] * factor',
+    },
+    testCases: [
+      { input: '1 2 3\n2', expectedOutput: '2 4 6' },
+      { input: '10 20\n5', expectedOutput: '50 100' },
+    ],
+  },
+  {
+    id: 'ex-7-9',
+    lessonId: null,
+    moduleId: 7,
+    difficulty: 'hard',
+    order: 9,
+    xpReward: 100,
+    title: { th: 'ท้าทาย 1: ฟังก์ชันนับสระ', en: 'Challenge 1: Vowel Counter' },
+    description: {
+      th: 'สร้างฟังก์ชัน `count_vowels(text)` ที่รับข้อความ แล้วคืนค่าเป็นจำนวนสระ (a, e, i, o, u) ในข้อความนั้น (ไม่สนใจพิมพ์เล็กพิมพ์ใหญ่)\nจากนั้นรับข้อความ 1 บรรทัด แล้วพิมพ์จำนวนสระ',
+      en: 'Create `count_vowels(text)` that returns the number of vowels (a, e, i, o, u) case-insensitively. Read a string and print the result.',
+    },
+    starterCode: 'def count_vowels(text):\n    pass\n\ntext = input()\nprint(count_vowels(text))\n',
+    hint: {
+      th: 'กำหนด vowels = "aeiou" วนลูปเช็คทีละตัวอักษรที่แปลงเป็นตัวเล็กแล้ว',
+      en: 'vowels = "aeiou", loop through text.lower()',
+    },
+    testCases: [
+      { input: 'Hello World', expectedOutput: '3' },
+      { input: 'Python Programming', expectedOutput: '4' },
+      { input: 'XYZ', expectedOutput: '0' },
+    ],
+  },
+  {
+    id: 'ex-7-10',
+    lessonId: null,
+    moduleId: 7,
+    difficulty: 'expert',
+    order: 10,
+    xpReward: 120,
+    title: { th: 'ท้าทาย 2: สั่งสินค้า (Args & Kwargs)', en: 'Challenge 2: Order System' },
+    description: {
+      th: 'สร้างฟังก์ชัน `place_order(customer, *items, **details)` ที่รับ:\n- `customer`: ชื่อลูกค้า\n- `*items`: รายการสินค้าที่สั่ง (รับกี่อันก็ได้)\n- `**details`: รายละเอียดเพิ่มเติม เช่น `discount=10`\n\nให้พิมพ์ชื่อลูกค้า, พิมพ์รายการสินค้า (ถ้ามี), และพิมพ์ส่วนลด (ถ้ามี discount)\nโจทย์ข้อนี้ได้เตรียมฟังก์ชันไว้แล้ว ให้คุณเติมโค้ดฟังก์ชันให้สมบูรณ์',
+      en: 'Complete `place_order(customer, *items, **details)`. Print customer name, list of items (if any), and discount (if provided in details).',
+    },
+    starterCode: 'def place_order(customer, *items, **details):\n    print(f"Customer: {customer}")\n    # เช็คว่ามี items ไหม ถ้ามีให้วนลูปพิมพ์ "- item"\n    \n    # เช็คว่ามี "discount" ใน details ไหม ถ้ามีให้พิมพ์ "Discount: X%"\n    \n\n# --- โค้ดทดสอบ ---\nplace_order("Alice", "Apple", "Banana", discount=10)\nprint("---")\nplace_order("Bob")\n',
+    hint: {
+      th: 'if items: วนลูปพิมพ์ | if "discount" in details: พิมพ์ details["discount"]',
+      en: 'if items: loop and print | if "discount" in details: print it',
+    },
+    testCases: [
+      { input: '', expectedOutput: 'Customer: Alice\n- Apple\n- Banana\nDiscount: 10%\n---\nCustomer: Bob' },
+    ],
   }
 ];

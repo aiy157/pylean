@@ -551,5 +551,99 @@ print(rd.randint(1, 10))
         },
       ],
     },
+    {
+      id: '7-7',
+      title: { th: 'Pass by Object Reference (ตัวแปรเปลี่ยนค่าไหม?)', en: 'Pass by Object Reference' },
+      xpReward: 60,
+      content: {
+        th: `## Pass by Object Reference 🚨
+
+เรื่องที่โปรแกรมเมอร์มือใหม่มักจะตกม้าตายมากที่สุด คือการส่งตัวแปรเข้าไปในฟังก์ชัน แล้วค่ามันเปลี่ยนไปโดยไม่รู้ตัว!
+
+ในภาษา C/C++ เราอาจจะเคยได้ยิน Pass by Value (ก๊อปปี้ค่าไป) หรือ Pass by Reference (ส่งตำแหน่งหน่วยความจำไป)
+แต่ใน Python เราใช้ระบบที่เรียกว่า **Pass by Object Reference** (ส่งป้ายชื่อที่ชี้ไปยัง Object เดียวกัน)
+
+### สิ่งที่เกิดขึ้นขึ้นอยู่กับประเภทของข้อมูล (Data Type)!
+
+#### 1. Immutable Objects (แก้ไม่ได้)
+ได้แก่: \`int\`, \`float\`, \`str\`, \`tuple\`, \`bool\`
+เมื่อส่งเข้าฟังก์ชัน แล้วพยายามแก้ค่า มันจะสร้างกล่องใหม่ (เหมือน Pass by Value) โค้ดข้างนอกจะไม่เปลี่ยน!
+\`\`\`python
+def change_num(n):
+    n = 999  # สร้าง int ใหม่
+    print("ในฟังก์ชัน:", n)
+
+x = 10
+change_num(x)
+print("นอกฟังก์ชัน:", x)  
+# Output: นอกฟังก์ชัน: 10 (ไม่ถูกเปลี่ยน!)
+\`\`\`
+
+#### 2. Mutable Objects (แก้ได้)
+ได้แก่: \`list\`, \`dict\`, \`set\`
+เมื่อส่งเข้าฟังก์ชัน แล้วไปแก้ไส้ใน โค้ดข้างนอกจะ **เปลี่ยนตามไปด้วย!** (เพราะชี้กล่องเดียวกัน)
+\`\`\`python
+def append_zero(lst):
+    lst.append(0)  # แอบยัด 0 เข้าไปใน List เดิม
+    print("ในฟังก์ชัน:", lst)
+
+my_list = [1, 2, 3]
+append_zero(my_list)
+print("นอกฟังก์ชัน:", my_list)  
+# Output: นอกฟังก์ชัน: [1, 2, 3, 0] (โดนเปลี่ยนซะงั้น!)
+\`\`\`
+
+### วิธีป้องกันตัวแปร Mutable โดนแก้ (Defensive Programming)
+ถ้าเราไม่ต้องการให้ฟังก์ชันมาแอบแก้ List ของเรา ให้ส่ง **ตัวก๊อปปี้ (Copy)** เข้าไปแทน
+\`\`\`python
+# วิธีที่ 1: ใช้ .copy() หรือ [:]
+append_zero(my_list.copy())
+append_zero(my_list[:])
+
+# วิธีที่ 2: ใช้ copy.deepcopy() สำหรับ List ซ้อน List
+import copy
+append_zero(copy.deepcopy(my_list))
+\`\`\`
+
+> 🎓 **จุดสังเกต:** ถ้าในฟังก์ชันมีการทำ \`lst = [9, 9]\` (กำหนดค่าตัวแปรใหม่ทั้งหมดด้วยเครื่องหมาย \`=\`) อันนี้จะไม่กระทบข้างนอก แต่ถ้าใช้เมธอดอย่าง \`.append()\`, \`.pop()\`, หรือ \`lst[0] = 9\` อันนี้จะกระทบแน่นอน!`,
+        en: `## Pass by Object Reference 🚨
+
+One of the most common pitfalls for beginners is passing variables into functions and having them unexpectedly change!
+
+Python uses a system called **Pass by Object Reference**. What happens inside the function depends on the data type.
+
+### 1. Immutable Objects (int, str, tuple)
+If you reassign them inside a function, Python creates a new object. The original variable outside the function remains unchanged.
+\`\`\`python
+def change_num(n):
+    n = 999
+    
+x = 10
+change_num(x)
+print(x)  # Still 10!
+\`\`\`
+
+### 2. Mutable Objects (list, dict, set)
+If you modify them in-place (e.g., \`.append()\`, modifying an index), the original variable outside the function **will change** because both reference the same object in memory!
+\`\`\`python
+def append_zero(lst):
+    lst.append(0)
+
+my_list = [1, 2, 3]
+append_zero(my_list)
+print(my_list)  # [1, 2, 3, 0] (Changed!)
+\`\`\`
+
+### How to Protect Mutable Objects
+If you don't want a function to modify your list, pass a copy instead:
+\`\`\`python
+append_zero(my_list.copy())
+append_zero(my_list[:])
+\`\`\`
+
+> 🎓 **Note:** Reassigning the whole variable inside the function (\`lst = [9]\`) creates a local variable and doesn't affect the outside. Only in-place modifications (\`.append()\`) cause side effects.`
+      },
+      commands: [],
+    },
   ]
 };
