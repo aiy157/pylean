@@ -5,7 +5,7 @@ import { useLanguageStore } from '../store/languageStore';
 import { useProgressStore } from '../store/progressStore';
 import { useCurriculumStore } from '../store/curriculumStore';
 import { usePyodide } from '../hooks/usePyodide';
-import { gradeExercise } from '../utils/grader';
+import { gradeExerciseSecurely } from '../utils/grader';
 import CodeEditor from '../components/editor/CodeEditor';
 import OutputPanel from '../components/editor/OutputPanel';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -45,6 +45,7 @@ export default function ExercisePage() {
   const [isGrading, setIsGrading] = useState(false);
   const [gradeResults, setGradeResults] = useState(null);
   const [customInput, setCustomInput] = useState(exercise?.testCases?.[0]?.input || '');
+  const [mobileView, setMobileView] = useState('problem'); // 'problem' | 'code'
 
   // Auto-save logic
   useEffect(() => {
@@ -102,7 +103,7 @@ export default function ExercisePage() {
     if (!isReady) return;
     setIsGrading(true);
     setGradeResults(null);
-    const results = await gradeExercise(exercise, code, runCode);
+    const results = await gradeExerciseSecurely(exercise, code, runCode);
     setGradeResults(results);
     setIsGrading(false);
 
@@ -202,22 +203,32 @@ export default function ExercisePage() {
         )}
       </div>
 
+      {/* Mobile View Toggle */}
+      <div className="md:hidden flex bg-[#1a1a2e] border-b border-white/5 w-full flex-shrink-0">
+        <button onClick={() => setMobileView('problem')} className={`flex-1 py-2.5 text-sm font-medium transition-colors ${mobileView === 'problem' ? 'text-indigo-400 border-b-2 border-indigo-400 bg-indigo-500/10' : 'text-gray-400 hover:text-gray-300'}`}>
+          📖 {lang === 'th' ? 'โจทย์ปัญหา' : 'Problem'}
+        </button>
+        <button onClick={() => setMobileView('code')} className={`flex-1 py-2.5 text-sm font-medium transition-colors ${mobileView === 'code' ? 'text-emerald-400 border-b-2 border-emerald-400 bg-emerald-500/10' : 'text-gray-400 hover:text-gray-300'}`}>
+          💻 {lang === 'th' ? 'เขียนโค้ด' : 'Code Editor'}
+        </button>
+      </div>
+
       {/* Main Split Layout */}
       <div style={{
         display: 'flex',
-        flexDirection: useColumnLayout ? 'column' : 'row',
-        flex: useColumnLayout ? 'none' : 1,
-        overflow: useColumnLayout ? 'visible' : 'hidden',
+        flexDirection: useColumnLayout && !isNarrow ? 'column' : 'row',
+        flex: (useColumnLayout && !isNarrow) ? 'none' : 1,
+        overflow: (useColumnLayout && !isNarrow) ? 'visible' : 'hidden',
       }}>
         {/* Problem Description Panel */}
-        <div style={{
-          width: useColumnLayout ? '100%' : '40%',
+        <div className={`${mobileView === 'problem' ? 'flex' : 'hidden'} md:flex flex-col`} style={{
+          width: useColumnLayout && !isNarrow ? '100%' : '40%',
           flexShrink: 0,
           overflow: 'auto',
-          borderRight: useColumnLayout ? 'none' : '1px solid var(--color-border-subtle)',
-          borderBottom: useColumnLayout ? '1px solid var(--color-border-subtle)' : 'none',
+          borderRight: useColumnLayout && !isNarrow ? 'none' : '1px solid var(--color-border-subtle)',
+          borderBottom: useColumnLayout && !isNarrow ? '1px solid var(--color-border-subtle)' : 'none',
           padding: '1.5rem',
-          maxHeight: useColumnLayout ? '45vh' : 'none',
+          maxHeight: useColumnLayout && !isNarrow ? '45vh' : 'none',
         }}>
           <div style={{
             background: 'var(--color-bg-card)',
@@ -419,8 +430,12 @@ export default function ExercisePage() {
           </AnimatePresence>
         </div>
 
-        {/* Right: Editor + Output */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {/* Right Panel: Editor & Output */}
+        <div className={`${mobileView === 'code' ? 'flex' : 'hidden'} md:flex flex-col`} style={{
+          flex: 1,
+          overflow: 'hidden',
+          width: '100%',
+        }}>
           {/* Editor header */}
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',

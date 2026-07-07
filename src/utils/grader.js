@@ -12,6 +12,7 @@
 //   5. runtime-ok — no expectedOutput defined → just "no crash"
 // ─────────────────────────────────────────────────────────────────────────────
 import { pyLog } from './errorAnalyzer';
+import { supabase } from './supabase';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -157,4 +158,23 @@ export const gradeExercise = async (exercise, code, runCode) => {
   pyLog.graderSummary(passCount, results.length, scorePercent);
 
   return { results, allPassed, passCount, scorePercent };
+};
+
+/**
+ * Attempts to grade securely on the server via Supabase Edge Function.
+ * Falls back to client-side grading if the server is unavailable or fails.
+ */
+export const gradeExerciseSecurely = async (exercise, code, runCode) => {
+  try {
+    const { data, error } = await supabase.functions.invoke('grade-python', {
+      body: { code, exerciseId: exercise.id }
+    });
+    
+    if (error || !data) throw error || new Error('No data returned from edge function');
+    
+    return data;
+  } catch (err) {
+    console.warn('[PyLearn | Grader] Server-side grading failed, falling back to local grading.', err.message);
+    return await gradeExercise(exercise, code, runCode);
+  }
 };

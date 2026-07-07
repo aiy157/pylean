@@ -6,7 +6,7 @@ import { useProgressStore } from '../store/progressStore';
 import { useAdminStore } from '../store/adminStore';
 import { useCurriculumStore } from '../store/curriculumStore';
 import { usePyodide } from '../hooks/usePyodide';
-import { gradeExercise } from '../utils/grader';
+import { gradeExerciseSecurely } from '../utils/grader';
 import CodeEditor from '../components/editor/CodeEditor';
 import OutputPanel from '../components/editor/OutputPanel';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -47,6 +47,7 @@ export default function LessonPage() {
   const [gradeResults, setGradeResults] = useState(null);
   const [customInput, setCustomInput] = useState('');
   const [showHint, setShowHint] = useState(false);
+  const [mobileView, setMobileView] = useState('theory'); // 'theory' | 'code'
 
   if (!mod || !lesson) {
     return (
@@ -128,7 +129,7 @@ export default function LessonPage() {
     if (!isReady || !linkedExercise) return;
     setIsGrading(true);
     setGradeResults(null);
-    const results = await gradeExercise(linkedExercise, code, runCode);
+    const results = await gradeExerciseSecurely(linkedExercise, code, runCode);
     setGradeResults(results);
     setIsGrading(false);
 
@@ -226,17 +227,20 @@ export default function LessonPage() {
         </div>
       )}
 
+      {/* Mobile View Toggle */}
+      <div className="md:hidden flex bg-[#1a1a2e] border-b border-white/5 w-full flex-shrink-0">
+        <button onClick={() => setMobileView('theory')} className={`flex-1 py-2.5 text-sm font-medium transition-colors ${mobileView === 'theory' ? 'text-indigo-400 border-b-2 border-indigo-400 bg-indigo-500/10' : 'text-gray-400 hover:text-gray-300'}`}>
+          📖 {lang === 'th' ? 'เนื้อหาทฤษฎี' : 'Theory'}
+        </button>
+        <button onClick={() => setMobileView('code')} className={`flex-1 py-2.5 text-sm font-medium transition-colors ${mobileView === 'code' ? 'text-emerald-400 border-b-2 border-emerald-400 bg-emerald-500/10' : 'text-gray-400 hover:text-gray-300'}`}>
+          💻 {lang === 'th' ? 'เขียนโค้ด' : 'Code Editor'}
+        </button>
+      </div>
+
       {/* Main Split Layout */}
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
         {/* Left: Theory Panel */}
-        <div style={{
-          width: '45%',
-          flexShrink: 0,
-          overflow: 'auto',
-          borderRight: '1px solid var(--color-border-subtle)',
-          display: 'flex',
-          flexDirection: 'column',
-        }}>
+        <div className={`${mobileView === 'theory' ? 'flex' : 'hidden'} md:flex flex-col w-full md:w-[45%] flex-shrink-0 overflow-auto border-r border-[var(--color-border-subtle)]`}>
           {/* Tabs */}
           <div style={{
             display: 'flex',
@@ -390,7 +394,7 @@ export default function LessonPage() {
         </div>
 
         {/* Right: Code Editor Panel */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div className={`${mobileView === 'code' ? 'flex' : 'hidden'} md:flex flex-col flex-1 overflow-hidden w-full`}>
           {/* Editor header */}
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',

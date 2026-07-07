@@ -135,6 +135,23 @@ const EDITOR_OPTIONS = {
   parameterHints: { enabled: true },
 };
 
+const MobileToolbar = ({ onInsert }) => {
+  const buttons = ['Tab', ':', '(', ')', '[', ']', '"', "'", '=', '+', '-'];
+  return (
+    <div className="md:hidden flex overflow-x-auto bg-[#1a1a2e] border-b border-white/5 p-1.5 gap-1.5 hide-scrollbar">
+      {buttons.map(b => (
+        <button 
+          key={b}
+          onClick={() => onInsert(b === 'Tab' ? '    ' : b)}
+          className="px-3.5 py-1.5 bg-[#2d2d3a] text-gray-300 rounded-md text-sm font-mono active:bg-[#4d4d5a] whitespace-nowrap shadow-sm border border-white/5"
+        >
+          {b}
+        </button>
+      ))}
+    </div>
+  );
+};
+
 export default function CodeEditor({ value, onChange, height = '300px', readOnly = false }) {
   const editorRef = useRef(null);
 
@@ -153,18 +170,35 @@ export default function CodeEditor({ value, onChange, height = '300px', readOnly
     editor.focus();
   }, []);
 
+  const insertText = useCallback((text) => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    const position = editor.getPosition();
+    editor.executeEdits('mobile-toolbar', [
+      {
+        range: new window.monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
+        text: text,
+        forceMoveMarkers: true
+      }
+    ]);
+    editor.focus();
+  }, []);
+
   return (
-    <div className="monaco-container" style={{ height }}>
-      <Editor
-        height={height}
-        language="python"
-        theme="vs-dark"
-        value={value}
-        onChange={onChange}
-        beforeMount={handleBeforeMount}
-        onMount={handleMount}
-        options={{ ...EDITOR_OPTIONS, readOnly }}
-      />
+    <div className="flex flex-col w-full" style={{ height }}>
+      {!readOnly && <MobileToolbar onInsert={insertText} />}
+      <div className="monaco-container flex-1 min-h-0 w-full">
+        <Editor
+          height="100%"
+          language="python"
+          theme="vs-dark"
+          value={value}
+          onChange={onChange}
+          beforeMount={handleBeforeMount}
+          onMount={handleMount}
+          options={{ ...EDITOR_OPTIONS, readOnly }}
+        />
+      </div>
     </div>
   );
 }
