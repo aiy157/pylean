@@ -1,8 +1,8 @@
 // src/pages/Landing.jsx
 import { Link } from 'react-router-dom';
+import { useCurriculumStore } from '../store/curriculumStore';
 import { useLanguageStore } from '../store/languageStore';
 import { useProgressStore } from '../store/progressStore';
-import { MODULES } from '../data/curriculum';
 import { motion } from 'framer-motion';
 import { ArrowRight, Zap, Layers, CheckSquare, GitBranch, Play, Code2 } from 'lucide-react';
 
@@ -12,6 +12,7 @@ const stagger = { show: { transition: { staggerChildren: 0.1 } } };
 export default function Landing() {
   const { t, lang } = useLanguageStore();
   const { xp } = useProgressStore();
+  const { modules } = useCurriculumStore();
 
   const features = [
     { icon: Layers, title: t.landing.feat1_title, desc: t.landing.feat1_desc, color: '#7c3aed' },
@@ -137,7 +138,7 @@ export default function Landing() {
           </h2>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '2rem' }}>
           {features.map((feat, i) => (
             <motion.div
               key={i}
@@ -177,7 +178,7 @@ export default function Landing() {
           </h2>
         </motion.div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {MODULES.map((mod, i) => (
+          {modules.map((mod, i) => (
             <motion.div
               key={mod.id}
               initial={{ opacity: 0, x: -20 }}

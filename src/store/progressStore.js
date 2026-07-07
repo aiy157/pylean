@@ -1,6 +1,6 @@
 // src/store/progressStore.js
 import { create } from 'zustand';
-import { MODULES } from '../data/curriculum';
+import { useCurriculumStore } from './curriculumStore';
 import { supabase } from '../utils/supabase';
 
 const STORAGE_KEY = 'pylearn_progress';
@@ -64,7 +64,8 @@ const initialState = {
 };
 
 const computeUnlockedModules = (xp) => {
-  return MODULES
+  const modules = useCurriculumStore.getState().modules;
+  return modules
     .filter(m => xp >= m.requiredXP)
     .map(m => m.id);
 };
@@ -185,7 +186,8 @@ export const useProgressStore = create((set, get) => {
 
     getModuleProgress: (moduleId) => {
       const state = get();
-      const module = MODULES.find(m => m.id === moduleId);
+      const modules = useCurriculumStore.getState().modules;
+      const module = modules.find(m => m.id === moduleId);
       if (!module) return 0;
       const totalLessons = module.lessons.length;
       if (totalLessons === 0) return 0;
@@ -207,6 +209,35 @@ export const useProgressStore = create((set, get) => {
     enableAdminUnlockMode: () => {
       sessionStorage.setItem('pylearn_admin_unlock', 'true');
       set({ isAdminUnlockMode: true });
+    },
+
+    saveCodeToCloud: async (exerciseId, code) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      try {
+        await supabase
+          .from('user_code')
+          .upsert({ user_id: user.id, exercise_id: exerciseId, code, updated_at: new Date().toISOString() });
+      } catch (err) {
+        console.warn('Auto-save failed:', err.message);
+      }
+    },
+
+    loadCodeFromCloud: async (exerciseId) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return null;
+      try {
+        const { data, error } = await supabase
+          .from('user_code')
+          .select('code')
+          .eq('user_id', user.id)
+          .eq('exercise_id', exerciseId)
+          .single();
+        if (error && error.code !== 'PGRST116') throw error;
+        return data?.code || null;
+      } catch (err) {
+        return null;
+      }
     },
   };
 });

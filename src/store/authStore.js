@@ -67,6 +67,19 @@ export const useAuthStore = create((set, get) => ({
     set({ user: null, session: null });
   },
 
+  // ── Password Reset ────────────────────────────────────────────────────────
+  resetPassword: async (email) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/update-password`,
+    });
+    if (error) throw error;
+  },
+
+  updatePassword: async (newPassword) => {
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) throw error;
+  },
+
   // ── Helpers ───────────────────────────────────────────────────────────────
   getUsername: () => {
     const user = get().user;

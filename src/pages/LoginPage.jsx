@@ -9,7 +9,7 @@ import { useProgressStore } from '../store/progressStore';
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login, register } = useAuthStore();
+  const { login, register, resetPassword } = useAuthStore();
   const { fetchProgress } = useProgressStore();
   const { lang } = useLanguageStore();
 
@@ -32,7 +32,7 @@ export default function LoginPage() {
         await login(form.email, form.password);
         await fetchProgress();
         navigate('/dashboard');
-      } else {
+      } else if (tab === 'register') {
         if (!form.username.trim()) {
           setErrorMsg(lang === 'th' ? 'กรุณาใส่ชื่อผู้ใช้' : 'Please enter a username');
           return;
@@ -46,9 +46,20 @@ export default function LoginPage() {
               : `📩 Confirmation email sent to ${form.email} — click the link to activate your account`
           );
         } else {
-          // Email confirmation disabled in Supabase → auto-login
           navigate('/dashboard');
         }
+      } else if (tab === 'forgot') {
+        if (!form.email) {
+          setErrorMsg(lang === 'th' ? 'กรุณากรอกอีเมล' : 'Please enter your email');
+          setIsLoading(false);
+          return;
+        }
+        await resetPassword(form.email);
+        setSuccessMsg(
+          lang === 'th'
+            ? `📩 ส่งลิงก์รีเซ็ตรหัสผ่านไปที่ ${form.email} แล้ว`
+            : `📩 Password reset link sent to ${form.email}`
+        );
       }
     } catch (err) {
       const msg = err.message || 'เกิดข้อผิดพลาด';
@@ -199,34 +210,50 @@ export default function LoginPage() {
           </div>
 
           {/* Password */}
-          <div>
-            <label style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', display: 'block', marginBottom: '0.4rem' }}>
-              {lang === 'th' ? 'รหัสผ่าน' : 'Password'}
-            </label>
-            <div style={{ position: 'relative' }}>
-              <Lock size={15} style={{ position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} />
-              <input
-                type={showPassword ? 'text' : 'password'}
-                className="input-dark"
-                placeholder={lang === 'th' ? 'อย่างน้อย 6 ตัวอักษร' : 'At least 6 characters'}
-                value={form.password}
-                onChange={e => update('password', e.target.value)}
-                style={{ paddingLeft: '2.5rem', paddingRight: '2.75rem' }}
-                required
-                autoComplete={tab === 'login' ? 'current-password' : 'new-password'}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(s => !s)}
-                style={{
-                  position: 'absolute', right: '0.875rem', top: '50%', transform: 'translateY(-50%)',
-                  background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)', padding: 0,
-                }}
+          <AnimatePresence>
+            {tab !== 'forgot' && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                style={{ overflow: 'hidden' }}
               >
-                {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
-              </button>
-            </div>
-          </div>
+                <div style={{ marginTop: '1rem' }}>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+                    <span>{lang === 'th' ? 'รหัสผ่าน' : 'Password'}</span>
+                    {tab === 'login' && (
+                      <button type="button" onClick={() => { setTab('forgot'); setErrorMsg(''); setSuccessMsg(''); }} style={{ background: 'none', border: 'none', color: '#a78bfa', fontSize: '0.78rem', cursor: 'pointer', padding: 0 }}>
+                        {lang === 'th' ? 'ลืมรหัสผ่าน?' : 'Forgot password?'}
+                      </button>
+                    )}
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <Lock size={15} style={{ position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} />
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      className="input-dark"
+                      placeholder={lang === 'th' ? 'อย่างน้อย 6 ตัวอักษร' : 'At least 6 characters'}
+                      value={form.password}
+                      onChange={e => update('password', e.target.value)}
+                      style={{ paddingLeft: '2.5rem', paddingRight: '2.75rem' }}
+                      required={tab !== 'forgot'}
+                      autoComplete={tab === 'login' ? 'current-password' : 'new-password'}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(s => !s)}
+                      style={{
+                        position: 'absolute', right: '0.875rem', top: '50%', transform: 'translateY(-50%)',
+                        background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)', padding: 0,
+                      }}
+                    >
+                      {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Error */}
           <AnimatePresence>
@@ -261,8 +288,10 @@ export default function LoginPage() {
               <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
             ) : tab === 'login' ? (
               <><LogIn size={15} /> {lang === 'th' ? 'เข้าสู่ระบบ' : 'Login'}</>
-            ) : (
+            ) : tab === 'register' ? (
               <><UserPlus size={15} /> {lang === 'th' ? 'สมัครสมาชิก' : 'Create Account'}</>
+            ) : (
+              <><Mail size={15} /> {lang === 'th' ? 'ส่งลิงก์รีเซ็ตรหัสผ่าน' : 'Send Reset Link'}</>
             )}
           </button>
         </form>

@@ -7,6 +7,8 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { useProgressStore } from './store/progressStore';
 import { useAdminStore } from './store/adminStore';
 import { useAuthStore } from './store/authStore';
+import { useCurriculumStore } from './store/curriculumStore';
+import UpdatePasswordPage from './pages/UpdatePasswordPage';
 
 // ─── Lazy-loaded pages (improves initial bundle load time) ───────────────────
 const Landing        = lazy(() => import('./pages/Landing'));
@@ -39,19 +41,26 @@ const PageSpinner = () => (
 export default function App() {
   const fetchProgress = useProgressStore(state => state.fetchProgress);
   const fetchExercises = useAdminStore(state => state.fetchExercises);
+  const fetchCurriculum = useCurriculumStore(state => state.fetchCurriculum);
+  const isCurriculumLoading = useCurriculumStore(state => state.isLoading);
   const { init: initAuth, user } = useAuthStore();
 
   // ── Step 1: Init auth on mount ──────────────────────────────────────────
   useEffect(() => {
     initAuth();
     fetchExercises();
-  }, [initAuth, fetchExercises]);
+    fetchCurriculum();
+  }, [initAuth, fetchExercises, fetchCurriculum]);
 
   // ── Step 2: Fetch progress ONLY after user state is known ────────────────
   // This fixes the race condition: progressStore needs user_id from Auth session
   useEffect(() => {
     fetchProgress();
   }, [user, fetchProgress]);   // re-runs whenever login/logout happens
+
+  if (isCurriculumLoading) {
+    return <PageSpinner />;
+  }
 
   return (
     <BrowserRouter>
@@ -70,6 +79,7 @@ export default function App() {
               <Route path="/exercise/:exerciseId"        element={<ExercisePage />} />
               <Route path="/flowchart"                   element={<FlowchartPage />} />
               <Route path="/admin"                       element={<AdminPage />} />
+              <Route path="/update-password"             element={<UpdatePasswordPage />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>

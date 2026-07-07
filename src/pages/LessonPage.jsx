@@ -4,9 +4,9 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useLanguageStore } from '../store/languageStore';
 import { useProgressStore } from '../store/progressStore';
 import { useAdminStore } from '../store/adminStore';
+import { useCurriculumStore } from '../store/curriculumStore';
 import { usePyodide } from '../hooks/usePyodide';
 import { gradeExercise } from '../utils/grader';
-import { MODULES } from '../data/curriculum';
 import CodeEditor from '../components/editor/CodeEditor';
 import OutputPanel from '../components/editor/OutputPanel';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -30,11 +30,11 @@ export default function LessonPage() {
   const { moduleId, lessonId } = useParams();
   const navigate = useNavigate();
   const { t, lang } = useLanguageStore();
-  const { completeLesson, isLessonComplete, isModuleUnlocked, isExercisePassed, getExerciseScore, completeExercise } = useProgressStore();
-  const { getAllExercises } = useAdminStore();
+  const { completeLesson, isLessonComplete, isModuleUnlocked, isExercisePassed, getExerciseScore, completeExercise, saveCodeToCloud, loadCodeFromCloud } = useProgressStore();
   const { isLoading: pyLoading, isReady, error: pyError, loadProgress, isWasmSupported, runCode } = usePyodide();
+  const { modules, exercises } = useCurriculumStore();
 
-  const mod = MODULES.find(m => m.id === parseInt(moduleId));
+  const mod = modules.find(m => m.id === parseInt(moduleId));
   const lessonIdx = mod?.lessons.findIndex(l => l.id === lessonId) ?? -1;
   const lesson = mod?.lessons[lessonIdx];
 
@@ -72,20 +72,23 @@ export default function LessonPage() {
   const nextLesson = lessonIdx < mod.lessons.length - 1 ? mod.lessons[lessonIdx + 1] : null;
   const completed = isLessonComplete(lesson.id);
 
-  // ── Gate: find exercise matching this lesson by same order index ──
-  const allExercises = getAllExercises();
-  const moduleExercises = allExercises
-    .filter(ex => ex.moduleId === mod.id)
-    .sort((a, b) => a.order - b.order);
-  const linkedExercise = moduleExercises.find(ex => ex.lessonId === lesson.id) ?? null;
+  // ── Gate: map lesson ID to exercise ID ──
+  const lessonToExerciseMap = {
+    '1-5': 'ex-1-1'
+  };
+  const linkedExerciseId = lessonToExerciseMap[lesson.id];
+  const linkedExercise = linkedExerciseId ? exercises.find(ex => ex.id === linkedExerciseId) : null;
   const exercisePassed = linkedExercise ? isExercisePassed(linkedExercise.id) : true;
   const exerciseBestScore = linkedExercise ? getExerciseScore(linkedExercise.id) : -1;
   // Block going to next lesson if there's a linked exercise that hasn't been passed
   const isNextBlocked = !!nextLesson && !!linkedExercise && !exercisePassed;
 
   useEffect(() => {
+    let active = true;
     if (linkedExercise && activeTab === TAB_EXERCISE) {
-      setCode(linkedExercise.starterCode || '');
+      loadCodeFromCloud(linkedExercise.id).then(savedCode => {
+        if (active) setCode(savedCode || linkedExercise.starterCode || '');
+      });
       setCustomInput(linkedExercise.testCases?.[0]?.input || '');
       setOutput('');
       setRunError('');
@@ -96,7 +99,18 @@ export default function LessonPage() {
       setOutput('');
       setRunError('');
     }
-  }, [linkedExercise?.id, activeTab]);
+    return () => { active = false; };
+  }, [linkedExercise?.id, activeTab, loadCodeFromCloud]);
+
+  // Debounce auto-save for exercise tab
+  useEffect(() => {
+    if (activeTab === TAB_EXERCISE && linkedExercise && code) {
+      const timer = setTimeout(() => {
+        saveCodeToCloud(linkedExercise.id, code);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [code, linkedExercise?.id, activeTab, saveCodeToCloud]);
 
   const handleRun = async () => {
     if (!isReady) return;

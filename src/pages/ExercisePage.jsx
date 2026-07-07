@@ -1,9 +1,9 @@
 // src/pages/ExercisePage.jsx
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useLanguageStore } from '../store/languageStore';
 import { useProgressStore } from '../store/progressStore';
-import { useAdminStore } from '../store/adminStore';
+import { useCurriculumStore } from '../store/curriculumStore';
 import { usePyodide } from '../hooks/usePyodide';
 import { gradeExercise } from '../utils/grader';
 import CodeEditor from '../components/editor/CodeEditor';
@@ -28,14 +28,15 @@ const useIsNarrow = (breakpoint = 900) => {
 
 export default function ExercisePage() {
   const { exerciseId } = useParams();
+  const navigate = useNavigate();
   const { lang, t } = useLanguageStore();
-  const { completeExercise, isExerciseComplete, getExerciseScore } = useProgressStore();
-  const { getAllExercises } = useAdminStore();
+  const { completeExercise, isExerciseComplete, getExerciseScore, saveCodeToCloud, loadCodeFromCloud } = useProgressStore();
+  const { getExerciseById } = useCurriculumStore();
   const { isReady, isLoading: pyLoading, error: pyError, loadProgress, isWasmSupported, runCode } = usePyodide();
   const isNarrow = useIsNarrow();  // true on mobile / iPad portrait
   const [layoutColumn, setLayoutColumn] = useState(false); // manual toggle override
 
-  const exercise = getAllExercises().find(ex => ex.id === exerciseId);
+  const exercise = getExerciseById(exerciseId);
 
   const [code, setCode] = useState(exercise?.starterCode || '');
   const [output, setOutput] = useState('');
@@ -43,9 +44,26 @@ export default function ExercisePage() {
   const [isRunning, setIsRunning] = useState(false);
   const [isGrading, setIsGrading] = useState(false);
   const [gradeResults, setGradeResults] = useState(null);
-  const [showHint, setShowHint] = useState(false);
-
   const [customInput, setCustomInput] = useState(exercise?.testCases?.[0]?.input || '');
+
+  // Auto-save logic
+  useEffect(() => {
+    let active = true;
+    if (exercise) {
+      loadCodeFromCloud(exercise.id).then(savedCode => {
+        if (active) setCode(savedCode || exercise.starterCode || '');
+      });
+    }
+    return () => { active = false; };
+  }, [exercise?.id, loadCodeFromCloud]);
+
+  useEffect(() => {
+    if (!exercise || !code) return;
+    const timer = setTimeout(() => {
+      saveCodeToCloud(exercise.id, code);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [code, exercise?.id, saveCodeToCloud]);
 
   useEffect(() => {
     if (exercise) {

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguageStore } from '../store/languageStore';
 import { useProgressStore } from '../store/progressStore';
 import { useAuthStore } from '../store/authStore';
-import { MODULES } from '../data/curriculum';
+import { useCurriculumStore } from '../store/curriculumStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, CheckCircle, PlayCircle, RotateCcw, AlertTriangle, X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -21,10 +21,11 @@ export default function Dashboard() {
   const { t, lang } = useLanguageStore();
   const { xp, badges, isModuleUnlocked, getModuleProgress, resetProgress } = useProgressStore();
   const { user, getUsername } = useAuthStore();
+  const { modules } = useCurriculumStore();
   const [showResetModal, setShowResetModal] = useState(false);
   const username = user ? getUsername() : null;
 
-  const totalXPNeeded = MODULES[MODULES.length - 1].requiredXP + 100;
+  const totalXPNeeded = modules.length > 0 ? modules[modules.length - 1].requiredXP + 100 : 100;
   const overallProgress = Math.min(100, Math.round((xp / totalXPNeeded) * 100));
 
   const handleReset = () => {
@@ -280,7 +281,7 @@ export default function Dashboard() {
         {lang === 'th' ? 'โมดูลการเรียน' : 'Learning Modules'}
       </h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.25rem' }}>
-        {MODULES.map((mod, i) => {
+        {modules.map((mod, i) => {
           const unlocked = isModuleUnlocked(mod.id);
           const progress = getModuleProgress(mod.id);
 

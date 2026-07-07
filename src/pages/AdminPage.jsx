@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useLanguageStore } from '../store/languageStore';
 import { useAdminStore } from '../store/adminStore';
-import { MODULES } from '../data/curriculum';
+import { useCurriculumStore } from '../store/curriculumStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { Plus, Edit2, Trash2, Shield, LogOut, Save, X, Lock, Eye, Search, User } from 'lucide-react';
@@ -149,6 +149,7 @@ function LoginPanel({ onLogin, lang, t }) {
 }
 
 function ExerciseForm({ initial, onSave, onCancel, lang, t }) {
+  const { modules } = useCurriculumStore();
   const [form, setForm] = useState(initial || EMPTY_EXERCISE);
   const [tab, setTab] = useState('th');
 
@@ -196,7 +197,7 @@ function ExerciseForm({ initial, onSave, onCancel, lang, t }) {
             value={form.moduleId}
             onChange={e => updateField('moduleId', parseInt(e.target.value))}
           >
-            {MODULES.map(m => (
+            {modules.map(m => (
               <option key={m.id} value={m.id} style={{ background: '#1a1a2e' }}>Module {m.id}: {m.title[lang]}</option>
             ))}
           </select>
@@ -335,9 +336,52 @@ function ExerciseForm({ initial, onSave, onCancel, lang, t }) {
   );
 }
 
+function LessonForm({ initial, onSave, onCancel, lang }) {
+  const [form, setForm] = useState(initial);
+  const [tab, setTab] = useState('th');
+
+  const updateField = (path, value) => {
+    const keys = path.split('.');
+    const updated = { ...form };
+    let ref = updated;
+    for (let i = 0; i < keys.length - 1; i++) {
+      ref[keys[i]] = { ...ref[keys[i]] };
+      ref = ref[keys[i]];
+    }
+    ref[keys[keys.length - 1]] = value;
+    setForm(updated);
+  };
+
+  return (
+    <div style={{ background: 'var(--color-bg-card)', border: '1px solid rgba(124,58,237,0.3)', borderRadius: '0.875rem', padding: '1.5rem', marginBottom: '1.5rem' }}>
+      <h3 style={{ marginBottom: '1rem', fontWeight: 600 }}>Edit Lesson</h3>
+      <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '1rem', borderBottom: '1px solid var(--color-border-subtle)', paddingBottom: '0.5rem' }}>
+        {['th', 'en'].map(l => (
+          <button key={l} onClick={() => setTab(l)} className={`tab-item ${tab === l ? 'active' : ''}`} style={{ border: 'none', background: 'none' }}>
+            {l === 'th' ? '🇹🇭 ไทย' : '🇬🇧 English'}
+          </button>
+        ))}
+      </div>
+      <div style={{ marginBottom: '0.875rem' }}>
+        <label style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', display: 'block', marginBottom: '0.3rem' }}>Title</label>
+        <input className="input-dark" value={form.title[tab]} onChange={e => updateField(`title.${tab}`, e.target.value)} />
+      </div>
+      <div style={{ marginBottom: '0.875rem' }}>
+        <label style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', display: 'block', marginBottom: '0.3rem' }}>Content (Markdown)</label>
+        <textarea className="input-dark" rows={12} value={form.content[tab]} onChange={e => updateField(`content.${tab}`, e.target.value)} style={{ resize: 'vertical', fontFamily: 'inherit' }} />
+      </div>
+      <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+        <button onClick={onCancel} className="btn-ghost" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><X size={14} /> Cancel</button>
+        <button onClick={() => onSave(form)} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Save size={14} /> Save</button>
+      </div>
+    </div>
+  );
+}
+
 export default function AdminPage() {
+  const { modules, exercises, fetchCurriculum } = useCurriculumStore();
   const { lang, t } = useLanguageStore();
-  const { isLoggedIn, login, logout, customExercises, addExercise, updateExercise, deleteExercise } = useAdminStore();
+  const { isLoggedIn, login, logout, addExercise, updateExercise, deleteExercise, updateLesson } = useAdminStore();
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [adminTab, setAdminTab] = useState('exercises');
@@ -346,26 +390,37 @@ export default function AdminPage() {
     return <LoginPanel onLogin={login} lang={lang} t={t} />;
   }
 
-  const handleSave = (form) => {
+  const handleSave = async (form) => {
     if (editingId) {
       updateExercise(editingId, form);
       toast.success(lang === 'th' ? 'อัปเดตแล้ว!' : 'Updated!', { style: { background: '#1a1a2e', color: '#34d399' } });
     } else {
-      addExercise(form);
+      await addExercise(form);
       toast.success(lang === 'th' ? 'เพิ่มโจทย์แล้ว!' : 'Exercise added!', { style: { background: '#1a1a2e', color: '#34d399' } });
     }
+    await fetchCurriculum();
     setShowForm(false);
     setEditingId(null);
   };
 
-  const handleDelete = (id) => {
+  const handleSaveLesson = async (form) => {
+    await updateLesson(editingId, form);
+    await fetchCurriculum();
+    toast.success(lang === 'th' ? 'อัปเดตบทเรียนแล้ว!' : 'Lesson updated!', { style: { background: '#1a1a2e', color: '#34d399' } });
+    setShowForm(false);
+    setEditingId(null);
+  };
+
+  const handleDelete = async (id) => {
     if (confirm(lang === 'th' ? 'ต้องการลบโจทย์นี้?' : 'Delete this exercise?')) {
-      deleteExercise(id);
+      await deleteExercise(id);
+      await fetchCurriculum();
       toast(lang === 'th' ? 'ลบแล้ว' : 'Deleted', { style: { background: '#1a1a2e', color: '#fb7185' } });
     }
   };
 
-  const editingExercise = editingId ? customExercises.find(ex => ex.id === editingId) : null;
+  const editingExercise = editingId ? exercises.find(ex => ex.id === editingId) : null;
+  const editingLesson = editingId ? modules.flatMap(m => m.lessons).find(l => l.id === editingId) : null;
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1.5rem' }}>
@@ -382,7 +437,6 @@ export default function AdminPage() {
         </div>
       </div>
 
-      {/* Tabs */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', borderBottom: '1px solid var(--color-border-subtle)', paddingBottom: '0.5rem' }}>
         <button 
           onClick={() => setAdminTab('exercises')}
@@ -390,6 +444,13 @@ export default function AdminPage() {
           style={{ border: 'none', background: 'none' }}
         >
           {lang === 'th' ? 'จัดการโจทย์ (Exercises)' : 'Manage Exercises'}
+        </button>
+        <button 
+          onClick={() => setAdminTab('lessons')}
+          className={`tab-item ${adminTab === 'lessons' ? 'active' : ''}`}
+          style={{ border: 'none', background: 'none' }}
+        >
+          {lang === 'th' ? 'บทเรียน (Lessons)' : 'Lessons'}
         </button>
         <button 
           onClick={() => setAdminTab('users')}
@@ -402,11 +463,63 @@ export default function AdminPage() {
 
       {adminTab === 'users' ? (
         <UserSearchPanel lang={lang} t={t} />
+      ) : adminTab === 'lessons' ? (
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-secondary)' }}>
+              {lang === 'th' ? 'บทเรียนทั้งหมด' : 'All Lessons'}
+            </h2>
+          </div>
+
+          <AnimatePresence>
+            {showForm && adminTab === 'lessons' && (
+              <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+                <LessonForm
+                  initial={editingLesson}
+                  onSave={handleSaveLesson}
+                  onCancel={() => { setShowForm(false); setEditingId(null); }}
+                  lang={lang}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {modules.flatMap(m => m.lessons).map(lesson => (
+              <motion.div
+                key={lesson.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '1rem',
+                  background: 'var(--color-bg-card)',
+                  border: '1px solid var(--color-border-subtle)',
+                  borderRadius: '0.75rem',
+                  padding: '1rem 1.25rem',
+                }}
+              >
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 600, marginBottom: '0.2rem' }}>{lesson.title[lang]}</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>ID: {lesson.id}</div>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button
+                    onClick={() => { setEditingId(lesson.id); setShowForm(true); }}
+                    className="btn-ghost"
+                    style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+                  >
+                    <Edit2 size={12} /> {t.admin.edit}
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       ) : (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
             <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-secondary)' }}>
-              {lang === 'th' ? `โจทย์ที่สร้างเอง (${customExercises.length})` : `Custom Exercises (${customExercises.length})`}
+              {lang === 'th' ? `โจทย์ทั้งหมด (${exercises.length})` : `All Exercises (${exercises.length})`}
             </h2>
             <button
               onClick={() => { setShowForm(true); setEditingId(null); }}
@@ -419,7 +532,7 @@ export default function AdminPage() {
 
       {/* Add/Edit Form */}
       <AnimatePresence>
-        {showForm && (
+        {showForm && adminTab === 'exercises' && (
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
             <ExerciseForm
               initial={editingExercise}
@@ -434,7 +547,7 @@ export default function AdminPage() {
 
       {/* Custom Exercises List */}
       <div>
-        {customExercises.length === 0 ? (
+        {exercises.length === 0 ? (
           <div style={{
             padding: '3rem', textAlign: 'center',
             background: 'var(--color-bg-card)',
@@ -447,8 +560,8 @@ export default function AdminPage() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {customExercises.map(ex => {
-              const mod = MODULES.find(m => m.id === ex.moduleId);
+            {exercises.map(ex => {
+              const mod = modules.find(m => m.id === ex.moduleId);
               return (
                 <motion.div
                   key={ex.id}

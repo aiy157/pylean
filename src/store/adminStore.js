@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { DEFAULT_EXERCISES } from '../data/exercises';
 import { supabase } from '../utils/supabase';
 
 const ADMIN_EXERCISES_KEY = 'pylearn_admin_exercises';
@@ -35,11 +34,6 @@ export const useAdminStore = create((set, get) => ({
   logout: () => {
     sessionStorage.removeItem(ADMIN_SESSION_KEY);
     set({ isLoggedIn: false });
-  },
-
-  getAllExercises: () => {
-    const state = get();
-    return [...DEFAULT_EXERCISES, ...state.customExercises];
   },
 
   fetchExercises: async () => {
@@ -156,6 +150,34 @@ export const useAdminStore = create((set, get) => ({
       if (error) throw error;
     } catch (err) {
       console.warn('Supabase delete failed:', err.message);
+    }
+  },
+
+  updateModule: async (id, updates) => {
+    try {
+      const dbUpdates = {};
+      if (updates.title !== undefined) dbUpdates.title = updates.title;
+      if (updates.description !== undefined) dbUpdates.description = updates.description;
+      if (updates.requiredXP !== undefined) dbUpdates.required_xp = updates.requiredXP;
+
+      const { error } = await supabase.from('modules').update(dbUpdates).eq('id', id);
+      if (error) throw error;
+    } catch (err) {
+      console.warn('Module update failed:', err.message);
+    }
+  },
+
+  updateLesson: async (id, updates) => {
+    try {
+      const dbUpdates = {};
+      if (updates.title !== undefined) dbUpdates.title = updates.title;
+      if (updates.content !== undefined) dbUpdates.content = updates.content;
+      if (updates.xpReward !== undefined) dbUpdates.xp_reward = updates.xpReward;
+
+      const { error } = await supabase.from('lessons').update(dbUpdates).eq('id', id);
+      if (error) throw error;
+    } catch (err) {
+      console.warn('Lesson update failed:', err.message);
     }
   },
 

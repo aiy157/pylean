@@ -1,24 +1,25 @@
 // src/pages/LessonsListPage.jsx — Module overview with lesson list
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useLanguageStore } from '../store/languageStore';
 import { useProgressStore } from '../store/progressStore';
 import { useAdminStore } from '../store/adminStore';
-import { MODULES } from '../data/curriculum';
+import { useCurriculumStore } from '../store/curriculumStore';
 import { motion } from 'framer-motion';
 import { CheckCircle, Lock, PlayCircle, ChevronRight, BookOpen, Dumbbell } from 'lucide-react';
 
 export default function LessonsListPage() {
   const { moduleId } = useParams();
+  const navigate = useNavigate();
   const { lang, t } = useLanguageStore();
   const { isModuleUnlocked, isLessonComplete, isExerciseComplete, isExercisePassed, getExerciseScore } = useProgressStore();
-  const { getAllExercises } = useAdminStore();
+  const { modules, exercises } = useCurriculumStore();
 
   // If moduleId is provided, show lessons for that module
   if (moduleId) {
-    const mod = MODULES.find(m => m.id === parseInt(moduleId));
+    const mod = modules.find(m => m.id === parseInt(moduleId));
     if (!mod) return null;
     const unlocked = isModuleUnlocked(mod.id);
-    const allExercises = getAllExercises().filter(e => e.moduleId === mod.id);
+    const allExercises = exercises.filter(e => e.moduleId === mod.id);
 
     return (
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1.5rem' }}>
@@ -223,7 +224,7 @@ export default function LessonsListPage() {
       </motion.div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {MODULES.map((mod, i) => {
+        {modules.map((mod, i) => {
           const unlocked = isModuleUnlocked(mod.id);
           return (
             <motion.div
