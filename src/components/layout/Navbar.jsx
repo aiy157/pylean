@@ -4,12 +4,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguageStore } from '../../store/languageStore';
 import { useProgressStore } from '../../store/progressStore';
 import { useAuthStore } from '../../store/authStore';
-import { Zap, Globe, LayoutDashboard, BookOpen, GitBranch, LogOut, LogIn, User, Menu, X } from 'lucide-react';
+import { Zap, Globe, LayoutDashboard, BookOpen, GitBranch, LogOut, LogIn, User, Menu, X, Shield } from 'lucide-react';
 
 export default function Navbar() {
   const { t, lang, toggleLang } = useLanguageStore();
   const { xp } = useProgressStore();
-  const { user, logout, getUsername } = useAuthStore();
+  const { user, isAdmin, logout, getUsername } = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,6 +19,14 @@ export default function Navbar() {
     { to: '/lessons', icon: BookOpen, label: t.nav.lessons },
     { to: '/flowchart', icon: GitBranch, label: t.nav.flowchart },
   ];
+
+  if (isAdmin) {
+    navLinks.push({
+      to: '/admin',
+      icon: Shield,
+      label: lang === 'th' ? 'แอดมิน' : 'Admin'
+    });
+  }
 
   const handleLogout = async () => {
     await logout();

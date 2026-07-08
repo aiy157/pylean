@@ -7,15 +7,31 @@ export const useAuthStore = create((set, get) => ({
   session: null,
   isLoading: true,   // true on first load while we check session
 
+  isAdmin: false,
+
   // ── Init: called once on app mount ──────────────────────────────────────
   init: async () => {
     // Get existing session
     const { data: { session } } = await supabase.auth.getSession();
-    set({ user: session?.user ?? null, session, isLoading: false });
+    
+    let adminStatus = false;
+    if (session?.user?.id) {
+      const { data } = await supabase.from('profiles').select('is_admin').eq('id', session.user.id).maybeSingle();
+      adminStatus = data?.is_admin === true;
+    }
+
+    set({ user: session?.user ?? null, session, isAdmin: adminStatus, isLoading: false });
 
     // Listen for auth changes (login / logout / token refresh)
-    supabase.auth.onAuthStateChange((_event, session) => {
-      set({ user: session?.user ?? null, session });
+    supabase.auth.onAuthStateChange(async (_event, session) => {
+      let updatedAdminStatus = false;
+      if (session?.user?.id) {
+        const { data } = await supabase.from('profiles').select('is_admin').eq('id', session.user.id).maybeSingle();
+        updatedAdminStatus = data?.is_admin === true;
+      }
+      set({ user: session?.user ?? null, session, isAdmin: updatedAdminStatus });
+      
+      // Sync with adminStore if needed (we can dynamically import it or just let adminStore pull from authStore)
     });
   },
 
@@ -64,7 +80,7 @@ export const useAuthStore = create((set, get) => ({
   // ── Logout ────────────────────────────────────────────────────────────────
   logout: async () => {
     await supabase.auth.signOut();
-    set({ user: null, session: null });
+    set({ user: null, session: null, isAdmin: false });
   },
 
   // ── Password Reset ────────────────────────────────────────────────────────

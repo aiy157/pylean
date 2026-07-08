@@ -1,23 +1,35 @@
 // src/pages/AllPassPage.jsx
 // Protected admin unlock gate — requires a passcode stored in Supabase
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Lock, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../utils/supabase';
 import { useProgressStore } from '../store/progressStore';
 import { useLanguageStore } from '../store/languageStore';
+import { useAuthStore } from '../store/authStore';
 
 export default function AllPassPage() {
   const navigate = useNavigate();
   const enableAdminUnlockMode = useProgressStore(s => s.enableAdminUnlockMode);
   const { lang } = useLanguageStore();
+  const { isAdmin } = useAuthStore();
 
   const [passcode, setPasscode] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (isAdmin) {
+      setSuccess(true);
+      setTimeout(() => {
+        enableAdminUnlockMode();
+        navigate('/dashboard');
+      }, 800);
+    }
+  }, [isAdmin, enableAdminUnlockMode, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

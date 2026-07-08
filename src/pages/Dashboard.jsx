@@ -5,7 +5,7 @@ import { useProgressStore } from '../store/progressStore';
 import { useAuthStore } from '../store/authStore';
 import { useCurriculumStore } from '../store/curriculumStore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lock, CheckCircle, PlayCircle, RotateCcw, AlertTriangle, X } from 'lucide-react';
+import { Lock, CheckCircle, PlayCircle, RotateCcw, AlertTriangle, X, Shield, Key } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const BADGES_CONFIG = {
@@ -19,8 +19,8 @@ const BADGES_CONFIG = {
 
 export default function Dashboard() {
   const { t, lang } = useLanguageStore();
-  const { xp, badges, isModuleUnlocked, getModuleProgress, resetProgress } = useProgressStore();
-  const { user, getUsername } = useAuthStore();
+  const { xp, badges, isModuleUnlocked, getModuleProgress, resetProgress, enableAdminUnlockMode } = useProgressStore();
+  const { user, isAdmin, getUsername } = useAuthStore();
   const { modules } = useCurriculumStore();
   const [showResetModal, setShowResetModal] = useState(false);
   const username = user ? getUsername() : null;
@@ -192,20 +192,57 @@ export default function Dashboard() {
           <h1 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '0.25rem' }}>{t.dashboard.title}</h1>
           <p style={{ color: 'var(--color-text-secondary)' }}>{t.dashboard.subtitle}</p>
         </div>
-        {/* Reset button */}
-        <button
-          onClick={() => setShowResetModal(true)}
-          className="btn-ghost"
-          style={{
-            display: 'flex', alignItems: 'center', gap: '0.45rem',
-            fontSize: '0.8rem', color: '#fb7185',
-            borderColor: 'rgba(244,63,94,0.25)',
-            padding: '0.45rem 0.875rem',
-          }}
-        >
-          <RotateCcw size={13} />
-          {lang === 'th' ? 'รีเซ็ตความก้าวหน้า' : 'Reset Progress'}
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          {isAdmin && (
+            <>
+              <Link
+                to="/admin"
+                className="btn-primary"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '0.45rem',
+                  fontSize: '0.8rem', padding: '0.45rem 0.875rem',
+                  textDecoration: 'none'
+                }}
+              >
+                <Shield size={13} />
+                {lang === 'th' ? 'จัดการโจทย์ (Admin)' : 'Manage (Admin)'}
+              </Link>
+              <button
+                onClick={() => {
+                  enableAdminUnlockMode();
+                  toast.success(
+                    lang === 'th' ? '🔓 ปลดล็อกทุกด่านแล้ว!' : '🔓 All modules unlocked!',
+                    { style: { background: '#1a1a2e', color: '#10b981', border: '1px solid rgba(16,185,129,0.3)' } }
+                  );
+                }}
+                className="btn-ghost"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '0.45rem',
+                  fontSize: '0.8rem', color: '#10b981',
+                  borderColor: 'rgba(16,185,129,0.25)',
+                  padding: '0.45rem 0.875rem',
+                }}
+              >
+                <Key size={13} />
+                {lang === 'th' ? 'ปลดล็อกทุกด่าน' : 'Unlock All'}
+              </button>
+            </>
+          )}
+          {/* Reset button */}
+          <button
+            onClick={() => setShowResetModal(true)}
+            className="btn-ghost"
+            style={{
+              display: 'flex', alignItems: 'center', gap: '0.45rem',
+              fontSize: '0.8rem', color: '#fb7185',
+              borderColor: 'rgba(244,63,94,0.25)',
+              padding: '0.45rem 0.875rem',
+            }}
+          >
+            <RotateCcw size={13} />
+            {lang === 'th' ? 'รีเซ็ตความก้าวหน้า' : 'Reset Progress'}
+          </button>
+        </div>
       </motion.div>
 
       {/* ── XP Overview Card ── */}
