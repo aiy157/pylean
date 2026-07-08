@@ -3,23 +3,28 @@ import { Handle, Position } from '@xyflow/react';
 
 export default function IONode({ data, selected }) {
   return (
-    <div style={{
-      background: 'linear-gradient(135deg, #6b21a8, #9333ea)',
-      color: 'white',
-      padding: '0.6rem 1.2rem',
-      fontSize: '0.8rem',
-      border: selected ? '2px solid white' : '2px solid transparent',
-      boxShadow: '0 0 15px rgba(147,51,234,0.3)',
-      cursor: 'grab',
-      minWidth: '100px',
-      textAlign: 'center',
-      userSelect: 'none',
-      // Parallelogram shape via clip-path
-      clipPath: 'polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%)',
-    }}>
-      <Handle type="target" position={Position.Top} style={{ background: 'rgba(255,255,255,0.5)', width: 8, height: 8 }} />
-      {data.label}
-      <Handle type="source" position={Position.Bottom} style={{ background: 'rgba(255,255,255,0.5)', width: 8, height: 8 }} />
+    <div style={{ position: 'relative', width: 120, height: 40 }}>
+      {/* Parallelogram SVG */}
+      <svg width="120" height="40" style={{ position: 'absolute', top: 0, left: 0 }}>
+        <polygon
+          points="15,2 118,2 105,38 2,38"
+          fill="#1e1e2e"
+          stroke={selected ? 'white' : '#9333ea'}
+          strokeWidth={selected ? "3" : "2"}
+        />
+      </svg>
+      <div style={{
+        position: 'absolute', inset: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '0.85rem', fontWeight: 500, color: '#e2e8f0',
+        textAlign: 'center', padding: '0 0.5rem',
+        userSelect: 'none',
+        cursor: 'grab',
+      }}>
+        {data.label}
+      </div>
+      <Handle type="target" position={Position.Top} style={{ background: '#94a3b8', width: 6, height: 6, border: 'none' }} />
+      <Handle type="source" position={Position.Bottom} style={{ background: '#94a3b8', width: 6, height: 6, border: 'none' }} />
     </div>
   );
 }

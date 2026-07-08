@@ -59,14 +59,14 @@ else:
 // Simple static flowchart SVG renderer
 function StaticFlowchart({ chart, lang }) {
   const getNodeStyle = (type) => {
-    const base = { fill: '', stroke: '', rx: 0 };
+    const base = { fill: '#1e1e2e', stroke: '', rx: 0 };
     switch (type) {
-      case 'start': return { ...base, fill: '#059669', stroke: '#10b981', shape: 'oval' };
-      case 'end': return { ...base, fill: '#be123c', stroke: '#f43f5e', shape: 'oval' };
-      case 'process': return { ...base, fill: '#1e40af', stroke: '#3b82f6', shape: 'rect' };
-      case 'decision': return { ...base, fill: '#92400e', stroke: '#f59e0b', shape: 'diamond' };
-      case 'io': return { ...base, fill: '#6b21a8', stroke: '#9333ea', shape: 'para' };
-      default: return { ...base, fill: '#374151', stroke: '#6b7280', shape: 'rect' };
+      case 'start': return { ...base, stroke: '#10b981', shape: 'oval' };
+      case 'end': return { ...base, stroke: '#f43f5e', shape: 'oval' };
+      case 'process': return { ...base, stroke: '#3b82f6', shape: 'rect' };
+      case 'decision': return { ...base, stroke: '#f59e0b', shape: 'diamond' };
+      case 'io': return { ...base, stroke: '#9333ea', shape: 'para' };
+      default: return { ...base, stroke: '#6b7280', shape: 'rect' };
     }
   };
 
@@ -129,7 +129,7 @@ function StaticFlowchart({ chart, lang }) {
               )}
               {lines.map((line, i) => (
                 <text key={i} x={x + 70} y={y + 22 + (i * 14) + (lines.length > 1 ? -7 : 0)}
-                  textAnchor="middle" fill="white" fontSize="11" fontWeight="600">
+                  textAnchor="middle" fill="#e2e8f0" fontSize="11" fontWeight="600">
                   {line}
                 </text>
               ))}
