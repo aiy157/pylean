@@ -1,8 +1,9 @@
 // src/pages/AdminPage.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguageStore } from '../store/languageStore';
 import { useAdminStore } from '../store/adminStore';
 import { useCurriculumStore } from '../store/curriculumStore';
+import { useAuthStore } from '../store/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { Plus, Edit2, Trash2, Shield, LogOut, Save, X, Lock, Eye, Search, User } from 'lucide-react';
@@ -99,54 +100,6 @@ function UserSearchPanel({ lang, t }) {
   );
 }
 
-function LoginPanel({ onLogin, lang, t }) {
-  const [pwd, setPwd] = useState('');
-  const [error, setError] = useState(false);
-
-  const handleLogin = () => {
-    const ok = onLogin(pwd);
-    if (!ok) { setError(true); setTimeout(() => setError(false), 2000); }
-  };
-
-  return (
-    <div style={{
-      maxWidth: 400, margin: '6rem auto', padding: '2.5rem',
-      background: 'var(--color-bg-card)',
-      border: '1px solid var(--color-border-subtle)',
-      borderRadius: '1rem',
-      textAlign: 'center',
-    }}>
-      <div style={{
-        width: 56, height: 56, borderRadius: '1rem',
-        background: 'rgba(124,58,237,0.15)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        margin: '0 auto 1.25rem',
-        border: '1px solid rgba(124,58,237,0.3)',
-      }}>
-        <Shield size={24} style={{ color: '#a78bfa' }} />
-      </div>
-      <h1 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.25rem' }}>{t.admin.title}</h1>
-      <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem', marginBottom: '1.75rem' }}>
-        {lang === 'th' ? 'กรุณาเข้าสู่ระบบเพื่อจัดการโจทย์' : 'Please login to manage exercises'}
-      </p>
-      <div style={{ marginBottom: '1rem' }}>
-        <input
-          type="password"
-          className="input-dark"
-          placeholder={t.admin.password}
-          value={pwd}
-          onChange={e => setPwd(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && handleLogin()}
-          style={{ borderColor: error ? 'rgba(244,63,94,0.5)' : undefined }}
-        />
-        {error && <p style={{ color: '#fb7185', fontSize: '0.8rem', marginTop: '0.4rem' }}>{t.admin.wrong_password}</p>}
-      </div>
-      <button onClick={handleLogin} className="btn-primary" style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-        <Lock size={14} /> {t.admin.login}
-      </button>
-    </div>
-  );
-}
 
 function ExerciseForm({ initial, onSave, onCancel, lang, t }) {
   const { modules } = useCurriculumStore();
@@ -381,13 +334,37 @@ function LessonForm({ initial, onSave, onCancel, lang }) {
 export default function AdminPage() {
   const { modules, exercises, fetchCurriculum } = useCurriculumStore();
   const { lang, t } = useLanguageStore();
-  const { isLoggedIn, login, logout, addExercise, updateExercise, deleteExercise, updateLesson } = useAdminStore();
+  const { user } = useAuthStore();
+  const { isLoggedIn, checkAdminStatus, logout, addExercise, updateExercise, deleteExercise, updateLesson } = useAdminStore();
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [adminTab, setAdminTab] = useState('exercises');
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    checkAdminStatus(user?.id).finally(() => setIsChecking(false));
+  }, [user, checkAdminStatus]);
+
+  if (isChecking) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)' }}>
+        กำลังตรวจสอบสิทธิ์...
+      </div>
+    );
+  }
 
   if (!isLoggedIn) {
-    return <LoginPanel onLogin={login} lang={lang} t={t} />;
+    return (
+      <div style={{ maxWidth: 400, margin: '6rem auto', padding: '2.5rem', background: 'var(--color-bg-card)', border: '1px solid var(--color-border-subtle)', borderRadius: '1rem', textAlign: 'center' }}>
+        <div style={{ width: 56, height: 56, borderRadius: '1rem', background: 'rgba(244,63,94,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', border: '1px solid rgba(244,63,94,0.3)' }}>
+          <Shield size={24} style={{ color: '#fb7185' }} />
+        </div>
+        <h1 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.25rem' }}>{lang === 'th' ? 'ไม่มีสิทธิ์เข้าถึง' : 'Access Denied'}</h1>
+        <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem', marginBottom: '1.75rem' }}>
+          {lang === 'th' ? 'เฉพาะผู้ดูแลระบบเท่านั้นที่สามารถเข้าถึงหน้านี้ได้' : 'Only administrators can access this page.'}
+        </p>
+      </div>
+    );
   }
 
   const handleSave = async (form) => {

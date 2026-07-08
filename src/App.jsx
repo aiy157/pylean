@@ -20,6 +20,7 @@ const LessonPage     = lazy(() => import('./pages/LessonPage'));
 const ExercisePage   = lazy(() => import('./pages/ExercisePage'));
 const FlowchartPage  = lazy(() => import('./pages/FlowchartPage'));
 const AdminPage      = lazy(() => import('./pages/AdminPage'));
+const NotFoundPage   = lazy(() => import('./pages/NotFoundPage'));
 
 // ─── Minimal spinner while lazy page loads ───────────────────────────────────
 const PageSpinner = () => (
@@ -80,6 +81,7 @@ export default function App() {
               <Route path="/flowchart"                   element={<FlowchartPage />} />
               <Route path="/admin"                       element={<AdminPage />} />
               <Route path="/update-password"             element={<UpdatePasswordPage />} />
+              <Route path="*"                            element={<NotFoundPage />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>

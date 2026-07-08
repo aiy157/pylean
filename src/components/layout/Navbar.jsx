@@ -1,9 +1,10 @@
 // src/components/layout/Navbar.jsx
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguageStore } from '../../store/languageStore';
 import { useProgressStore } from '../../store/progressStore';
 import { useAuthStore } from '../../store/authStore';
-import { Zap, Globe, LayoutDashboard, BookOpen, GitBranch, LogOut, LogIn, User } from 'lucide-react';
+import { Zap, Globe, LayoutDashboard, BookOpen, GitBranch, LogOut, LogIn, User, Menu, X } from 'lucide-react';
 
 export default function Navbar() {
   const { t, lang, toggleLang } = useLanguageStore();
@@ -11,6 +12,7 @@ export default function Navbar() {
   const { user, logout, getUsername } = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
     { to: '/dashboard', icon: LayoutDashboard, label: t.nav.dashboard },
@@ -53,8 +55,8 @@ export default function Navbar() {
           }}>PyLearn</span>
         </Link>
 
-        {/* Nav Links */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+        {/* Desktop Nav Links */}
+        <div className="hidden md:flex items-center gap-1">
           {navLinks.map(({ to, icon: Icon, label }) => (
             <Link
               key={to}
@@ -67,8 +69,8 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Right side */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        {/* Desktop Right side */}
+        <div className="hidden md:flex items-center gap-3">
           {/* XP Display */}
           <div style={{
             display: 'flex', alignItems: 'center', gap: '0.4rem',
@@ -128,7 +130,92 @@ export default function Navbar() {
             </Link>
           )}
         </div>
+
+        {/* Mobile Menu Toggle */}
+        <div className="md:hidden flex items-center gap-2">
+          {/* Always show XP on mobile header */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '0.3rem',
+            background: 'rgba(124,58,237,0.1)',
+            border: '1px solid rgba(124,58,237,0.25)',
+            borderRadius: '999px',
+            padding: '0.2rem 0.5rem',
+          }}>
+            <Zap size={12} style={{ color: '#fbbf24' }} />
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#a78bfa' }}>{xp}</span>
+          </div>
+
+          <button 
+            className="btn-ghost" 
+            style={{ padding: '0.4rem' }}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden" style={{
+          background: 'rgba(13,13,20,0.95)',
+          borderBottom: '1px solid var(--color-border-subtle)',
+          padding: '1rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem'
+        }}>
+          {navLinks.map(({ to, icon: Icon, label }) => (
+            <Link
+              key={to}
+              to={to}
+              className={`nav-item ${location.pathname.startsWith(to) ? 'active' : ''}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <Icon size={16} />
+              {label}
+            </Link>
+          ))}
+          
+          <div style={{ height: '1px', background: 'var(--color-border-subtle)', margin: '0.5rem 0' }}></div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <button
+              onClick={() => { toggleLang(); setIsMobileMenuOpen(false); }}
+              className="btn-ghost"
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 0.875rem' }}
+            >
+              <Globe size={16} />
+              {lang === 'th' ? 'Switch to English' : 'เปลี่ยนเป็นภาษาไทย'}
+            </button>
+          </div>
+
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.6rem 0.875rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <User size={16} style={{ color: '#10b981' }} />
+                <span style={{ fontSize: '0.9rem', color: '#10b981' }}>{getUsername()}</span>
+              </div>
+              <button
+                onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
+                style={{ background: 'rgba(244,63,94,0.1)', color: '#fb7185', border: 'none', padding: '0.4rem 0.75rem', borderRadius: '0.4rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+              >
+                <LogOut size={14} /> {lang === 'th' ? 'ออกจากระบบ' : 'Logout'}
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="btn-primary"
+              onClick={() => setIsMobileMenuOpen(false)}
+              style={{ padding: '0.6rem', textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}
+            >
+              <LogIn size={15} />
+              {lang === 'th' ? 'เข้าสู่ระบบ' : 'Login'}
+            </Link>
+          )}
+        </div>
+      )}
     </nav>
   );
 }

@@ -4,11 +4,6 @@ import { supabase } from '../utils/supabase';
 const ADMIN_EXERCISES_KEY = 'pylearn_admin_exercises';
 const ADMIN_SESSION_KEY = 'pylearn_admin_session';
 
-// Use environment variable for admin password, fallback to something secure if missing in production
-// Since this is evaluated on the client side, the password will still be visible in the bundle if built!
-// However, as a first step we remove the hardcoded 'admin1234'. 
-// A real fix would require moving auth to the server (Supabase Auth).
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
 const loadAdminExercises = () => {
   try {
@@ -18,21 +13,34 @@ const loadAdminExercises = () => {
 };
 
 export const useAdminStore = create((set, get) => ({
-  isLoggedIn: sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true',
+  isLoggedIn: false, // Now determined by Supabase role
   customExercises: loadAdminExercises(),
   isSyncing: false,
 
-  login: (password) => {
-    if (password === ADMIN_PASSWORD) {
-      sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
-      set({ isLoggedIn: true });
-      return true;
+  checkAdminStatus: async (userId) => {
+    if (!userId) {
+      set({ isLoggedIn: false });
+      return false;
     }
-    return false;
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', userId)
+        .single();
+      
+      if (error) throw error;
+      const isAdmin = data?.is_admin === true;
+      set({ isLoggedIn: isAdmin });
+      return isAdmin;
+    } catch (err) {
+      console.error("Error checking admin status:", err);
+      set({ isLoggedIn: false });
+      return false;
+    }
   },
 
   logout: () => {
-    sessionStorage.removeItem(ADMIN_SESSION_KEY);
     set({ isLoggedIn: false });
   },
 
