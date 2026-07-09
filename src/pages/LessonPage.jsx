@@ -76,16 +76,18 @@ export default function LessonPage() {
   const nextLesson = lessonIdx < mod.lessons.length - 1 ? mod.lessons[lessonIdx + 1] : null;
   const completed = isLessonComplete(lesson.id);
 
-  // ── Gate: map lesson ID to exercise ID ──
-  const lessonToExerciseMap = {
-    '1-5': 'ex-1-1'
-  };
-  const linkedExerciseId = lessonToExerciseMap[lesson.id];
-  const linkedExercise = linkedExerciseId ? exercises.find(ex => ex.id === linkedExerciseId) : null;
+  // ── Gate: 1-to-1 Mapping between Lesson and Exercise ──
+  const moduleExercises = exercises
+    .filter(ex => ex.moduleId === mod.id)
+    .sort((a, b) => a.order - b.order);
+  
+  // Link the exercise at the same index as the lesson
+  const linkedExercise = moduleExercises[lessonIdx] || null;
+
   const exercisePassed = linkedExercise ? isExercisePassed(linkedExercise.id) : true;
   const exerciseBestScore = linkedExercise ? getExerciseScore(linkedExercise.id) : -1;
-  // Block going to next lesson if there's a linked exercise that hasn't been passed
-  const isNextBlocked = !!nextLesson && !!linkedExercise && !exercisePassed;
+  // Block completion if there's a linked exercise that hasn't been passed
+  const isNextBlocked = !!linkedExercise && !exercisePassed;
 
   useEffect(() => {
     let active = true;
