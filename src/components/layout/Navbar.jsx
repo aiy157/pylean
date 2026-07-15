@@ -34,14 +34,17 @@ export default function Navbar() {
   };
 
   return (
-    <nav style={{
-      background: 'rgba(13,13,20,0.85)',
-      backdropFilter: 'blur(16px)',
-      borderBottom: '1px solid rgba(124,58,237,0.15)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 100,
-    }}>
+    <nav
+      role="navigation"
+      aria-label={lang === 'th' ? 'เมนูหลัก' : 'Main navigation'}
+      style={{
+        background: 'rgba(13,13,20,0.85)',
+        backdropFilter: 'blur(16px)',
+        borderBottom: '1px solid rgba(124,58,237,0.15)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+      }}>
       <div style={{
         maxWidth: '1280px',
         margin: '0 auto',
@@ -69,9 +72,11 @@ export default function Navbar() {
             <Link
               key={to}
               to={to}
+              aria-label={label}
+              aria-current={location.pathname.startsWith(to) ? 'page' : undefined}
               className={`nav-item ${location.pathname.startsWith(to) ? 'active' : ''}`}
             >
-              <Icon size={15} />
+              <Icon size={15} aria-hidden="true" />
               {label}
             </Link>
           ))}
@@ -95,9 +100,10 @@ export default function Navbar() {
           <button
             onClick={toggleLang}
             className="btn-ghost"
+            aria-label={lang === 'th' ? 'เปลี่ยนเป็นภาษาอังกฤษ' : 'Switch to Thai'}
             style={{ padding: '0.35rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8rem' }}
           >
-            <Globe size={13} />
+            <Globe size={13} aria-hidden="true" />
             {lang === 'th' ? 'TH' : 'EN'}
           </button>
 
@@ -122,9 +128,10 @@ export default function Navbar() {
                 onClick={handleLogout}
                 className="btn-ghost"
                 title={lang === 'th' ? 'ออกจากระบบ' : 'Logout'}
+                aria-label={lang === 'th' ? 'ออกจากระบบ' : 'Logout'}
                 style={{ padding: '0.35rem 0.6rem', display: 'flex', alignItems: 'center' }}
               >
-                <LogOut size={15} />
+                <LogOut size={15} aria-hidden="true" />
               </button>
             </div>
           ) : (
@@ -156,23 +163,34 @@ export default function Navbar() {
           <button 
             className="btn-ghost" 
             style={{ padding: '0.4rem' }}
+            aria-label={isMobileMenuOpen
+              ? (lang === 'th' ? 'ปิดเมนู' : 'Close menu')
+              : (lang === 'th' ? 'เปิดเมนู' : 'Open menu')
+            }
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {isMobileMenuOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden" style={{
-          background: 'rgba(13,13,20,0.95)',
-          borderBottom: '1px solid var(--color-border-subtle)',
-          padding: '1rem',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '0.5rem'
-        }}>
+        <div
+          id="mobile-menu"
+          className="md:hidden"
+          role="menu"
+          aria-label={lang === 'th' ? 'เมนูมือถือ' : 'Mobile menu'}
+          style={{
+            background: 'rgba(13,13,20,0.95)',
+            borderBottom: '1px solid var(--color-border-subtle)',
+            padding: '1rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem'
+          }}>
           {navLinks.map(({ to, icon: Icon, label }) => (
             <Link
               key={to}

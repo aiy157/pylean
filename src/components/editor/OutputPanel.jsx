@@ -295,6 +295,110 @@ function PythonLoadingView({ loadProgress, lang }) {
   );
 }
 
+// ─── Interactive Terminal Input ─────────────────────────────────────────────────
+function InteractiveInputView({ prompts, onSubmit, lang }) {
+  const [text, setText] = useState('');
+
+  const handleKeyDown = (e) => {
+    // Ctrl+Enter or Cmd+Enter → submit
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      onSubmit(text);
+    }
+  };
+
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column',
+      background: '#0d1117', padding: '0.875rem',
+      fontFamily: "'JetBrains Mono', monospace", fontSize: '0.85rem',
+      gap: '0.6rem',
+    }}>
+      {/* Header hint */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: '0.5rem',
+        padding: '0.45rem 0.75rem',
+        background: 'rgba(124,58,237,0.08)',
+        border: '1px solid rgba(124,58,237,0.25)',
+        borderRadius: '0.4rem',
+        fontSize: '0.78rem', color: '#c4b5fd',
+        fontFamily: 'Inter, sans-serif', lineHeight: 1.5,
+      }}>
+        <Terminal size={13} style={{ flexShrink: 0 }} />
+        <span>
+          {lang === 'th'
+            ? <>⚡ โค้ดต้องการ <strong>input</strong> — พิมพ์ค่าทีละบรรทัด (1 บรรทัด = 1 ค่า) แล้วกด <kbd style={{ background:'rgba(255,255,255,0.1)', padding:'0.1rem 0.35rem', borderRadius:'0.2rem', fontSize:'0.72rem' }}>Ctrl+Enter</kbd> หรือปุ่มรันโค้ด</>
+            : <>⚡ Code needs <strong>input</strong> — type one value per line, then press <kbd style={{ background:'rgba(255,255,255,0.1)', padding:'0.1rem 0.35rem', borderRadius:'0.2rem', fontSize:'0.72rem' }}>Ctrl+Enter</kbd> or Run</>}
+        </span>
+      </div>
+
+      {/* Prompt hints (labels from input('...') calls) */}
+      {prompts.length > 0 && prompts.some(p => p) && (
+        <div style={{
+          padding: '0.4rem 0.65rem',
+          background: 'rgba(163,230,203,0.05)',
+          border: '1px solid rgba(163,230,203,0.15)',
+          borderRadius: '0.35rem',
+          fontSize: '0.75rem', color: '#6b9e8a',
+          fontFamily: 'Inter, sans-serif', lineHeight: 1.8,
+        }}>
+          <span style={{ color: '#4a6e5a', fontWeight: 600, marginRight: '0.4rem' }}>
+            {lang === 'th' ? 'prompt ที่โค้ดถาม:' : 'Prompts in code:'}
+          </span>
+          {prompts.filter(p => p).map((p, i) => (
+            <span key={i} style={{
+              display: 'inline-block', marginRight: '0.5rem',
+              background: 'rgba(163,230,203,0.08)',
+              padding: '0 0.3rem', borderRadius: '0.2rem', color: '#a3e6cb',
+            }}>"{p}"</span>
+          ))}
+        </div>
+      )}
+
+      {/* Single textarea for all input values */}
+      <textarea
+        autoFocus
+        value={text}
+        onChange={e => setText(e.target.value)}
+        onKeyDown={handleKeyDown}
+        rows={Math.max(prompts.length, 3)}
+        placeholder={
+          lang === 'th'
+            ? `พิมพ์ค่า input ที่นี่...\n(1 บรรทัด = 1 ค่า)`
+            : `Type input values here...\n(1 line = 1 value)`
+        }
+        style={{
+          width: '100%', padding: '0.5rem 0.65rem',
+          background: 'rgba(255,255,255,0.04)',
+          border: '1px solid rgba(124,58,237,0.35)',
+          borderRadius: '0.375rem',
+          color: '#e2e8f0',
+          fontFamily: "'JetBrains Mono', monospace", fontSize: '0.85rem',
+          resize: 'vertical', outline: 'none', lineHeight: 1.65,
+          boxSizing: 'border-box', minHeight: '70px',
+        }}
+      />
+
+      {/* Run button */}
+      <button
+        onClick={() => onSubmit(text)}
+        style={{
+          alignSelf: 'flex-end',
+          display: 'flex', alignItems: 'center', gap: '0.4rem',
+          padding: '0.4rem 1.25rem',
+          background: 'rgba(124,58,237,0.2)',
+          border: '1px solid rgba(124,58,237,0.45)',
+          borderRadius: '0.375rem',
+          color: '#a78bfa', fontFamily: 'Inter, sans-serif',
+          fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer',
+        }}
+      >
+        ▶ {lang === 'th' ? 'รันโค้ด' : 'Run Code'}
+      </button>
+    </div>
+  );
+}
+
 // ─── Main OutputPanel ─────────────────────────────────────────────────────────
 export default function OutputPanel({
   output          = '',
@@ -308,6 +412,10 @@ export default function OutputPanel({
   pyError         = null,
   customInput     = '',
   setCustomInput  = null,
+  // Interactive input mode
+  waitingForInput = false,
+  inputPrompts    = [],      // extracted prompt strings from input() calls
+  onInputSubmit   = null,   // async (inputValue: string) => void
 }) {
   const hasError  = Boolean(error);
   const hasOutput = Boolean(output);
@@ -365,6 +473,13 @@ export default function OutputPanel({
     </PanelShell>
   );
 
+  // ── waitingForInput: show interactive terminal ────────────────────────────
+  if (waitingForInput && onInputSubmit) return (
+    <PanelShell lang={lang} statusIcon={<Terminal size={13} style={{ color: '#a78bfa' }} />} tabBar={null}>
+      <InteractiveInputView prompts={inputPrompts} onSubmit={onInputSubmit} lang={lang} />
+    </PanelShell>
+  );
+
   // ── Tab bar ────────────────────────────────────────────────────────────────
   const tabBar = (
     <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center', padding: '0.375rem 0.875rem', background: '#0d1117', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
@@ -394,43 +509,30 @@ export default function OutputPanel({
     // OUTPUT tab
     if (tab === 'output') {
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', height: '100%' }}>
-          {/* Custom Input Section */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-             <span style={{ fontSize: '0.72rem', color: '#5a5a80', fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>
-               {lang === 'th' ? 'ข้อมูลนำเข้า (Standard Input):' : 'Custom Input:'}
-             </span>
-             <textarea
-                value={customInput}
-                onChange={e => setCustomInput && setCustomInput(e.target.value)}
-                placeholder={lang === 'th' ? 'พิมพ์ข้อมูลนำเข้า... (1 ค่าต่อ 1 บรรทัด)' : 'Enter input values... (1 per line)'}
-                style={{
-                  width: '100%', minHeight: '50px', padding: '0.5rem 0.6rem',
-                  background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '0.375rem',
-                  color: '#c4cde4', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.8rem',
-                  resize: 'vertical', outline: 'none'
-                }}
-             />
-          </div>
-
-          {/* Output Section */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', flex: 1 }}>
-             <span style={{ fontSize: '0.72rem', color: '#5a5a80', fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>
-               {lang === 'th' ? 'ผลลัพธ์ (Standard Output):' : 'Output:'}
-             </span>
-             {hasError && !hasOutput ? (
-               <div style={{ color: '#5a5a80', fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                 <AlertCircle size={14} style={{ color: '#f43f5e' }} />
-                 {lang === 'th' ? 'โค้ดเกิด error — ดูรายละเอียดที่แท็บ Log หรือ แปล Log' : 'Code errored — see Log or Explain Log tab'}
-               </div>
-             ) : hasOutput ? (
-               <pre style={{ color: '#e2e8f0', whiteSpace: 'pre-wrap', margin: 0, flex: 1, fontFamily: "'JetBrains Mono', monospace", fontSize: '0.8rem' }}>{output}</pre>
-             ) : (
-               <span style={{ color: '#4a4a6a', fontFamily: 'Inter, sans-serif', fontSize: '0.82rem' }}>
-                 {lang === 'th' ? '▶ กด Run เพื่อรันโค้ด' : '▶ Press Run to execute code'}
-               </span>
-             )}
-          </div>
+        <div style={{ flex: 1, padding: '0.6rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+          <span style={{
+            fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.07em',
+            color: '#5a5a80', fontFamily: 'Inter, sans-serif', textTransform: 'uppercase',
+          }}>stdout</span>
+          {isRunning ? (
+            <span style={{ color: '#7c3aed', fontFamily: 'Inter, sans-serif', fontSize: '0.82rem' }}>
+              ⚙️ {lang === 'th' ? 'กำลังรันโค้ด...' : 'Running…'}
+            </span>
+          ) : hasError && !hasOutput ? (
+            <div style={{ color: '#5a5a80', fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <AlertCircle size={14} style={{ color: '#f43f5e' }} />
+              {lang === 'th' ? 'โค้ดเกิด error — ดูรายละเอียดที่แท็บ Log' : 'Code errored — see Log tab'}
+            </div>
+          ) : hasOutput ? (
+            <pre style={{
+              color: '#e2e8f0', whiteSpace: 'pre-wrap', margin: 0,
+              fontFamily: "'JetBrains Mono', monospace", fontSize: '0.8rem', lineHeight: 1.6,
+            }}>{output}</pre>
+          ) : (
+            <span style={{ color: '#3a3a5a', fontFamily: 'Inter, sans-serif', fontSize: '0.82rem' }}>
+              {lang === 'th' ? '▶ กด Run เพื่อรันโค้ด' : '▶ Press Run to execute'}
+            </span>
+          )}
         </div>
       );
     }

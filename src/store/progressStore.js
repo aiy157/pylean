@@ -195,15 +195,26 @@ export const useProgressStore = create((set, get) => {
       return Math.round((done / totalLessons) * 100);
     },
 
-    resetProgress: () => {
+    resetProgress: async () => {
       localStorage.removeItem(STORAGE_KEY);
-      set(initialState);
-      // Clear cloud progress too
-      supabase.auth.getUser().then(({ data: { user } }) => {
+      set({ ...initialState, isAdminUnlockMode: false });
+      sessionStorage.removeItem('pylearn_admin_unlock');
+
+      // Clear ALL cloud data (progress + saved code)
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
         if (user) {
-          supabase.from('user_progress').delete().eq('user_id', user.id).catch(() => {});
+          await Promise.all([
+            supabase.from('user_progress').delete().eq('user_id', user.id),
+            supabase.from('user_code').delete().eq('user_id', user.id),
+          ]);
         }
-      });
+      } catch (err) {
+        console.warn('Reset cloud data failed:', err.message);
+      }
+
+      // Hard reload so Zustand initialises fresh from empty localStorage
+      window.location.href = '/';
     },
 
     enableAdminUnlockMode: () => {

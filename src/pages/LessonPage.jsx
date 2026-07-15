@@ -1,5 +1,5 @@
 // src/pages/LessonPage.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useLanguageStore } from '../store/languageStore';
 import { useProgressStore } from '../store/progressStore';
@@ -24,10 +24,11 @@ import {
   Lock, AlertTriangle, ExternalLink, Send, Lightbulb, AlertCircle, XCircle
 } from 'lucide-react';
 
-const TAB_THEORY = 'theory';
-const TAB_EXAMPLE = 'example';
+const TAB_THEORY   = 'theory';
+const TAB_EXAMPLE  = 'example';
 const TAB_COMMANDS = 'commands';
 const TAB_EXERCISE = 'exercise';
+const TAB_CONSOLE  = 'console';
 
 export default function LessonPage() {
   const { moduleId, lessonId } = useParams();
@@ -51,6 +52,9 @@ export default function LessonPage() {
   const [customInput, setCustomInput] = useState('');
   const [showHint, setShowHint] = useState(false);
   const [mobileView, setMobileView] = useState('theory'); // 'theory' | 'code'
+  // Interactive input state
+  const [waitingForInput, setWaitingForInput] = useState(false);
+  const [pendingInputPrompts, setPendingInputPrompts] = useState([]); // e.g. ['ใส่ตัวเลข : ']
 
   if (!mod || !lesson) {
     return (
@@ -117,14 +121,55 @@ export default function LessonPage() {
       return () => clearTimeout(timer);
     }
   }, [code, linkedExercise?.id, activeTab, saveCodeToCloud]);
+  // Extract all input() prompt texts from code
+  const extractInputPrompts = (src) => {
+    const prompts = [];
+    const re = /input\s*\(\s*(['"])(.*?)\1\s*\)/g;
+    let m;
+    while ((m = re.exec(src)) !== null) prompts.push(m[2]);
+    // Count bare input() calls with no prompt
+    const bareCount = (src.match(/input\s*\(\s*\)/g) || []).length;
+    for (let i = 0; i < bareCount; i++) prompts.push('');
+    return prompts;
+  };
+
+  const codeNeedsInput = (src) => /input\s*\(/.test(src);
 
   const handleRun = async () => {
     if (!isReady) return;
+    setActiveTab(TAB_CONSOLE);
+
+    // If code has input() but stdin is empty → enter waiting-for-input mode
+    if (codeNeedsInput(code) && customInput.trim() === '') {
+      const prompts = extractInputPrompts(code);
+      setPendingInputPrompts(prompts);
+      setWaitingForInput(true);
+      setOutput('');
+      setRunError('');
+      return;  // wait for user to type
+    }
+
+    // Run normally
+    setWaitingForInput(false);
     setIsRunning(true);
     setOutput('');
     setRunError('');
     setGradeResults(null);
     const result = await runCode(code, customInput);
+    setOutput(result.output);
+    setRunError(result.error);
+    setIsRunning(false);
+  };
+
+  // Called when user submits input from the Console interactive prompt
+  const handleInputSubmit = async (inputValue) => {
+    setCustomInput(inputValue);
+    setWaitingForInput(false);
+    setIsRunning(true);
+    setOutput('');
+    setRunError('');
+    setGradeResults(null);
+    const result = await runCode(code, inputValue);
     setOutput(result.output);
     setRunError(result.error);
     setIsRunning(false);
@@ -137,6 +182,8 @@ export default function LessonPage() {
     const results = await gradeExerciseSecurely(linkedExercise, code, runCode);
     setGradeResults(results);
     setIsGrading(false);
+    // Switch to Exercise tab so user sees the grade results
+    setActiveTab(TAB_EXERCISE);
 
     const scorePercent = results.scorePercent;
     const { grantXP, nowPasses } = completeExercise(linkedExercise.id, linkedExercise.xpReward, scorePercent);
@@ -168,10 +215,11 @@ export default function LessonPage() {
   };
 
   const tabs = [
-    { id: TAB_THEORY, icon: BookOpen, label: t.lesson.theory },
-    { id: TAB_EXAMPLE, icon: Code2, label: t.lesson.example },
+    { id: TAB_THEORY,   icon: BookOpen,  label: t.lesson.theory },
+    { id: TAB_EXAMPLE,  icon: Code2,     label: t.lesson.example },
     ...(lesson.commands?.length ? [{ id: TAB_COMMANDS, icon: Hash, label: t.lesson.command_ref }] : []),
-    ...(linkedExercise ? [{ id: TAB_EXERCISE, icon: GitBranch, label: lang === 'th' ? 'แบบฝึกหัด' : 'Exercise' }] : []),
+    ...(linkedExercise  ? [{ id: TAB_EXERCISE, icon: GitBranch, label: lang === 'th' ? 'แบบฝึกหัด' : 'Exercise' }] : []),
+    { id: TAB_CONSOLE,  icon: Terminal,  label: 'Console' },
   ];
 
   return (
@@ -371,22 +419,93 @@ export default function LessonPage() {
                   )}
 
                   {gradeResults && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{
-                      padding: '1rem', marginTop: '1rem', borderRadius: '0.5rem',
-                      background: gradeResults.allPassed ? 'rgba(16,185,129,0.1)' : 'rgba(244,63,94,0.1)',
-                      border: `1px solid ${gradeResults.allPassed ? 'rgba(16,185,129,0.3)' : 'rgba(244,63,94,0.3)'}`
-                    }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                        {gradeResults.allPassed ? <CheckCircle size={16} color="#10b981" /> : <XCircle size={16} color="#f43f5e" />}
-                        <span style={{ fontWeight: 600, color: gradeResults.allPassed ? '#34d399' : '#fb7185' }}>
-                          {lang === 'th' ? 'ผลตรวจ:' : 'Results:'} {gradeResults.scorePercent}%
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ marginTop: '1rem' }}>
+                      {/* ── Score header */}
+                      <div style={{
+                        display: 'flex', alignItems: 'center', gap: '0.5rem',
+                        padding: '0.6rem 1rem',
+                        borderRadius: '0.5rem 0.5rem 0 0',
+                        background: gradeResults.allPassed ? 'rgba(16,185,129,0.12)' : 'rgba(244,63,94,0.1)',
+                        border: `1px solid ${gradeResults.allPassed ? 'rgba(16,185,129,0.3)' : 'rgba(244,63,94,0.3)'}`,
+                        borderBottom: 'none',
+                      }}>
+                        {gradeResults.allPassed ? <CheckCircle size={15} color="#10b981" /> : <XCircle size={15} color="#f43f5e" />}
+                        <span style={{ fontWeight: 700, fontSize: '0.9rem', color: gradeResults.allPassed ? '#34d399' : '#fb7185' }}>
+                          {lang === 'th' ? 'ผลตรวจ:' : 'Results:'}&nbsp;{gradeResults.scorePercent}%
+                          &nbsp;({gradeResults.passCount}/{gradeResults.results.length})
                         </span>
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        {gradeResults.results.map((t, i) => (
-                          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
-                            {t.passed ? <CheckCircle size={12} color="#10b981" /> : <XCircle size={12} color="#f43f5e" />}
-                            <span>Test {i + 1}: {t.passed ? (lang === 'th' ? 'ผ่าน' : 'Passed') : (lang === 'th' ? 'ไม่ผ่าน' : 'Failed')}</span>
+
+                      {/* ── Per-test detail rows */}
+                      <div style={{
+                        border: `1px solid ${gradeResults.allPassed ? 'rgba(16,185,129,0.2)' : 'rgba(244,63,94,0.2)'}`,
+                        borderRadius: '0 0 0.5rem 0.5rem',
+                        overflow: 'hidden',
+                      }}>
+                        {gradeResults.results.map((tc, i) => (
+                          <div key={i} style={{
+                            borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                            padding: '0.75rem 1rem',
+                            background: tc.passed ? 'rgba(16,185,129,0.04)' : 'rgba(244,63,94,0.05)',
+                          }}>
+                            {/* Row header */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                              {tc.passed ? <CheckCircle size={13} color="#10b981" /> : <XCircle size={13} color="#f43f5e" />}
+                              <span style={{ fontWeight: 600, fontSize: '0.82rem', color: tc.passed ? '#34d399' : '#fb7185' }}>
+                                {lang === 'th' ? `โจทย์ที่ ${i + 1}` : `Test Case ${i + 1}`}
+                                &nbsp;—&nbsp;
+                                {tc.passed ? (lang === 'th' ? 'ผ่าน ✓' : 'Passed ✓') : (lang === 'th' ? 'ไม่ผ่าน ✗' : 'Failed ✗')}
+                              </span>
+                            </div>
+
+                            {/* Detail grid */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', fontSize: '0.78rem', fontFamily: "'JetBrains Mono', monospace" }}>
+                              {/* Input row — only if test has input */}
+                              {tc.input !== undefined && tc.input !== '' && tc.input !== null && (
+                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+                                  <span style={{ color: '#5a5a80', minWidth: '90px', flexShrink: 0, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: '0.72rem', paddingTop: '0.1rem' }}>
+                                    {lang === 'th' ? 'Input:' : 'Input:'}
+                                  </span>
+                                  <code style={{ background: 'rgba(0,0,0,0.3)', padding: '0.1rem 0.4rem', borderRadius: '0.2rem', color: '#a3e6cb', whiteSpace: 'pre-wrap' }}>{tc.input}</code>
+                                </div>
+                              )}
+
+                              {/* Expected */}
+                              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+                                <span style={{ color: '#5a5a80', minWidth: '90px', flexShrink: 0, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: '0.72rem', paddingTop: '0.1rem' }}>
+                                  {lang === 'th' ? 'คาดว่า:' : 'Expected:'}
+                                </span>
+                                <code style={{ background: 'rgba(0,0,0,0.3)', padding: '0.1rem 0.4rem', borderRadius: '0.2rem', color: '#86efac', whiteSpace: 'pre-wrap' }}>{tc.expected}</code>
+                              </div>
+
+                              {/* Actual */}
+                              {!tc.passed && (
+                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+                                  <span style={{ color: '#5a5a80', minWidth: '90px', flexShrink: 0, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: '0.72rem', paddingTop: '0.1rem' }}>
+                                    {lang === 'th' ? 'ได้รับ:' : 'Your output:'}
+                                  </span>
+                                  <code style={{ background: 'rgba(0,0,0,0.3)', padding: '0.1rem 0.4rem', borderRadius: '0.2rem', color: '#fca5a5', whiteSpace: 'pre-wrap' }}>{tc.actual || '(ไม่มี output)'}</code>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Hint message when wrong */}
+                            {!tc.passed && (
+                              <div style={{
+                                marginTop: '0.6rem', padding: '0.45rem 0.65rem',
+                                background: 'rgba(245,158,11,0.07)',
+                                border: '1px solid rgba(245,158,11,0.2)',
+                                borderRadius: '0.35rem',
+                                fontSize: '0.78rem', color: '#fde68a',
+                                fontFamily: 'Inter, sans-serif', lineHeight: 1.5,
+                              }}>
+                                <AlertCircle size={12} style={{ display: 'inline', marginRight: '0.35rem', verticalAlign: 'middle' }} />
+                                {lang === 'th'
+                                  ? `โค้ดของคุณ output ออกมาเป็น "${tc.actual || '(ว่าง)'}" แต่โจทย์นี้ต้องการ "${tc.expected}" — ลองตรวจสอบเงื่อนไของโค้ดอีกครั้ง (ไม่เฉลย)`
+                                  : `Your code output "${tc.actual || '(empty)'}" but this test expects "${tc.expected}" — review your logic (no spoilers!)`
+                                }
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -395,6 +514,28 @@ export default function LessonPage() {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Console Tab Content */}
+            {activeTab === TAB_CONSOLE && (
+              <motion.div key="console" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                style={{ display: 'flex', flexDirection: 'column', height: '100%', margin: '-1.5rem' }}>
+                <OutputPanel
+                  output={output}
+                  error={runError}
+                  isRunning={isRunning}
+                  language={lang}
+                  pyLoading={pyLoading}
+                  loadProgress={loadProgress}
+                  isWasmSupported={isWasmSupported}
+                  pyError={pyError}
+                  customInput={customInput}
+                  setCustomInput={setCustomInput}
+                  waitingForInput={waitingForInput}
+                  inputPrompts={pendingInputPrompts}
+                  onInputSubmit={handleInputSubmit}
+                />
+              </motion.div>
+            )}
           </div>
         </div>
 
@@ -431,7 +572,7 @@ export default function LessonPage() {
                 {isRunning ? <Loader2 size={13} className="animate-spin" /> : <Play size={13} />}
                 {t.exercise.run}
               </button>
-              {activeTab === TAB_EXERCISE && linkedExercise && (
+              {linkedExercise && (
                 <button
                   onClick={handleSubmit}
                   disabled={!isReady || isRunning || isGrading || !isWasmSupported}
@@ -447,31 +588,6 @@ export default function LessonPage() {
 
           <div style={{ flex: 1, overflow: 'hidden' }}>
             <CodeEditor value={code} onChange={setCode} height="100%" />
-          </div>
-
-          <div style={{ padding: '0.75rem', borderTop: '1px solid var(--color-border-subtle)', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {activeTab === TAB_EXERCISE && linkedExercise && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', minWidth: '80px' }}>Custom Input:</span>
-                <input
-                  type="text"
-                  value={customInput}
-                  onChange={e => setCustomInput(e.target.value)}
-                  placeholder="Enter inputs separated by space..."
-                  style={{ flex: 1, padding: '0.3rem 0.5rem', fontSize: '0.8rem', background: '#0d1117', border: '1px solid var(--color-border-subtle)', borderRadius: '0.25rem', color: '#e2e8f0', fontFamily: "'JetBrains Mono', monospace" }}
-                />
-              </div>
-            )}
-            <OutputPanel
-              output={output}
-              error={runError}
-              isRunning={isRunning}
-              language={lang}
-              pyLoading={pyLoading}
-              loadProgress={loadProgress}
-              isWasmSupported={isWasmSupported}
-              pyError={pyError}
-            />
           </div>
         </div>
       </div>

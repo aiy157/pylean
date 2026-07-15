@@ -180,9 +180,9 @@ export const usePyodide = () => {
     let output   = '';
     let errorMsg = '';
 
-    // Split stdin into lines, filtering blanks
+    // Split stdin into lines (keep empty strings so input() at index N still gets its value)
     const inputLines = stdin
-      ? stdin.split('\n').map(l => l.trim()).filter(Boolean)
+      ? stdin.split('\n').map(l => l.trimEnd())
       : [];
 
     // ── Setup: fresh stdout/stderr capture + mock input() ──────────────────
